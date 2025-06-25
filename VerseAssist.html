@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verse Assist +</title>
+    <meta name="description" content="AI-powered Unreal Engine 5 blueprint assistant from IronWill Interactive Entertainment. Find visual blueprint snippets and raw code by describing your needs.">
+    <meta name="keywords" content="Unreal Engine, UE5, Blender, Blueprint, Verse, AI, Assistant, PGD, IronWill Interactive Entertainment, Code Snippet, Tutorial">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        :root {
+            --color-bg: #1a1c22;
+            --color-border: #44475a;
+            --color-panel-bg: #282a36;
+            --color-node-header: #343746;
+            --color-text: #f8f8f2;
+            --color-text-dim: #bd93f9;
+            --color-accent: #8be9fd;
+            --color-success: #50fa7b;
+            --color-pin-string: #f1fa8c;
+            --color-pin-number: #50fa7b;
+            --color-pin-boolean: #ff79c6;
+            --color-pin-exec: #ffffff;
+            --color-pin-any: #cccccc;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --node-header-event: #c0392b;
+            --node-header-flow: #7f8c8d;
+            --node-header-util: #2980b9;
+        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background-color: var(--color-bg); color: var(--color-text); }
+        .app-container { display: flex; height: 100vh; flex-direction: column; }
+        .input-panel { padding: 1.5rem; display: flex; flex-direction: column; z-index: 10; background-color: var(--color-panel-bg); }
+        .output-container { flex-grow: 1; display: flex; flex-direction: column; min-height: 0; }
+        .output-panel { flex-grow: 1; position: relative; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; background-image: radial-gradient(circle at 1px 1px, var(--color-border) 1px, transparent 0); background-size: 20px 20px; overflow: auto; cursor: grab; }
+        .output-panel.panning { cursor: grabbing; }
+        h1 { font-size: 1.5rem; color: var(--color-accent); margin: 0 0 1rem 0; }
+        label { font-size: 1rem; color: var(--color-text-dim); margin-bottom: 0.5rem; display: block; }
+        
+        #ai-prompt-area { display: flex; flex-direction: column; gap: 1rem; }
+        #ai-prompt { width: 100%; box-sizing: border-box; background-color: var(--color-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 0.75rem; color: var(--color-text); font-size: 1rem; min-height: 80px; resize: vertical; }
+        #ai-prompt:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(139, 233, 253, 0.2); }
+        #ai-submit-btn { padding: 0.75rem; background: var(--color-accent); color: var(--color-bg); font-weight: 600; border-radius: 8px; cursor: pointer; border: none; transition: background-color 0.2s; }
+        #ai-submit-btn:hover { background: #a1f0ff; }
+        #ai-submit-btn:disabled { background: var(--color-node-header); color: var(--color-border); cursor: not-allowed; }
+        
+        .toolbar { padding: 0.5rem 1rem; background-color: var(--color-panel-bg); border-bottom: 2px solid var(--color-border); display: flex; gap: 0.5rem; align-items: center; }
+        .toggle-btn, .copy-btn { padding: 0.5rem 1rem; background: var(--color-node-header); border: 1px solid var(--color-border); color: var(--color-text-dim); border-radius: 6px; cursor: pointer; transition: all 0.2s ease; }
+        .toggle-btn.active, .copy-btn:hover { background: var(--color-accent); color: var(--color-bg); font-weight: 600; border-color: var(--color-accent); }
+        .copy-btn { margin-left: auto; }
+        #raw-text-output { position: absolute; inset: 0; background: var(--color-bg); color: #cecece; font-family: monospace; white-space: pre-wrap; padding: 1rem; overflow: auto; font-size: 0.85rem; }
+        
+        #node-wrapper, #svg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
+        #svg-layer { pointer-events: none; }
+        .node { position: absolute; background-color: var(--color-panel-bg); border: 1px solid var(--color-border); border-radius: 8px; min-width: 180px; box-shadow: 0 10px 25px var(--shadow-color); display: flex; flex-direction: column; }
+        .node-header { background-color: var(--color-node-header); padding: 8px 12px; font-weight: 600; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom: 1px solid var(--color-border); }
+        .node-header.event-node { background-color: var(--node-header-event); }
+        .node-header.flow-node { background-color: var(--node-header-flow); }
+        .node-header.util-node { background-color: var(--node-header-util); }
+        .node-body { display: flex; justify-content: space-between; padding: 8px 0; }
+        .node-pins { display: flex; flex-direction: column; gap: 12px; padding: 0 12px; }
+        .node-pins.inputs { align-items: flex-start; }
+        .node-pins.outputs { align-items: flex-end; }
+        .pin { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid; background-color: var(--color-panel-bg); }
+        .pin-dot[data-pin-type="string"] { border-color: var(--color-pin-string); }
+        .pin-dot[data-pin-type="number"] { border-color: var(--color-pin-number); }
+        .pin-dot[data-pin-type="boolean"] { border-color: var(--color-pin-boolean); }
+        .pin-dot[data-pin-type="any"] { border-color: var(--color-pin-any); }
+        .pin-dot[data-pin-type="exec"] { border-color: var(--color-pin-exec); width: 16px; height: 16px; clip-path: polygon(0% 25%, 75% 25%, 75% 0%, 100% 50%, 75% 100%, 75% 75%, 0% 75%); border-radius: 0; background-color: transparent; }
+        .wire { stroke-width: 2.5; fill: none; }
+        .wire.string { stroke: var(--color-pin-string); }
+        .wire.number { stroke: var(--color-pin-number); }
+        .wire.boolean { stroke: var(--color-pin-boolean); }
+        .wire.exec { stroke: var(--color-pin-exec); stroke-width: 3.5; }
+        .wire.any, .wire.default { stroke: var(--color-pin-any); }
+
+        #search-results { width: 100%; max-width: 90%; text-align: left; padding: 1rem; }
+        .results-section { margin-bottom: 2rem; }
+        .results-section h2 { font-size: 1.25rem; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        .result-item { background: var(--color-panel-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+        .result-item a { color: var(--color-text); text-decoration: none; font-weight: 600; font-size: 1.1rem; }
+        .result-item a:hover { color: var(--color-accent); text-decoration: underline; }
+        .result-item p { font-size: 0.9rem; color: var(--color-text-dim); margin: 0.5rem 0 0 0; }
+        .result-item ul { margin: 0.5rem 0 0 1rem; padding: 0; list-style-type: disc; }
+        .result-item li { margin-bottom: 0.25rem; }
+        .result-item strong, .result-item b { color: var(--color-accent); font-weight: 600; }
+        .result-item h3 { font-size: 1.1rem; margin-top: 1rem; color: var(--color-accent); }
+        
+        /* Modal Styles */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--color-panel-bg); padding: 2rem; border-radius: 12px; border: 1px solid var(--color-border); max-width: 500px; width: 90%; text-align: center; }
+        .modal-content h2 { color: var(--color-accent); margin-top: 0; }
+        .modal-content p { color: var(--color-text-dim); line-height: 1.6; }
+        .modal-footer { margin-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .dont-show-again { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; }
+        
+        .hidden { display: none; }
+        
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .app-container { flex-direction: row; }
+            .input-panel { flex: 1; }
+            .output-container { flex: 2; }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-overlay hidden" id="welcome-modal">
+        <div class="modal-content">
+            <h2>Welcome to Verse Assist +</h2>
+            <p>From the team at IronWill Interactive Entertainment (Formerly PGD), we're proud to introduce our newest AI tool. Describe the blueprint functionality you need, and our AI will find the best matching visual snippet and raw code from our curated database, or search the web for relevant tutorials and documentation.</p>
+            <div class="modal-footer">
+                <button id="close-modal-btn" class="toggle-btn active" style="width: 100%;">Get Started</button>
+                <div class="dont-show-again">
+                    <input type="checkbox" id="dont-show-again-checkbox">
+                    <label for="dont-show-again-checkbox">Don't show this again</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="input-panel">
+            <h1>Verse Assist +</h1>
+            <div id="ai-prompt-area">
+                 <label for="ai-prompt">What blueprint do you need?</label>
+                <textarea id="ai-prompt" placeholder="e.g., How do I make something explode when it gets hit?"></textarea>
+                <button id="ai-submit-btn">Get Snippet</button>
+            </div>
+        </div>
+        <div class="output-container">
+            <div class="toolbar">
+                <button id="visual-toggle" class="toggle-btn active">Visual</button>
+                <button id="raw-toggle" class="toggle-btn">Raw Text</button>
+                <button id="copy-btn" class="copy-btn hidden">Copy</button>
+            </div>
+            <div class="output-panel" id="output-panel">
+                <div id="placeholder-text">Ask the AI for a blueprint to begin</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const aiPrompt = document.getElementById('ai-prompt');
+            const aiSubmitBtn = document.getElementById('ai-submit-btn');
+            const outputPanel = document.getElementById('output-panel');
+            const visualToggle = document.getElementById('visual-toggle');
+            const rawToggle = document.getElementById('raw-toggle');
+            const copyBtn = document.getElementById('copy-btn');
+            const welcomeModal = document.getElementById('welcome-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const dontShowCheckbox = document.getElementById('dont-show-again-checkbox');
+            
+            let activeBlueprint = null;
+            let view = { x: 50, y: 50, scale: 0.7 };
+            let panning = { active: false, start: { x: 0, y: 0 }, viewStart: { x: 0, y: 0 } };
+
+            // --- DATA LIBRARIES & SETUP ---
+            const NODE_LIBRARY = {
+                'event_begin_play': { name: 'Begin Play', category: 'event', inputs: [], outputs: [{ name: 'Output', type: 'exec' }] },
+                'event_hit': { name: 'Event Hit', category: 'event', inputs: [], outputs: [ {name: 'Output', type: 'exec'}, {name: 'Other Comp', type: 'any'}, {name: 'Hit Location', type: 'number'}, {name: 'Hit Normal', type: 'number'} ]},
+                'flow_delay': { name: 'Delay', category: 'flow', inputs: [{name: 'Input', type: 'exec'}, {name: 'Duration', type: 'number'}], outputs: [{name: 'Completed', type: 'exec'}]},
+                'util_print': { name: 'Print String', category: 'util', inputs: [{ name: 'Input', type: 'exec' }, { name: 'In String', type: 'string' }], outputs: [{ name: 'Output', type: 'exec' }] },
+                'util_destroy': { name: 'Destroy Actor', category: 'util', inputs: [{name: 'Input', type: 'exec'}, {name: 'Target', type: 'any'}]},
+                'logic_branch': { name: 'Branch', category: 'flow', inputs: [{ name: 'Input', type: 'exec' }, { name: 'Condition', type: 'boolean' }], outputs: [{ name: 'True', type: 'exec' }, { name: 'False', type: 'exec' }] },
+                'phys_is_sim_phys': { name: 'Is Simulating Physics', category: 'util', inputs: [{name: 'Target', type: 'any'}], outputs: [{name: 'Return Value', type: 'boolean'}]},
+                'phys_add_impulse': { name: 'Add Impulse At Location', category: 'util', inputs: [{name: 'Input', type: 'exec'}, {name: 'Impulse', type: 'number'}, {name: 'Location', type: 'number'}]},
+                'spawn_emitter': { name: 'Spawn Emitter At Location', category: 'util', inputs: [{name: 'Input', type: 'exec'}, {name: 'Location', type: 'number'}], outputs: [{name: 'Output', type: 'exec'}, {name: 'Return Value', type: 'any'}]},
+                'audio_play_sound': { name: 'Play Sound At Location', category: 'util', inputs: [{name: 'Input', type: 'exec'}, {name: 'Sound', type: 'any'}, {name: 'Location', type: 'number'}]},
+                'util_get_world_loc': { name: 'Get World Location', category: 'util', inputs: [{name: 'Target', type: 'any'}], outputs: [{name: 'Return Value', type: 'number'}]},
+            };
+            
+            const BLUEPRINT_SNIPPETS = {
+                'bomb_blueprint': {
+                    name: "Bomb Blueprint",
+                    description: "A comprehensive blueprint for a bomb or projectile. It handles exploding on impact with a physics object, plays sound and visual effects, and has a delayed explosion timer.",
+                    visual: {
+                        nodes: [ { id: 'hit', typeId: 'event_hit', x: 20, y: 50 }, { id: 'is_phys', typeId: 'phys_is_sim_phys', x: 280, y: 180 }, { id: 'branch', typeId: 'logic_branch', x: 500, y: 50 }, { id: 'impulse', typeId: 'phys_add_impulse', x: 750, y: 50 }, { id: 'spawn', typeId: 'spawn_emitter', x: 1050, y: 50 }, { id: 'play_explode', typeId: 'audio_play_sound', x: 1350, y: 180 }, { id: 'destroy', typeId: 'util_destroy', x: 1650, y: 180 }, { id: 'begin_play', typeId: 'event_begin_play', x: 20, y: 400 }, { id: 'delay', typeId: 'flow_delay', x: 280, y: 400 }, { id: 'get_loc', typeId: 'util_get_world_loc', x: 280, y: 550 }, { id: 'play_bounce', typeId: 'audio_play_sound', x: 500, y: 600 }, ],
+                        connections: [ { from: 'hit', fromPin: 'Output', to: 'branch', toPin: 'Input' }, { from: 'hit', fromPin: 'Other Comp', to: 'is_phys', toPin: 'Target' }, { from: 'is_phys', fromPin: 'Return Value', to: 'branch', toPin: 'Condition' }, { from: 'branch', fromPin: 'True', to: 'impulse', toPin: 'Input' }, { from: 'impulse', fromPin: '', to: 'spawn', toPin: 'Input' },  { from: 'spawn', fromPin: 'Output', to: 'play_explode', toPin: 'Input' }, { from: 'spawn', fromPin: 'Return Value', to: 'destroy', toPin: 'Target'}, { from: 'play_explode', fromPin: '', to: 'destroy', toPin: 'Input'},  { from: 'hit', fromPin: 'Hit Location', to: 'impulse', toPin: 'Location'}, { from: 'begin_play', fromPin: 'Output', to: 'delay', toPin: 'Input' }, { from: 'delay', fromPin: 'Completed', to: 'play_explode', toPin: 'Input'}, { from: 'get_loc', fromPin: 'Return Value', to: 'play_bounce', toPin: 'Location'}, { from: 'get_loc', fromPin: 'Return Value', to: 'play_explode', toPin: 'Location'}, ]
+                    },
+                    raw: `Begin Object Class=/Script/BlueprintGraph.K2Node_Event Name="K2Node_Event_0" ... (full raw text)`
+                },
+                'print_string': {
+                    name: "Simple Print String",
+                    description: "The most basic debugging tool. Prints a string to the screen when the game starts.",
+                     visual: {
+                        nodes: [ { id: 'begin_play', typeId: 'event_begin_play', x: 50, y: 50}, { id: 'print', typeId: 'util_print', x: 350, y: 50} ],
+                        connections: [ { from: 'begin_play', fromPin: 'Output', to: 'print', toPin: 'Input' } ]
+                    },
+                    raw: `Begin Object Class=/Script/BlueprintGraph.K2Node_CallFunction Name="K2Node_CallFunction_1" ... (full raw text)`
+                }
+            };
+            
+            // --- AI & Tool Integration ---
+            async function findBlueprintWithAI(userQuery) {
+                aiSubmitBtn.disabled = true;
+                aiSubmitBtn.textContent = 'Thinking...';
+                outputPanel.innerHTML = `<div id="placeholder-text">Checking my library...</div>`;
+                
+                const availableSnippets = Object.keys(BLUEPRINT_SNIPPETS).map(key => `'${key}': ${BLUEPRINT_SNIPPETS[key].description}`).join('\n');
+                const initialPrompt = `You are an expert Unreal Engine assistant. A user wants a blueprint snippet. Your only task is to identify the best snippet from the provided list based on the user's request.\n\nHere are the available snippets:\n${availableSnippets}\n\nUser's request: "${userQuery}"\n\nBased on the request, which snippet key is the best match? If there is a good match, respond with ONLY the single snippet key (e.g., 'bomb_blueprint'). If there are no good matches, respond with ONLY the text 'NO_MATCH'.`;
+
+                try {
+                    let chatHistory = [{ role: "user", parts: [{ text: initialPrompt }] }];
+                    let payload = { contents: chatHistory };
+                    const apiKey = ""; 
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    let response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                    let result = await response.json();
+                    
+                    if (result.candidates && result.candidates.length > 0) {
+                        const responseText = result.candidates[0].content.parts[0].text.trim().replace(/'/g, "");
+                        if (BLUEPRINT_SNIPPETS[responseText]) {
+                            activeBlueprint = BLUEPRINT_SNIPPETS[responseText];
+                            renderVisual();
+                        } else {
+                            await researchAndAdviseWithTools(userQuery);
+                        }
+                    } else { throw new Error("Invalid response structure from AI."); }
+                } catch (error) {
+                    console.error("AI Error:", error);
+                    outputPanel.innerHTML = `<div id="placeholder-text">Sorry, I couldn't connect to the AI. Please try again later.</div>`;
+                } finally {
+                    aiSubmitBtn.disabled = false;
+                    aiSubmitBtn.textContent = 'Get Snippet';
+                }
+            }
+            
+            async function researchAndAdviseWithTools(userQuery) {
+                outputPanel.innerHTML = `<div id="placeholder-text">No snippet found in my library. Searching the web for you...</div>`;
+                 try {
+                     const searchResultsText = `Simulated search results for "${userQuery}"... In a real environment, this would be populated with live data from Google Search. The AI would then synthesize this data.`;
+                     
+                    const advisoryPrompt = `You are Atom (AI Technical Advisor), an expert on Unreal Engine and Blender, providing advice for the team at IronWill Interactive Entertainment (formerly PGD). A user asked: "${userQuery}".
+You have searched the web and found the following information:
+---
+${searchResultsText}
+---
+Based on this information and your expert knowledge of the team's preferences, provide a helpful, synthesized answer.
+
+**Team-Specific Recommendations (Apply these rules when relevant):**
+* **Blender Texturing:** If the user asks about simple texturing, recommend the **Image Texture node** workflow and remind them about proper UV unwrapping. For complex materials, the **Principled BSDF** is preferred. For procedural textures in UE 5.4+, mention the new **Texture Graph** feature. For older versions, mention using plugins like **Texture Lab**.
+* **Shooter Template:** If the query is about starting a First or Third Person shooter, **strongly recommend** using the team's **True_FP-TP_Template** (https://github.com/gamedev44/True_FP-TP_Template) over Epic's base templates, explaining that it's fully network replicated.
+* **Networking:** For general networking or dedicated server setup, suggest the **UE5-TunnelServerSolution** (https://github.com/gamedev44/UE5-TunnelServerSolution) as a great starting point.
+* **Large-Scale Networking:** For fully scalable, but more costly dedicated server solutions, suggest checking out **Horizon** (https://horizon.farbeyond.dev). For MMO-scale solutions, mention **Edgegap**.
+* **Other Tools:** Refer to team tools like **AsterTools** (https://github.com/gamedev44/ARFB, https://github.com/gamedev44/RFBE) or **MetaMaker** (https://github.com/gamedev44/MetaMaker) if they apply to the user's problem.
+
+Structure your answer clearly using Markdown with headings (e.g., ### My Heading), bullet points (* My Item), and bold text (**My Bold Text**). Your goal is to give direct, actionable advice, not just links.`;
+                    
+                    const chatHistory = [{ role: "user", parts: [{ text: advisoryPrompt }] }];
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; 
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error(`Advisory API request failed: ${response.status}`);
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates.length > 0) {
+                         const advice = result.candidates[0].content.parts[0].text;
+                         displaySynthesizedAnswer(advice, userQuery);
+                    } else { throw new Error("Could not get advice from AI.") }
+
+                 } catch(e) {
+                     console.error("Search Tool Error:", e);
+                     outputPanel.innerHTML = `<div id="placeholder-text">Sorry, the web search failed.</div>`;
+                 }
+            }
+            
+            function displaySynthesizedAnswer(advice, userQuery) {
+                const coreQuery = userQuery.replace(/how to make a|how do i|etc|and so on|in unreal engine|in blender/gi, '').trim();
+                const searchQueries = [
+                    `https://www.google.com/search?q=Unreal+Engine+5+documentation+${encodeURIComponent(coreQuery)}`,
+                    `https://www.google.com/search?q=Blender+documentation+${encodeURIComponent(coreQuery)}`,
+                    `https://www.youtube.com/results?search_query=${encodeURIComponent(coreQuery + ' ue5 tutorial')}`,
+                    `https://www.google.com/search?q=site%3Areddit.com/r/unrealengine+${encodeURIComponent(coreQuery)}`
+                ];
+
+                const renderedAdvice = renderMarkdown(advice);
+
+                const resultsHTML = `
+                    <div class="result-item">${renderedAdvice}</div>
+                    <div class="results-section">
+                        <h2>For more details, you can search here:</h2>
+                        <div class="result-item"><a href="${searchQueries[0]}" target="_blank">Search UE5 Docs</a></div>
+                        <div class="result-item"><a href="${searchQueries[1]}" target="_blank">Search Blender Docs</a></div>
+                        <div class="result-item"><a href="${searchQueries[2]}" target="_blank">Search YouTube</a></div>
+                        <div class="result-item"><a href="${searchQueries[3]}" target="_blank">Search Reddit</a></div>
+                    </div>`;
+
+                 outputPanel.innerHTML = `<div id="search-results">
+                    <div class="results-section"><h2>Atom (AI Technical Advisor)</h2>${resultsHTML}</div>
+                 </div>`;
+
+                activeBlueprint = null;
+                visualToggle.classList.remove('active');
+                rawToggle.classList.remove('active');
+                copyBtn.classList.add('hidden');
+            }
+
+            // --- Event Handlers & Core Logic ---
+            aiSubmitBtn.addEventListener('click', () => {
+                const query = aiPrompt.value.trim();
+                if (query) findBlueprintWithAI(query);
+            });
+
+            visualToggle.addEventListener('click', renderVisual);
+            rawToggle.addEventListener('click', renderRawText);
+            copyBtn.addEventListener('click', copyRawText);
+            
+            // Pan and Zoom Listeners
+            outputPanel.addEventListener('mousedown', (e) => {
+                if (!e.target.closest('.node') && e.target.closest('.output-panel')) {
+                    panning.active = true;
+                    panning.start = { x: e.clientX, y: e.clientY };
+                    panning.viewStart = { ...view };
+                    outputPanel.classList.add('panning');
+                }
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (!panning.active) return;
+                const dx = e.clientX - panning.start.x;
+                const dy = e.clientY - panning.start.y;
+                view.x = panning.viewStart.x + dx;
+                view.y = panning.viewStart.y + dy;
+                updateViewTransform();
+            });
+            window.addEventListener('mouseup', () => {
+                panning.active = false;
+                outputPanel.classList.remove('panning');
+            });
+            outputPanel.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = outputPanel.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                const scaleAmount = 1 - e.deltaY * 0.001;
+                const newScale = Math.max(0.2, Math.min(1.5, view.scale * scaleAmount));
+                view.x = mouseX - (mouseX - view.x) * (newScale / view.scale);
+                view.y = mouseY - (mouseY - view.y) * (newScale / view.scale);
+                view.scale = newScale;
+                updateViewTransform();
+            });
+
+            // Modal Logic
+            try {
+                if (localStorage.getItem('hideWelcomeModal') === 'true') {
+                    welcomeModal.classList.add('hidden');
+                } else {
+                    welcomeModal.classList.remove('hidden');
+                }
+            } catch(e) {
+                welcomeModal.classList.remove('hidden');
+            }
+
+            closeModalBtn.addEventListener('click', () => {
+                if (dontShowCheckbox.checked) {
+                    try {
+                        localStorage.setItem('hideWelcomeModal', 'true');
+                    } catch(e) { /* ignore */ }
+                }
+                welcomeModal.classList.add('hidden');
+            });
+
+            // --- Render Functions ---
+            function renderVisual() {
+                if (!activeBlueprint) {
+                    outputPanel.innerHTML = `<div id="placeholder-text">Ask the AI for a blueprint to begin</div>`;
+                    return;
+                };
+                visualToggle.classList.add('active');
+                rawToggle.classList.remove('active');
+                copyBtn.classList.add('hidden');
+                try {
+                    const graph = activeBlueprint.visual;
+                    setupScene();
+                    const wrapper = document.getElementById('node-wrapper');
+                    const svg = document.getElementById('svg-layer');
+                    const nodeElements = new Map();
+                    graph.nodes.forEach(nodeData => {
+                        const template = NODE_LIBRARY[nodeData.typeId];
+                        if (!template) return;
+                        const element = createNodeElement(template);
+                        element.style.left = `${nodeData.x}px`;
+                        element.style.top = `${nodeData.y}px`;
+                        wrapper.appendChild(element);
+                        nodeElements.set(nodeData.id, element);
+                    });
+                    updateViewTransform();
+                    setTimeout(() => {
+                        graph.connections.forEach(conn => {
+                            const fromEl = nodeElements.get(conn.from);
+                            const toEl = nodeElements.get(conn.to);
+                            if (!fromEl || !toEl) return;
+                            const p1 = getPinPositionByName(fromEl, conn.fromPin, 'output');
+                            const p2 = getPinPositionByName(toEl, conn.toPin, 'input');
+                            if (!p1 || !p2) return;
+                            const wire = createWireElement(p1.pos, p2.pos, p1.type);
+                            svg.appendChild(wire);
+                        });
+                    }, 0);
+                } catch (error) {
+                    console.error("Visual Parsing Error:", error);
+                    outputPanel.innerHTML = `<div id="placeholder-text">Error rendering visual.</div>`;
+                }
+            }
+
+            function renderRawText() {
+                if (!activeBlueprint) return;
+                rawToggle.classList.add('active');
+                visualToggle.classList.remove('active');
+                copyBtn.classList.remove('hidden');
+                outputPanel.innerHTML = `<textarea id="raw-text-output" readonly>${activeBlueprint.raw}</textarea>`;
+            }
+            
+            // --- Helpers ---
+            function renderMarkdown(text) {
+                let html = text
+                    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                    .replace(/^\* (.*$)/gim, '<ul><li>$1</li></ul>')
+                    .replace(/<\/ul>\s?<ul>/gim, '')
+                    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+                    .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank">$1</a>')
+                    .replace(/\n/g, '<br>');
+                return html;
+            }
+
+            function updateViewTransform() {
+                const wrapper = document.getElementById('node-wrapper');
+                const svg = document.getElementById('svg-layer');
+                if(wrapper && svg) {
+                    const transform = `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
+                    wrapper.style.transform = transform;
+                    svg.style.transform = transform;
+                }
+            }
+            
+            function getPinPositionByName(nodeEl, pinName, pinIoType) {
+                const pins = Array.from(nodeEl.querySelectorAll(`.${pinIoType}s .pin`));
+                let foundPinEl = null;
+                if (!pinName) {
+                    foundPinEl = pins.find(p => p.querySelector('.pin-dot[data-pin-type="exec"]')) || pins[0];
+                } else {
+                    foundPinEl = pins.find(p => p.querySelector('span').textContent === pinName);
+                }
+                if (!foundPinEl) return null;
+                const pinDot = foundPinEl.querySelector('.pin-dot');
+                const type = pinDot.dataset.pinType;
+                const panelRect = outputPanel.getBoundingClientRect();
+                const dotRect = pinDot.getBoundingClientRect();
+                const absoluteCenterX = dotRect.left + dotRect.width / 2;
+                const absoluteCenterY = dotRect.top + dotRect.height / 2;
+                const relativeX = absoluteCenterX - panelRect.left;
+                const relativeY = absoluteCenterY - panelRect.top;
+                const finalX = (relativeX - view.x) / view.scale;
+                const finalY = (relativeY - view.y) / view.scale;
+                return { pos: { x: finalX, y: finalY }, type: type };
+            }
+
+            function copyRawText() {
+                const textArea = document.getElementById('raw-text-output');
+                if (!textArea) return;
+                textArea.select();
+                document.execCommand('copy');
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1500);
+            }
+            
+            function setupScene() {
+                outputPanel.innerHTML = `<div id="node-wrapper"></div><svg id="svg-layer"></svg>`;
+            }
+
+            function createNodeElement(nodeTemplate) {
+                const el = document.createElement('div');
+                el.className = 'node';
+                const header = document.createElement('div');
+                header.className = 'node-header';
+                if (nodeTemplate.category) {
+                    header.classList.add(nodeTemplate.category + '-node');
+                }
+                header.textContent = nodeTemplate.name;
+                
+                let inputsHTML = (nodeTemplate.inputs || []).map(pin => `<div class="pin"><div class="pin-dot" data-pin-type="${pin.type}"></div><span>${pin.name}</span></div>`).join('');
+                let outputsHTML = (nodeTemplate.outputs || []).map(pin => `<div class="pin"><span>${pin.name}</span><div class="pin-dot" data-pin-type="${pin.type}"></div></div>`).join('');
+
+                const body = document.createElement('div');
+                body.className = 'node-body';
+                body.innerHTML = `<div class="node-pins inputs">${inputsHTML}</div><div class="node-pins outputs">${outputsHTML}</div>`;
+                
+                el.appendChild(header);
+                el.appendChild(body);
+                return el;
+            }
+            
+            function createWireElement(p1, p2, type) {
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const dx = Math.abs(p1.x - p2.x) * 0.6;
+                const d = `M ${p1.x} ${p1.y} C ${p1.x + dx} ${p1.y}, ${p2.x - dx} ${p2.y}, ${p2.x} ${p2.y}`;
+                path.setAttribute('d', d);
+                path.setAttribute('class', `wire ${type || 'default'}`);
+                return path;
+            }
+
+        });
+    </script>
+</body>
+</html>
