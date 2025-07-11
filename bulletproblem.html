@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Asterisk">
+    <meta name="description" content="A detailed breakdown of the firing logic problem in modern video games and a proposal for a unified, efficient solution.">
+    <title>The Bullet Problem: A Unified Firing Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://miro.medium.com/v2/resize:fit:1400/1*6Z263tK4w5XVe_zC4heGwQ.gif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .prose-custom h2 {
+            border-bottom: 2px solid #22d3ee; /* cyan-400 */
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .prose-custom h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .card {
+            background-color: rgba(15, 23, 42, 0.75); /* slate-900 with more opacity */
+            border: 1px solid rgba(51, 65, 85, 0.5); /* slate-700 with transparency */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        /* -- Styles for Modals & Loading Screen -- */
+        #expandable-image {
+            cursor: zoom-in;
+            transition: opacity 0.2s ease-in-out;
+            /* Invert black to white, keep other colors */
+            filter: invert(1) hue-rotate(180deg);
+        }
+        #expandable-image:hover {
+            opacity: 0.8;
+        }
+        .modal, #loading-screen {
+            /* Smoother, longer fade transition. The JS variable `fadeOutDuration` should match this value. */
+            transition: opacity 1.5s ease-in-out;
+        }
+        .modal.hidden, #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #modal-image {
+            transition: transform 0.1s ease-out;
+            transform-origin: center center;
+            /* Invert black to white, keep other colors */
+            filter: invert(1) hue-rotate(180deg);
+        }
+    </style>
+</head>
+<body class="text-gray-300">
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 bg-black flex items-center justify-center z-[100]">
+        <!-- Updated image to fill the screen -->
+        <img src="https://i.pinimg.com/originals/c5/8b/f6/c58bf61b9e786e3c4131348e933b752c.gif" alt="Loading..." class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1920x1080/000000/ffffff?text=Loading...';">
+    </div>
+
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50">
+        <div class="card text-center p-6 sm:p-8 rounded-2xl max-w-lg w-full">
+            <h2 class="text-2xl font-bold text-white mb-2">Documentation Provided By</h2>
+            <p class="text-white text-lg mb-4">IronWill Interactive Entertainment</p>
+            <div class="flex items-center justify-center space-x-4 my-6">
+                <img src="https://i.ibb.co/TmFjF7k/image-2023-11-28-155608753.png" alt="PGD Logo" class="h-16 sm:h-20" onerror="this.onerror=null;this.src='https://placehold.co/150x80/1e293b/9ca3af?text=PGD';">
+                <span class="text-cyan-400 text-4xl font-thin">&rarr;</span>
+                <img src="https://i.ibb.co/tMVDxK5p/image-2025-06-10-150850097.png" alt="IronWill Interactive Entertainment Logo" class="h-20 sm:h-24" onerror="this.onerror=null;this.src='https://placehold.co/200x100/1e293b/9ca3af?text=IronWill';">
+            </div>
+            <p class="text-gray-400 mb-6">Formerly PGD</p>
+            <button id="close-welcome-modal" class="bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">Continue</button>
+        </div>
+    </div>
+
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">The Bullet Problem</h1>
+            <p class="text-xl text-cyan-400" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">A Unified Firing Solution for Modern Shooters</p>
+        </header>
+
+        <main class="prose prose-lg prose-invert max-w-4xl mx-auto prose-custom">
+            <p>In first-person and third-person shooters, a fundamental conflict exists: the player's view (the camera) is not in the same physical location as the weapon's barrel. This simple fact, known as parallax, has forced developers to create increasingly complex systems to ensure that when a player shoots, the bullet lands where the crosshair is pointing. These solutions, however, often introduce more problems than they solve.</p>
+
+            <!-- Visual Context -->
+            <div class="my-10">
+                <img id="expandable-image" src="https://i.ibb.co/pjK6myN9/image-2025-07-11-074242699.png" alt="Diagram showing the parallax problem between camera, muzzle, and target" class="w-full max-w-2xl mx-auto rounded-lg shadow-2xl border-2 border-gray-700 bg-white" onerror="this.onerror=null;this.src='https://placehold.co/1200x675/111827/9ca3af?text=Visual+Context+Not+Found';">
+                <p class="text-center text-sm mt-2 text-gray-500">The core issue: The camera's line-of-sight and the barrel's line-of-sight are different. (Click image to expand)</p>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white">The Old Ways: Flawed Firing Models</h2>
+            <p>Historically, games have used a few common methods to handle shooting, each with significant downsides.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 not-prose">
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mt-0">Classic FPS (e.g., Doom, Quake)</h3>
+                    <p class="text-gray-400">This model uses a single hitscan trace fired straight from the weapon's barrel.</p>
+                    <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li><strong class="text-green-400">Pro:</strong> The tracer path is perfectly straight and visually honest. It originates from the gun.</li>
+                        <li><strong class="text-red-400">Con:</strong> Due to barrel offset, shots will miss the on-screen crosshair at a distance, leading to player frustration.</li>
+                    </ul>
+                </div>
+                <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mt-0">Hybrid TPS / FPS (e.g., SWBF2 2017)</h3>
+                    <p class="text-gray-400">These games use duplication to their advantage so that each mode has its own unique animations and linetrace projectile code.</p>
+                     <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li><strong class="text-green-400">Pro:</strong> Shots are accurate to the linetrace and crosshair, which feels intuitive to the player.</li>
+                        <li><strong class="text-red-400">Con:</strong> Requires duplicating everything for each mode (animations, linetrace functions, replication, etc.), causing too much overhead and long-term maintenance, making it unscalable for small teams.</li>
+                    </ul>
+                </div>
+                 <div class="card p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mt-0">Modern FPS (e.g., Call of Duty)</h3>
+                    <p class="text-gray-400">These games use complex hybrid systems to make the bullet hit the crosshair.</p>
+                     <ul class="list-disc list-inside mt-4 space-y-2">
+                        <li><strong class="text-green-400">Pro:</strong> Shots are accurate to the crosshair, which feels intuitive to the player.</li>
+                        <li><strong class="text-red-400">Con:</strong> Requires "bending" the bullet path, creating visual artifacts and significant technical overhead.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white">Why Complex Solutions Are a Bad Idea</h2>
+            <p>The attempt to "fake" a straight bullet path from the barrel to the crosshair's target introduces a cascade of technical and experiential issues.</p>
+            
+            <div class="not-prose space-y-4">
+                <div class="card p-6 rounded-lg">
+                    <h4 class="font-bold text-white text-lg">1. Spectator & Replay Inconsistency</h4>
+                    <p>Every curved or offset tracer is instantly visible from a third-person or overhead spectator view, revealing the "magic trick." This requires developers to replicate all the complex transforms for every possible view, or risk showing players bizarre, bending bullets.</p>
+                </div>
+                <div class="card p-6 rounded-lg">
+                    <h4 class="font-bold text-white text-lg">2. Network & Performance Overhead</h4>
+                    <p>Tracking multiple traces, offsets, and view-dependent transforms across the network is expensive. It consumes extra CPU cycles and bandwidth just to correct a visual problem, reducing server performance and potentially increasing latency.</p>
+                </div>
+                <div class="card p-6 rounded-lg">
+                    <h4 class="font-bold text-white text-lg">3. GPU & Rendering Cost</h4>
+                    <p>Bending tracers isn't free. It can require extra work on the GPU, such as compute shaders or multi-pass rendering, which costs fill-rate and draw calls, ultimately reducing the framerate.</p>
+                </div>
+                 <div class="card p-6 rounded-lg">
+                    <h4 class="font-bold text-white text-lg">4. Asset & Pipeline Duplication</h4>
+                    <p>Supporting different firing logic for first-person, third-person, and ADS views often means duplicating assets. This can include separate animations, weapon socket setups, and recoil patterns, bloating disk usage and doubling the art pipeline effort.</p>
+                </div>
+                 <div class="card p-6 rounded-lg">
+                    <h4 class="font-bold text-white text-lg">5. Inconsistent Player Experience</h4>
+                    <p>Hybrid models create a messy experience. Pure-muzzle shots feel unfair. Camera-blended shots create glaring "fake" bullet curves in replays. The complexity leads to visual artifacts and collision glitches, like shots failing to register or tracers passing through enemies.</p>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white">The Real Solution: A Unified, Predictable Model</h2>
+            <p>The best solution is one that is simple, efficient, and prioritizes competitive integrity. It accepts the reality of parallax and uses it to create a system that is 100% accurate and visually honest.</p>
+            
+            <ol class="list-decimal list-inside space-y-3">
+                <li><strong>Single Camera-Center Raycast:</strong> First, cast a ray from the center of the viewport (the crosshair) to find the true aim point in the world. This is what the player is actually aiming at.</li>
+                <li><strong>Identify Muzzle Position:</strong> Get the world position of a dedicated `Muzzle` socket on the weapon mesh.</li>
+                <li><strong>Compute Muzzle-to-Target Vector:</strong> Calculate the normalized direction vector from the muzzle's position to the aim point found in step 1.</li>
+                <li><strong>Fire from Muzzle:</strong> Instantiate the projectile or tracer at the muzzle and launch it along the computed vector. No bending, no blending.</li>
+            </ol>
+
+            <div class="bg-gray-900/50 rounded-lg my-6 overflow-hidden not-prose border border-gray-700">
+                <pre class="p-4 text-sm"><code class="language-cpp">// Core Logic Example
+FVector AimPoint = CameraTrace().GetHitLocation();
+FVector MuzzlePosition = WeaponMesh->GetSocketLocation("Muzzle");
+
+FVector FireDirection = (AimPoint - MuzzlePosition).GetSafeNormal();
+
+// Spawn projectile at MuzzlePosition, fire with FireDirection velocity
+SpawnProjectile(MuzzlePosition, FireDirection);
+                </code></pre>
+            </div>
+
+            <h3 class="text-2xl font-bold text-white">Benefits of the Unified Solution</h3>
+            <ul class="list-disc list-inside space-y-2">
+                <li><strong class="text-cyan-400">100% Crosshair Accuracy:</strong> What you see is what you hit. The system is perfectly predictable for the player.</li>
+                <li><strong class="text-cyan-400">True, Straight Tracers:</strong> Projectiles travel in a straight line from the barrel to the target. It looks correct from every angle, including spectator views.</li>
+                <li><strong class="text-cyan-400">Single, Simple Code Path:</strong> One set of logic works for all views (1st-person, 3rd-person, spectator), dramatically simplifying development.</li>
+                <li><strong class="text-cyan-400">Minimal Assets:</strong> No need for duplicate animations, sockets, or weapon models.</li>
+                <li><strong class="text-cyan-400">Low Overhead:</strong> The logic is computationally cheap, requiring minimal CPU, GPU, and network resources.</li>
+            </ul>
+            
+            <h3 class="text-2xl font-bold text-white">The Final Trade-Off: "Barrel Stuffing"</h3>
+            <p>This unified model has one primary, well-understood trade-off: aiming over nearby cover. Because the camera is higher than the barrel, a player can sometimes see a target that their gun barrel cannot. In this case, firing will result in the bullet hitting the cover directly in front of them. While initially surprising, this is a consistent and learnable behavior that preserves the game's competitive integrity, unlike the unpredictable nature of complex, "magic" bullet systems.</p>
+
+        </main>
+        
+        <footer class="text-center mt-16 text-gray-500 border-t border-gray-700/50 pt-6">
+            <p>Page created and programmed by Asterisk.</p>
+            <a href="https://gist.github.com/gamedev44/04c21006def2d0ffe54ecc1b57aca2cd" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 transition-colors">Portfolio & Résumé</a>
+        </footer>
+    </div>
+
+    <!-- Modal for Full-Screen Image -->
+    <div id="modal-overlay" class="modal hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-[60]">
+        <span id="modal-close" class="absolute top-4 right-6 text-white text-5xl font-bold cursor-pointer select-none transition-transform hover:scale-110">&times;</span>
+        <div id="modal-content" class="relative w-full h-full flex items-center justify-center overflow-hidden">
+             <img id="modal-image" src="" alt="Full screen view" class="max-w-none bg-white" style="transform: scale(1) translate(0px, 0px); cursor: grab;">
+        </div>
+    </div>
+
+    <script>
+        // --- Page Load Sequence ---
+        const loadingScreen = document.getElementById('loading-screen');
+        const welcomeModal = document.getElementById('welcome-modal');
+        const closeWelcomeBtn = document.getElementById('close-welcome-modal');
+
+        // --- CONFIGURATION ---
+        // Adjust the time in milliseconds for how long the loading GIF appears.
+        const loadingGifDuration = 2600; // Currently 2.6 seconds
+        
+        // This should match the CSS transition duration for a smooth handover.
+        const fadeOutDuration = 1500; // Currently 1.5 seconds
+
+        window.addEventListener('load', () => {
+            // Set a timer to fade out the loading screen
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                
+                // After the loading screen fades, show the welcome modal
+                setTimeout(() => {
+                    welcomeModal.classList.remove('hidden');
+                }, fadeOutDuration);
+
+            }, loadingGifDuration);
+        });
+
+        closeWelcomeBtn.addEventListener('click', () => {
+            welcomeModal.classList.add('hidden');
+        });
+
+        // --- Interactive Image Modal Logic ---
+        const expandableImage = document.getElementById('expandable-image');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalImage = document.getElementById('modal-image');
+        const modalClose = document.getElementById('modal-close');
+
+        let scale = 1;
+        let panX = 0;
+        let panY = 0;
+        let isPanning = false;
+        let startX, startY;
+
+        function openModal() {
+            scale = 1;
+            panX = 0;
+            panY = 0;
+            updateTransform();
+            modalImage.src = expandableImage.src;
+            modalOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function updateTransform() {
+            modalImage.style.transform = `scale(${scale}) translate(${panX}px, ${panY}px)`;
+        }
+
+        expandableImage.addEventListener('click', openModal);
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        modalImage.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            isPanning = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+            modalImage.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mouseup', () => {
+            isPanning = false;
+            modalImage.style.cursor = 'grab';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isPanning) return;
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+            updateTransform();
+        });
+
+        modalImage.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const rect = modalImage.getBoundingClientRect();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            const newScale = Math.max(0.5, Math.min(scale + delta, 5));
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            panX = panX - (mouseX - panX) * (newScale / scale - 1);
+            panY = panY - (mouseY - panY) * (newScale / scale - 1);
+            scale = newScale;
+            updateTransform();
+        });
+
+    </script>
+</body>
+</html>
