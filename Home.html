@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Iron Will Interactive (IWI) - Confidently Crafting Software that Inspires!">
+  <meta name="author" content="Iron Will Interactive">
+  <meta name="theme-color" content="#0f0f0f">
+  <meta name="keywords" content="IWI, Iron Will Interactive, software, AI, enterprise, consulting, devops, unreal, python, blender">
+
+  <title>Iron Will Interactive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --bg-alt: #1a1a1a;
+      --text: #f4f4f4;
+      --accent: #f37021;
+      --hover: #2a2a2a;
+      --radius: 8px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--bg-alt);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #333;
+    }
+
+    .logo img {
+      height: 40px;
+      object-fit: cover;
+      object-position: center;
+      margin-bottom: 0.5rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-link {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      transition: background 0.3s;
+    }
+
+    .nav-link:hover {
+      background: var(--hover);
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--bg-alt);
+      border: 1px solid #444;
+      border-radius: var(--radius);
+      min-width: 200px;
+      z-index: 10;
+    }
+
+    .nav-item:hover .dropdown {
+      display: block;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .dropdown a:hover {
+      background: var(--hover);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .main-logo {
+      max-width: 300px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    footer {
+      background: var(--bg-alt);
+      border-top: 1px solid #333;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      margin: 0 0.5rem;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="https://i.ibb.co/b58gSLth/image-2025-07-20-171622174.png" alt="Iron Will Logo Text Only">
+    </div>
+    <nav>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Company</a>
+        <div class="dropdown">
+          <a href="/about.html">About</a>
+          <a href="/team.html">Team</a>
+          <a href="/careers.html">Careers</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Services</a>
+        <div class="dropdown">
+          <a href="/dev.html">Development</a>
+          <a href="/ai.html">AI & ML</a>
+          <a href="/integrations.html">Integration</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Forms</a>
+        <div class="dropdown">
+          <a href="/Pages/Forms/Requests/EarlyPay_Form.html">EPR Form</a>
+          <a href="/Application_Form.html">PTO Request</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Our Apps</a>
+        <div class="dropdown">
+          <a href="/VerseAssist.html">AI Assistant</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <img class="main-logo" src="https://i.ibb.co/tMVDxK5p/image-2025-06-10-150850097.png" alt="IWI Full Logo">
+    <h1>Iron Will Interactive</h1>
+    <p>Confidently Crafting Software that Inspires!</p>
+  </main>
+
+  <footer>
+    <p>
+      <a href="/LICENSE">Licensing</a> |
+      <a href="/privacy.html">Privacy Policy</a> |
+      <a href="/terms.html">EULA</a>
+    </p>
+    <p style="margin-top: 1rem; color: #777">&copy; 2025 Iron Will Interactive. All rights reserved.</p>
+  </footer>
+</body>
+</html>
