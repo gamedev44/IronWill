@@ -126,6 +126,76 @@
         #githubInvitation a:hover {
             background-color: #2d3748; /* Darker grey on hover */
         }
+        /* Custom styles for the typewriter effect */
+        .typewriter-text {
+            display: inline-block; /* Ensures the cursor is next to the text */
+            overflow: hidden; /* Ensures the text is not visible until typed */
+            white-space: pre-wrap; /* Preserves whitespace and wraps text */
+        }
+        /* Blinking cursor for typewriter */
+        .typewriter-text.typing::after {
+            content: '|';
+            animation: blink-caret .75s step-end infinite;
+        }
+        @keyframes blink-caret {
+            from, to { opacity: 0 }
+            50% { opacity: 1; }
+        }
+
+        /* Styles for the new buttons in NDA section */
+        .nda-buttons-container {
+            position: absolute; /* Position relative to the NDA section */
+            top: 1rem; /* Adjust as needed */
+            right: 1rem; /* Adjust as needed */
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10; /* Ensure buttons are above content */
+        }
+        .nda-buttons-container button {
+            background-color: #3b82f6; /* Blue color for buttons */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .nda-buttons-container button:hover {
+            background-color: #2563eb; /* Darker blue on hover */
+        }
+        .nda-buttons-container button:disabled {
+            background-color: #4a5568;
+            cursor: not-allowed;
+        }
+
+        #simpleExplanationContent {
+            margin-top: 1rem; /* Space below explanation */
+            padding: 1rem;
+            background-color: #2d3748;
+            border-radius: 0.5rem;
+            text-align: left;
+            display: none; /* Hidden by default */
+        }
+        #simpleExplanationContent p {
+            margin-bottom: 0.5rem;
+        }
+        #simpleExplanationDisclaimer {
+            color: #ef4444; /* Red for disclaimer */
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        /* Ensure NDA section is positioned relative for absolute children */
+        #nda-section {
+            position: relative;
+        }
+        /* New highlight class for NDA section when reading */
+        .reading-highlight {
+            border: 2px solid #3b82f6; /* Blue border to indicate reading */
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); /* Subtle glow */
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -139,6 +209,14 @@
 
         <!-- NDA Section -->
         <div id="nda-section" class="mb-8 p-6 border border-gray-600 rounded-lg space-y-6">
+            <!-- Buttons for Read Aloud and Simple Explanation -->
+            <div class="nda-buttons-container">
+                <button id="readAloudLicenseBtn">Read Aloud License</button>
+                <button id="simpleExplanationBtn">Simple Explanation</button>
+                <button id="pauseSpeechBtn" disabled>Pause</button>
+                <button id="resumeSpeechBtn" disabled>Resume</button>
+            </div>
+
             <h2 class="text-2xl font-bold mb-4">IronWill Interactive Proprietary Contributor License (IWI-PCL)</h2>
             <p>This Agreement is entered into as of <b><span id="currentDate"></span></b>, by and between <strong class="highlight-term">IronWill Interactive Entertainment ('IWI')</strong>, formerly known as PGD Progressive Game Design, including its principal founder <strong class="highlight-term">Joshua Herrell</strong> (Founder, Owner, and CEO) <strong class="highlight-term">Hamza Ahmed</strong> Co-Founder and any other current contributing associates (formerly of the Game Developers Union 'GDU'), hereinafter collectively referred to as "the Company," and the undersigned individual or entity ("the Recipient").</p>
             <p>This Agreement governs the disclosure of Confidential Information related to **any and all proprietary projects** developed by the Company to which the Recipient is granted access. This constitutes a master agreement covering all current and future work designated by IWI as falling under the <strong class="highlight-term">IWI-PCL</strong>.</p>
@@ -175,6 +253,11 @@
                 <li>Penalties for individuals can include substantial fines and imprisonment for up to 10 years.</li>
                 <li>The Company reserves the right to cooperate fully with federal law enforcement agencies and pursue all available criminal and civil penalties in the event of such a breach.</li>
             </ul>
+
+            <!-- Simple Explanation Content (initially hidden) -->
+            <div id="simpleExplanationContent" class="p-4 bg-gray-700 rounded-lg hidden">
+                <!-- Content will be typed in by JavaScript -->
+            </div>
         </div>
 
         <!-- Contributor Information Form -->
@@ -182,8 +265,6 @@
             <!-- Hidden fields for Formspree -->
             <input type="hidden" name="_subject" value="New Contributor Onboarding: IWI-PCL Agreement">
             <input type="hidden" name="_replyto" id="formspreeReplyTo">
-            <!-- The _to field is not strictly necessary if your Formspree form is configured to send to a specific email -->
-            <!-- <input type="hidden" name="_to" value="sonydevteam4@gmail.com"> -->
 
             <h2 class="text-2xl font-bold border-b border-gray-600 pb-2">Contributor Information</h2>
             <fieldset class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -226,6 +307,15 @@
                 <div>
                     <label for="phone" class="block text-sm font-medium">Phone Number</label>
                     <input type="text" id="phone" name="Phone Number" class="mt-1 block w-full px-3 py-2 rounded-md">
+                </div>
+                <!-- NEW FIELDS ADDED HERE -->
+                <div>
+                    <label for="generalEmail" class="block text-sm font-medium">Your Email (for general contact)</label>
+                    <input type="email" id="generalEmail" name="generalEmail" class="mt-1 block w-full px-3 py-2 rounded-md">
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-medium">Your Message</label>
+                    <textarea id="message" name="message" rows="3" class="mt-1 block w-full px-3 py-2 rounded-md"></textarea>
                 </div>
             </fieldset>
             <hr class="border-gray-600">
@@ -274,9 +364,7 @@
 
         <!-- GitHub Invitation Section (initially hidden) -->
         <div id="githubInvitation" class="mt-8 p-6 bg-gray-800 rounded-lg text-center hidden">
-            <p>Your onboarding form has been submitted! We will review your details shortly.</p>
-            <p>Once your email is accepted, you will be invited as a contributor to the **BFR: Spiritual Successor to BF3** project on GitHub.</p>
-            <p>Please check the link below periodically. It will show a message confirming your invitation once it's active.</p>
+            <p id="typedMessage" class="text-xl text-white mb-4"></p> <!-- Element for typewriter text -->
             <a href="https://github.com/gamedev44/AsterGaspV2" target="_blank" class="mt-4 inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-md transition duration-300">
                 Go to AsterGaspV2 GitHub Repo
             </a>
@@ -297,6 +385,73 @@
     <!-- Bootstrap JS for Modal functionality -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        let speechUtterance = null; // Global variable to manage speech
+        let typewriterInterval = null; // Global variable to manage typewriter interval
+
+        // Function to stop any ongoing speech
+        function stopSpeech() {
+            if (speechUtterance && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            // Ensure buttons are reset if speech is stopped externally
+            updateSpeechControlButtons(false, false);
+        }
+
+        // Function to stop any ongoing typewriter effect
+        function stopTypewriter() {
+            if (typewriterInterval) {
+                clearInterval(typewriterInterval);
+                typewriterInterval = null;
+            }
+            // Remove typing cursor class
+            const typedElements = document.querySelectorAll('.typewriter-text.typing');
+            typedElements.forEach(el => el.classList.remove('typing'));
+        }
+
+        // Function to speak text
+        function speakText(text, onEndCallback = () => {}) {
+            stopSpeech(); // Stop any current speech before starting a new one
+            if ('speechSynthesis' in window) {
+                speechUtterance = new SpeechSynthesisUtterance(text);
+                speechUtterance.lang = 'en-US'; // Set language
+                speechUtterance.rate = 1.0; // Speed (0.1 to 10)
+                speechUtterance.pitch = 1.0; // Pitch (0 to 2)
+
+                speechUtterance.onstart = () => {
+                    updateSpeechControlButtons(true, false); // Enable pause, disable resume
+                };
+                speechUtterance.onpause = () => {
+                    updateSpeechControlButtons(false, true); // Disable pause, enable resume
+                };
+                speechUtterance.onresume = () => {
+                    updateSpeechControlButtons(true, false); // Enable pause, disable resume
+                };
+                speechUtterance.onend = () => {
+                    updateSpeechControlButtons(false, false); // Disable both
+                    onEndCallback(); // Execute the provided callback
+                };
+                speechUtterance.onerror = (event) => {
+                    console.error('Speech synthesis error:', event.error);
+                    updateSpeechControlButtons(false, false);
+                    onEndCallback(); // Also call callback on error
+                };
+
+                window.speechSynthesis.speak(speechUtterance);
+            } else {
+                console.warn("Text-to-speech not supported in this browser.");
+                onEndCallback(); // Call callback even if speech not supported
+            }
+        }
+
+        // Function to update the state of pause/resume buttons
+        function updateSpeechControlButtons(canPause, canResume) {
+            const pauseBtn = document.getElementById('pauseSpeechBtn');
+            const resumeBtn = document.getElementById('resumeSpeechBtn');
+            if (pauseBtn) pauseBtn.disabled = !canPause;
+            if (resumeBtn) resumeBtn.disabled = !canResume;
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             // Set current date in the NDA text
             const today = new Date();
@@ -306,8 +461,19 @@
             const onboardingForm = document.getElementById('onboardingForm');
             const userEmailInput = document.getElementById('userEmail');
             const formspreeReplyTo = document.getElementById('formspreeReplyTo');
-            const submitBtn = document.getElementById('submitBtn'); // Get the submit button
-            const agreeCheckbox = document.getElementById('agree'); // Get the agreement checkbox
+            const submitBtn = document.getElementById('submitBtn');
+            const agreeCheckbox = document.getElementById('agree');
+            const githubInvitation = document.getElementById('githubInvitation');
+            const typedMessageElement = document.getElementById('typedMessage');
+            const modalMessage = document.getElementById('modalMessage');
+            const sendingModal = new bootstrap.Modal(document.getElementById('sendingModal'));
+
+            const readAloudLicenseBtn = document.getElementById('readAloudLicenseBtn');
+            const simpleExplanationBtn = document.getElementById('simpleExplanationBtn');
+            const pauseSpeechBtn = document.getElementById('pauseSpeechBtn');
+            const resumeSpeechBtn = document.getElementById('resumeSpeechBtn');
+            const simpleExplanationContent = document.getElementById('simpleExplanationContent');
+            const ndaSection = document.getElementById('nda-section'); // Get NDA section for highlighting
 
             // Function to check form validity and agreement checkbox
             function checkFormValidityAndAgreement() {
@@ -323,30 +489,149 @@
             onboardingForm.addEventListener('input', checkFormValidityAndAgreement);
             onboardingForm.addEventListener('change', checkFormValidityAndAgreement);
 
-
-            // Update the _replyto hidden field whenever the user's email changes
+            // Update the _replyto hidden field whenever the user's contact email changes
             userEmailInput.addEventListener('input', () => {
                 formspreeReplyTo.value = userEmailInput.value;
             });
 
-            const modalMessage = document.getElementById('modalMessage');
-            const githubInvitation = document.getElementById('githubInvitation');
-            const sendingModal = new bootstrap.Modal(document.getElementById('sendingModal'));
+            // --- Typewriter and Speech for Post-Submission Message ---
+            const postSubmitMessage = "Thank you for your interest in collaborating with IronWill Interactive. We will review your submission shortly. In the meantime, this button below will take you to our repo. Feel free to refresh the private hidden page periodically until it shows the collaboration invite if you're accepted. Also, feel free to check your email for a confirmation message of approved submission and a link to the repo. Either way is up to you.";
+            
+            function typePostSubmitMessage() {
+                stopTypewriter(); // Stop any previous typewriter effect
+                typedMessageElement.textContent = ''; // Clear content
+                typedMessageElement.classList.add('typing'); // Add typing cursor class
 
+                let charIndex = 0;
+                typewriterInterval = setInterval(() => {
+                    if (charIndex < postSubmitMessage.length) {
+                        typedMessageElement.textContent += postSubmitMessage.charAt(charIndex);
+                        charIndex++;
+                    } else {
+                        stopTypewriter(); // Stop typing
+                    }
+                }, 50); // Typing speed
+            }
+
+            // --- Read Aloud License Button Functionality ---
+            readAloudLicenseBtn.addEventListener('click', () => {
+                stopSpeech(); // Stop any ongoing speech
+                stopTypewriter(); // Stop any ongoing typewriter effect
+                simpleExplanationContent.classList.add('hidden'); // Hide simple explanation if visible
+                simpleExplanationContent.innerHTML = ''; // Clear its content
+                ndaSection.classList.remove('reading-highlight'); // Remove highlight from simple explanation if it was active
+
+                let licenseText = '';
+                // Iterate through children of ndaSection to build text, skipping the h2 title and buttons container
+                ndaSection.childNodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        if (node.tagName === 'H2' && node.textContent.includes('IronWill Interactive Proprietary Contributor License (IWI-PCL)')) {
+                            // Skip this specific H2
+                            return;
+                        }
+                        if (node.classList.contains('nda-buttons-container') || node.id === 'simpleExplanationContent') {
+                            // Skip buttons container and simple explanation content
+                            return;
+                        }
+                        // Extract text from paragraphs, list items, headers
+                        if (node.tagName === 'P' || node.tagName === 'LI' || node.tagName === 'H3') {
+                            licenseText += node.textContent + ' ';
+                        } else if (node.tagName === 'UL') {
+                            node.querySelectorAll('li').forEach(li => {
+                                licenseText += li.textContent + ' ';
+                            });
+                        }
+                    }
+                });
+                
+                // Add highlight when speech starts
+                ndaSection.classList.add('reading-highlight');
+
+                speakText(licenseText.trim(), () => {
+                    // This callback runs when speech ends
+                    ndaSection.classList.remove('reading-highlight');
+                });
+            });
+
+            // --- Simple Explanation Button Functionality ---
+            const simpleExplanationFullHTML = `
+                <p><strong>Simple Explanation of the IronWill Interactive Contributor License:</strong></p>
+                <p>This agreement is like a promise you make to IronWill Interactive (IWI) when you work with us. We're sharing our secret ideas, code, and designs (called "Confidential Information") with you so you can help us make awesome games like BFR: Spiritual Successor to BF3.</p>
+                <p>Your promise is to keep these secrets safe. That means you can't share them with anyone else, copy them for your own projects, or try to figure out how they work without our permission. You can only use our secrets to help us with our projects.</p>
+                <p>Remember, everything you create while working with us belongs to IWI. We can also stop your access to our projects at any time.</p>
+                <p>If you break this promise, it can cause big problems for IWI. We might have to stop your access immediately, take legal action, and you could even face serious fines or jail time under federal law. We will work with law enforcement if our secrets are stolen.</p>
+                <p id="simpleExplanationDisclaimer" class="text-red-500 font-bold mt-4">
+                    IMPORTANT: This is a simplified explanation and not a legal document. It is still highly recommended that you read the full license above at least once. By submitting this form, you are legally bound by the terms of the full IronWill Interactive Proprietary Contributor License (IWI-PCL), regardless of whether you read this simple explanation.
+                </p>
+            `;
+
+            simpleExplanationBtn.addEventListener('click', () => {
+                stopSpeech(); // Stop any ongoing speech
+                stopTypewriter(); // Stop any ongoing typewriter effect
+                ndaSection.classList.remove('reading-highlight'); // Remove highlight from NDA section if it was active
+
+                // Ensure the simple explanation content is visible and reset for typing
+                simpleExplanationContent.classList.remove('hidden');
+                simpleExplanationContent.innerHTML = ''; // Clear previous content
+                simpleExplanationContent.classList.add('typing'); // Add typing cursor class
+
+                // Extract plain text for speech synthesis from the full HTML
+                const tempDivForText = document.createElement('div');
+                tempDivForText.innerHTML = simpleExplanationFullHTML;
+                const speechTextForSimpleExplanation = tempDivForText.textContent;
+
+                let charIndex = 0;
+                typewriterInterval = setInterval(() => {
+                    if (charIndex < simpleExplanationFullHTML.length) {
+                        // Append character by character to the innerHTML to preserve tags
+                        simpleExplanationContent.innerHTML += simpleExplanationFullHTML.charAt(charIndex);
+                        charIndex++;
+                    } else {
+                        stopTypewriter(); // Stop typing
+                        simpleExplanationContent.classList.remove('typing'); // Remove cursor
+                    }
+                }, 20); // Typing speed for simple explanation
+
+                // Add highlight to simple explanation content when speech starts
+                simpleExplanationContent.classList.add('reading-highlight');
+
+                speakText(speechTextForSimpleExplanation, () => {
+                    // This callback runs when speech ends
+                    simpleExplanationContent.classList.remove('reading-highlight');
+                });
+            });
+
+            // --- Pause and Resume Speech Buttons ---
+            pauseSpeechBtn.addEventListener('click', () => {
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.pause();
+                }
+            });
+
+            resumeSpeechBtn.addEventListener('click', () => {
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            });
+
+            // --- Form Submission Logic ---
             onboardingForm.addEventListener('submit', async (event) => {
-                event.preventDefault(); // Prevent default form submission to handle it with fetch
+                event.preventDefault(); // Prevent default form submission
 
-                // This check is redundant if the button is disabled, but good for robustness
                 if (submitBtn.disabled) {
-                    onboardingForm.reportValidity(); // Show native browser validation messages
+                    onboardingForm.reportValidity();
                     return;
                 }
 
-                // Show the "sending" modal
+                stopSpeech(); // Stop any ongoing speech
+                stopTypewriter(); // Stop any ongoing typewriter effect
+                ndaSection.classList.remove('reading-highlight'); // Ensure NDA highlight is off
+                simpleExplanationContent.classList.add('hidden'); // Hide simple explanation content
+                simpleExplanationContent.innerHTML = ''; // Clear its content
+
                 modalMessage.textContent = 'Submitting your onboarding form...';
                 sendingModal.show();
 
-                // Collect form data
                 const formData = new FormData(onboardingForm);
 
                 try {
@@ -354,22 +639,26 @@
                         method: 'POST',
                         body: formData,
                         headers: {
-                            'Accept': 'application/json' // Important for Formspree to send JSON response
+                            'Accept': 'application/json'
                         }
                     });
 
                     if (response.ok) {
-                        modalMessage.innerHTML = `
-                            Form submitted successfully!<br>
-                            We will review your details shortly.
-                        `;
-                        // Show GitHub invitation section after successful submission
-                        githubInvitation.classList.remove('hidden');
-                        onboardingForm.reset(); // Clear the form after successful submission
-                        // After reset, re-evaluate button state
-                        checkFormValidityAndAgreement(); // Re-check to disable button after reset
+                        // Hide the form and show the invitation section
+                        onboardingForm.classList.add('hidden'); // Hide the form
+                        githubInvitation.classList.remove('hidden'); // Show the GitHub invitation section
+
+                        // Start typewriter and speech for post-submit message
+                        typePostSubmitMessage();
+                        speakText(postSubmitMessage);
+
+                        // Modal is temporary, hide it after its message is read/displayed
+                        modalMessage.innerHTML = `Form submitted successfully!`; // Brief modal message
+                        setTimeout(() => {
+                            sendingModal.hide();
+                        }, 1500); // Shorter delay for modal to hide
+                        
                     } else {
-                        // Handle non-OK responses (e.g., Formspree validation errors)
                         const errorData = await response.json();
                         console.error('Formspree submission error:', errorData);
                         modalMessage.innerHTML = `
@@ -378,6 +667,9 @@
                             <br><br>
                             <strong>Please ensure your Formspree form ID is correct.</strong>
                         `;
+                        setTimeout(() => {
+                            sendingModal.hide();
+                        }, 3000);
                     }
                 } catch (error) {
                     console.error('Network or fetch error:', error);
@@ -386,15 +678,12 @@
                         <br><br>
                         <strong>Please ensure your Formspree form ID is correct.</strong>
                     `;
-                } finally {
-                    // Hide the modal after a short delay to allow user to read message
                     setTimeout(() => {
                         sendingModal.hide();
-                    }, 3000); // 3 seconds delay
+                    }, 3000);
                 }
             });
         });
     </script>
-  
 </body>
 </html>
