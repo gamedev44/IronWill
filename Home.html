@@ -3,385 +3,353 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Iron Will Interactive - Confidently Crafting Software that Inspires!</title>
 <meta name="description" content="Iron Will Interactive (IWI) specializes in cutting-edge software development, AI & ML, enterprise solutions, and immersive interactive experiences. Inspiring confidence through expert craftsmanship.">
 <meta name="keywords" content="Iron Will Interactive, IWI, software development, AI, machine learning, enterprise software, consulting, DevOps, Unreal Engine, Python, Blender, custom software, interactive experiences, technology solutions">
 <meta name="author" content="Iron Will Interactive">
-<meta name="theme-color" content="#f37021"> <meta name="robots" content="index, follow"> <link rel="canonical" href="https://gamedev44.github.io/IronWill/Home.html"> <meta property="og:type" content="website">
-<meta property="og:url" content="https://gamedev44.github.io/IronWill/Home.html"> <meta property="og:title" content="Iron Will Interactive | Crafting Software that Inspires">
+<meta name="theme-color" content="#f37021">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://gamedev44.github.io/IronWill/Home.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gamedev44.github.io/IronWill/Home.html">
+<meta property="og:title" content="Iron Will Interactive | Crafting Software that Inspires">
 <meta property="og:description" content="Iron Will Interactive (IWI) specializes in cutting-edge software development, AI & ML, enterprise solutions, and immersive interactive experiences.">
-<meta property="og:image" content="https://gamedev44.github.io/IronWill/assets/social-share-logo.jpg"> <meta property="og:image:alt" content="Iron Will Interactive Logo">
+<meta property="og:image" content="https://gamedev44.github.io/IronWill/assets/social-share-logo.jpg">
+<meta property="og:image:alt" content="Iron Will Interactive Logo">
 <meta property="og:locale" content="en_US">
-
-<meta name="twitter:card" content="summary_large_image"> <meta name="twitter:site" content="@IWI_Tech"> <meta name="twitter:creator" content="@YourPersonalHandle"> <meta name="twitter:url" content="https://gamedev44.github.io/IronWill/Home.html"> <meta name="twitter:title" content="Iron Will Interactive | Crafting Software that Inspires">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@IWI_Tech">
+<meta name="twitter:creator" content="@YourPersonalHandle">
+<meta name="twitter:url" content="https://gamedev44.github.io/IronWill/Home.html">
+<meta name="twitter:title" content="Iron Will Interactive | Crafting Software that Inspires">
 <meta name="twitter:description" content="Iron Will Interactive (IWI) specializes in cutting-edge software development, AI & ML, enterprise solutions, and immersive interactive experiences.">
-<meta name="twitter:image" content="https://gamedev44.github.io/IronWill/assets/twitter-share-image.jpg"> <meta name="twitter:image:alt" content="Iron Will Interactive Logo and text">
+<meta name="twitter:image" content="https://gamedev44.github.io/IronWill/assets/twitter-share-image.jpg">
+<meta name="twitter:image:alt" content="Iron Will Interactive Logo and text">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  /* Dark Mode Variables (Default) */
+  :root {
+    --bg-start: #0f0f0f; /* Darker start for gradient */
+    --bg-end: #1a1a1a;   /* Lighter end for gradient */
+    --bg-alt: #1a1a1a;
+    --text: #f4f4f4;
+    --accent: #f37021;
+    --hover: #2a2a2a;
+    --border-color: #333;
+    --footer-text-color: #777;
+    --radius: 8px;
+    /* Modal specific colors for dark mode */
+    --modal-bg: #2a2a2a;
+    --modal-text: #f4f4f4;
+    --modal-border: #444;
+  }
+  /* Light Mode Variables */
+  body.light-mode {
+    --bg-start: #f4f4f4; /* Lighter start for gradient */
+    --bg-end: #ffffff;   /* Darker end for gradient */
+    --bg-alt: #ffffff;
+    --text: #333333;
+    --accent: #f37021; /* Accent color remains the same */
+    --hover: #e0e0e0;
+    --border-color: #cccccc;
+    --footer-text-color: #888;
+    /* Modal specific colors for light mode */
+    --modal-bg: #ffffff;
+    --modal-text: #333333;
+    --modal-border: #cccccc;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html, body {
+    height: 100%;
+    /* Allow scrolling on body */
+    overflow-y: auto;
+  }
+  /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+  body::-webkit-scrollbar {
+    width: 0px; /* For vertical scrollbar */
+    height: 0px; /* For horizontal scrollbar */
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    /* Apply gradient background */
+    background: linear-gradient(to bottom right, var(--bg-start), var(--bg-end));
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s ease, color 0.5s ease; /* Smooth transition for theme changes */
+  }
+  header {
+    background: var(--bg-alt);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border-color); /* Use variable */
+    position: relative; /* For theme toggle button positioning */
+  }
+  /* Styling for the text-based logo */
+  .header-logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none; /* Remove underline from link */
+    color: inherit; /* Inherit color from parent for main text */
+    margin-bottom: 1rem; /* Added tiny space between logo and nav */
+    cursor: pointer; /* Indicate it's clickable */
+    transition: transform 0.2s ease-in-out; /* Smooth hover effect */
+  }
+  .header-logo-text:hover {
+      transform: scale(1.02); /* Slightly enlarge on hover */
+  }
+  .header-logo-text .main-title {
+    font-size: 3.5rem; /* Made significantly bigger */
+    font-weight: 800; /* Extra bold */
+    color: var(--text); /* Main text color */
+    line-height: 1; /* Adjust line height for tight spacing */
+    text-transform: uppercase; /* Match original logo style */
+    letter-spacing: 0.05em; /* Add some letter spacing */
+  }
+  .header-logo-text .tagline {
+    font-size: 1.2rem; /* Smaller for tagline */
+    font-weight: 400; /* Normal weight */
+    color: var(--accent); /* Accent color for tagline */
+    margin-top: 0.5rem; /* Space between title and tagline */
+    text-align: center;
+  }
+  nav {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+    flex-wrap: wrap; /* Allow navigation items to wrap on smaller screens */
+  }
+  .nav-item {
+    position: relative;
+  }
+  .nav-link {
+    color: var(--text);
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    transition: background 0.3s, color 0.3s; /* Smooth transition for hover and text color */
+  }
+  .nav-link:hover {
+    background: var(--hover);
+  }
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-color); /* Use variable */
+    border-radius: var(--radius);
+    min-width: 200px;
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+  }
+  .nav-item:hover .dropdown {
+    display: block;
+  }
+  .dropdown a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .dropdown a:hover {
+    background: var(--hover);
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+  .main-logo {
+    max-width: 600px;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text); /* Ensure heading color changes */
+  }
+  p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: auto;
+    color: var(--text); /* Ensure paragraph color changes */
+  }
+  footer {
+    background: var(--bg-alt);
+    border-top: 1px solid var(--border-color); /* Use variable */
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--footer-text-color); /* Use variable */
+  }
+  footer a {
+    color: var(--accent);
+    margin: 0 0.5rem;
+    text-decoration: none;
+  }
+  footer a:hover {
+    text-decoration: underline;
+  }
+  /* Theme Toggle Button */
+  .theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--hover);
+    color: var(--text);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .theme-toggle:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  /* Welcome Modal Styling */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Above everything else */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .modal-content {
+    background-color: var(--modal-bg);
+    color: var(--modal-text);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--modal-border);
+  }
+  .modal-overlay.show .modal-content {
+    transform: translateY(0);
+  }
+  .modal-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+  }
+  .modal-content p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .modal-checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .modal-checkbox-container input[type="checkbox"] {
+    margin-right: 0.5rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+  }
+  .modal-checkbox-container label {
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .modal-button {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  .modal-button:hover {
+    background-color: darken(var(--accent), 10%); /* Darken accent on hover */
+    filter: brightness(1.1); /* Fallback for darken */
+  }
 
-<link rel="icon" href="/favicon.ico" sizes="any"> <link rel="icon" href="/icon.svg" type="image/svg+xml"> <link rel="apple-touch-icon" href="/apple-touch-icon.png"> <link rel="manifest" href="/manifest.webmanifest">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    /* Dark Mode Variables (Default) */
-    :root {
-      --bg-start: #0f0f0f; /* Darker start for gradient */
-      --bg-end: #1a1a1a;   /* Lighter end for gradient */
-      --bg-alt: #1a1a1a;
-      --text: #f4f4f4;
-      --accent: #f37021;
-      --hover: #2a2a2a;
-      --border-color: #333;
-      --footer-text-color: #777;
-      --radius: 8px;
-
-      /* Modal specific colors for dark mode */
-      --modal-bg: #2a2a2a;
-      --modal-text: #f4f4f4;
-      --modal-border: #444;
-    }
-
-    /* Light Mode Variables */
-    body.light-mode {
-      --bg-start: #f4f4f4; /* Lighter start for gradient */
-      --bg-end: #ffffff;   /* Darker end for gradient */
-      --bg-alt: #ffffff;
-      --text: #333333;
-      --accent: #f37021; /* Accent color remains the same */
-      --hover: #e0e0e0;
-      --border-color: #cccccc;
-      --footer-text-color: #888;
-
-      /* Modal specific colors for light mode */
-      --modal-bg: #ffffff;
-      --modal-text: #333333;
-      --modal-border: #cccccc;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      /* Allow scrolling on body */
-      overflow-y: auto;
-    }
-
-    /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
-    body::-webkit-scrollbar {
-      width: 0px; /* For vertical scrollbar */
-      height: 0px; /* For horizontal scrollbar */
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      /* Apply gradient background */
-      background: linear-gradient(to bottom right, var(--bg-start), var(--bg-end));
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      transition: background 0.5s ease, color 0.5s ease; /* Smooth transition for theme changes */
-    }
-
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
     header {
-      background: var(--bg-alt);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem 2rem;
-      border-bottom: 1px solid var(--border-color); /* Use variable */
-      position: relative; /* For theme toggle button positioning */
+      padding: 1rem;
     }
-
-    /* Styling for the text-based logo */
-    .header-logo-text {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none; /* Remove underline from link */
-      color: inherit; /* Inherit color from parent for main text */
-      margin-bottom: 1rem; /* Added tiny space between logo and nav */
-      cursor: pointer; /* Indicate it's clickable */
-      transition: transform 0.2s ease-in-out; /* Smooth hover effect */
-    }
-
-    .header-logo-text:hover {
-        transform: scale(1.02); /* Slightly enlarge on hover */
-    }
-
     .header-logo-text .main-title {
-      font-size: 3.5rem; /* Made significantly bigger */
-      font-weight: 800; /* Extra bold */
-      color: var(--text); /* Main text color */
-      line-height: 1; /* Adjust line height for tight spacing */
-      text-transform: uppercase; /* Match original logo style */
-      letter-spacing: 0.05em; /* Add some letter spacing */
+      font-size: 2.5rem; /* Adjust font size for mobile */
     }
-
     .header-logo-text .tagline {
-      font-size: 1.2rem; /* Smaller for tagline */
-      font-weight: 400; /* Normal weight */
-      color: var(--accent); /* Accent color for tagline */
-      margin-top: 0.5rem; /* Space between title and tagline */
-      text-align: center;
+      font-size: 1rem; /* Adjust font size for mobile */
     }
-
     nav {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      margin-top: 0.5rem;
-      flex-wrap: wrap; /* Allow navigation items to wrap on smaller screens */
-    }
-
-    .nav-item {
-      position: relative;
-    }
-
-    .nav-link {
-      color: var(--text);
-      text-decoration: none;
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius);
-      transition: background 0.3s, color 0.3s; /* Smooth transition for hover and text color */
-    }
-
-    .nav-link:hover {
-      background: var(--hover);
-    }
-
-    .dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: var(--bg-alt);
-      border: 1px solid var(--border-color); /* Use variable */
-      border-radius: var(--radius);
-      min-width: 200px;
-      z-index: 10;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
-    }
-
-    .nav-item:hover .dropdown {
-      display: block;
-    }
-
-    .dropdown a {
-      display: block;
-      padding: 0.75rem 1rem;
-      color: var(--text);
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .dropdown a:hover {
-      background: var(--hover);
-    }
-
-    main {
-      flex: 1;
-      display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
+      gap: 0.5rem;
+      margin-top: 1rem;
     }
-
-    .main-logo {
-      max-width: 600px;
-      margin-bottom: 1rem;
+    .nav-link {
+      padding: 0.5rem 0.75rem;
     }
-
-    h1 {
-      font-size: 2.25rem;
-      margin-bottom: 0.5rem;
-      color: var(--text); /* Ensure heading color changes */
-    }
-
-    p {
-      font-size: 1.2rem;
-      max-width: 800px;
-      margin: auto;
-      color: var(--text); /* Ensure paragraph color changes */
-    }
-
-    footer {
-      background: var(--bg-alt);
-      border-top: 1px solid var(--border-color); /* Use variable */
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--footer-text-color); /* Use variable */
-    }
-
-    footer a {
-      color: var(--accent);
-      margin: 0 0.5rem;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* Theme Toggle Button */
-    .theme-toggle {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: var(--hover);
-      color: var(--text);
-      border: 1px solid var(--border-color);
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.3s, color 0.3s, border-color 0.3s;
-    }
-
-    .theme-toggle:hover {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-
-    /* Welcome Modal Styling */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000; /* Above everything else */
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-
-    .modal-overlay.show {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal-content {
-      background-color: var(--modal-bg);
-      color: var(--modal-text);
-      padding: 2rem;
-      border-radius: var(--radius);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-      transform: translateY(-20px);
-      transition: transform 0.3s ease;
-      border: 1px solid var(--modal-border);
-    }
-
-    .modal-overlay.show .modal-content {
-      transform: translateY(0);
-    }
-
-    .modal-content h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: var(--accent);
-    }
-
-    .modal-content p {
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-checkbox-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-checkbox-container input[type="checkbox"] {
-      margin-right: 0.5rem;
-      width: 1.2rem;
-      height: 1.2rem;
-      cursor: pointer;
-    }
-
-    .modal-checkbox-container label {
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .modal-button {
-      background-color: var(--accent);
-      color: white;
+    .dropdown {
+      position: static; /* Make dropdowns stack on smaller screens */
       border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: var(--radius);
-      cursor: pointer;
+      box-shadow: none;
+      background: transparent;
+      min-width: unset;
+    }
+    .dropdown a {
+      padding-left: 2rem; /* Indent dropdown items */
+    }
+    h1 {
+      font-size: 1.75rem;
+    }
+    p {
       font-size: 1rem;
-      transition: background-color 0.3s ease;
     }
-
-    .modal-button:hover {
-      background-color: darken(var(--accent), 10%); /* Darken accent on hover */
-      filter: brightness(1.1); /* Fallback for darken */
+    .theme-toggle {
+      position: static; /* Place toggle button below logo on small screens */
+      margin-top: 1rem;
     }
-
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      header {
-        padding: 1rem;
-      }
-      .header-logo-text .main-title {
-        font-size: 2.5rem; /* Adjust font size for mobile */
-      }
-      .header-logo-text .tagline {
-        font-size: 1rem; /* Adjust font size for mobile */
-      }
-      nav {
-        flex-direction: column;
-        gap: 0.5rem;
-        margin-top: 1rem;
-      }
-      .nav-link {
-        padding: 0.5rem 0.75rem;
-      }
-      .dropdown {
-        position: static; /* Make dropdowns stack on smaller screens */
-        border: none;
-        box-shadow: none;
-        background: transparent;
-        min-width: unset;
-      }
-      .dropdown a {
-        padding-left: 2rem; /* Indent dropdown items */
-      }
-      h1 {
-        font-size: 1.75rem;
-      }
-      p {
-        font-size: 1rem;
-      }
-      .theme-toggle {
-        position: static; /* Place toggle button below logo on small screens */
-        margin-top: 1rem;
-      }
-      .modal-content {
-        padding: 1.5rem;
-      }
-      .modal-content h2 {
-        font-size: 1.5rem;
-      }
+    .modal-content {
+      padding: 1.5rem;
     }
-  </style>
+    .modal-content h2 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
 </head>
 <body>
   <header>
@@ -426,7 +394,6 @@
     </nav>
     <button id="theme-toggle" class="theme-toggle">Switch to Light Mode</button>
   </header>
-
   <main>
     <img class="main-logo" src="https://i.ibb.co/tMVDxK5p/image-2025-06-10-150850097.png" alt="IWI Full Logo">
     <section class="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg text-white max-w-2xl mx-auto transition-colors duration-500 light-mode:bg-gray-200 light-mode:text-gray-800">
@@ -435,7 +402,6 @@
         <p class="mt-4 text-lg">Whether it's cutting-edge AI, robust enterprise systems, or immersive interactive experiences, our team is committed to excellence and inspiring confidence in every line of our work.</p>
     </section>
   </main>
-
   <footer>
     <p>
       <a href="/LICENSE">Licensing</a> |
@@ -444,7 +410,6 @@
     </p>
     <p style="margin-top: 1rem; color: var(--footer-text-color)">&copy; 2025 Iron Will Interactive. All rights reserved.</p>
   </footer>
-
   <!-- Welcome Modal -->
   <div id="welcome-modal-overlay" class="modal-overlay">
     <div class="modal-content">
@@ -457,7 +422,6 @@
       <button id="modal-got-it" class="modal-button">Got It!</button>
     </div>
   </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const themeToggle = document.getElementById('theme-toggle');
@@ -482,7 +446,6 @@
           localStorage.setItem('theme', 'dark-mode');
         }
       });
-
       // Welcome Modal Logic
       const welcomeModalOverlay = document.getElementById('welcome-modal-overlay');
       const modalGotItButton = document.getElementById('modal-got-it');
