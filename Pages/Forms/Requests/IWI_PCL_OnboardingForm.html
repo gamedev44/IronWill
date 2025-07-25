@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronWill Interactive - Proprietary Contributor License</title>
+    <meta name="description" content="A comprehensive proprietary contributor license and onboarding agreement for all contributors to IronWill Interactive Entertainment projects.">
+    <meta name="keywords" content="IronWill Interactive, IWI, PGD, SpeedVerse, Joshua Herrell, Hamza Ahmed, Contributor License, NDA, Game Development">
+    <meta name="author" content="IronWill Interactive Entertainment">
+    <meta property="og:title" content="IronWill Interactive - Contributor Agreement & Onboarding">
+    <meta property="og:description" content="Official agreement and onboarding form for contributors to IWI projects.">
+    <meta property="og:image" content="https://i.ibb.co/tMVDxK5/image-2025-06-10-150850097.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IronWill Interactive - Contributor Agreement & Onboarding">
+    <meta name="twitter:description" content="Official agreement and onboarding form for contributors to IWI projects.">
+    <meta name="twitter:image" content="https://i.ibb.co/tMVDxK5/image-2025-06-10-150850097.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Bootstrap CSS for Modal -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the dark theme and form elements */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark background */
+            color: #e5e7eb; /* Light text color */
+        }
+        .form-container {
+            background-color: #1f2937; /* Slightly lighter dark for container */
+            border: 1px solid #374151; /* Border color */
+        }
+        label {
+            color: #9ca3af; /* Label color */
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 2.5rem; /* Larger heading */
+        }
+        h2 {
+            color: #9ca3af;
+            border-bottom: 1px solid #374151; /* Underline for sections */
+            padding-bottom: 5px;
+            font-size: 1.75rem;
+        }
+        h3 {
+            color: #e5e7eb;
+            font-size: 1.25rem;
+        }
+        p, li {
+            color: #d1d5db;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        b, strong {
+            color: #f9fafb; /* Stronger white for bold text */
+        }
+        input, textarea, select {
+            background-color: #374151; /* Darker input background */
+            border: 1px solid #4b5563; /* Input border */
+            border-radius: 0.375rem; /* Rounded corners for inputs */
+            color: #e5e7eb; /* Input text color */
+            transition: border-color 0.3s, box-shadow 0.3s;
+            padding: 0.5rem 0.75rem; /* Padding for inputs */
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6; /* Blue border on focus */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Blue shadow on focus */
+        }
+        .btn-primary {
+            background-color: #1e40af; /* Dark blue button */
+            border: none;
+            border-radius: 0.375rem; /* Rounded corners for buttons */
+            padding: 0.75rem 2rem; /* Button padding */
+            font-weight: 600; /* Semi-bold font */
+            color: #ffffff; /* White text for button */
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* Lighter blue on hover */
+        }
+        .btn-primary:disabled { /* Added disabled state styling */
+            background-color: #4a5568; /* Greyed out when disabled */
+            cursor: not-allowed;
+        }
+        .modal-content {
+            background-color: #1f2937; /* Modal background */
+            color: #e5e7eb;
+            border-radius: 0.5rem; /* Rounded corners for modal */
+        }
+        .modal-body p {
+            color: #d1d5db;
+        }
+        /* Style for highlighting key terms */
+        .highlight-term {
+            color: #ef4444; /* Red-500 */
+            font-weight: bold;
+        }
+        /* Styling for the GitHub invitation section */
+        #githubInvitation {
+            display: none; /* Hidden by default */
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #2d3748; /* Darker background for this section */
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        #githubInvitation p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        #githubInvitation a {
+            display: inline-block;
+            background-color: #4a5568; /* Grey button for GitHub link */
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        #githubInvitation a:hover {
+            background-color: #2d3748; /* Darker grey on hover */
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="form-container max-w-5xl mx-auto p-6 md:p-10 rounded-lg shadow-lg">
+        <div class="text-center mb-10">
+            <!-- Company Logo -->
+            <img src="https://i.ibb.co/tMVDxK5/image-2025-06-10-150850097.png" alt="IronWill Interactive Logo" class="mx-auto max-h-48 md:max-h-64 mb-4 rounded-lg">
+            <h1 class="text-4xl md:text-5xl font-bold mt-6">Proprietary Contributor License</h1>
+            <p class="text-xl mt-2 text-gray-400">Contributor Agreement & Onboarding</p>
+        </div>
+
+        <!-- NDA Section -->
+        <div id="nda-section" class="mb-8 p-6 border border-gray-600 rounded-lg space-y-6">
+            <h2 class="text-2xl font-bold mb-4">IronWill Interactive Proprietary Contributor License (IWI-PCL)</h2>
+            <p>This Agreement is entered into as of <b><span id="currentDate"></span></b>, by and between <strong class="highlight-term">IronWill Interactive Entertainment ('IWI')</strong>, formerly known as PGD Progressive Game Design, including its principal founder <strong class="highlight-term">Joshua Herrell</strong> (Founder, Owner, and CEO) <strong class="highlight-term">Hamza Ahmed</strong> Co-Founder and any other current contributing associates (formerly of the Game Developers Union 'GDU'), hereinafter collectively referred to as "the Company," and the undersigned individual or entity ("the Recipient").</p>
+            <p>This Agreement governs the disclosure of Confidential Information related to **any and all proprietary projects** developed by the Company to which the Recipient is granted access. This constitutes a master agreement covering all current and future work designated by IWI as falling under the <strong class="highlight-term">IWI-PCL</strong>.</p>
+
+            <h3 class="text-xl font-semibold mt-4 mb-2">1. Definition of Confidential Information</h3>
+            <p>For purposes of this Agreement, "Confidential Information" shall include all information or material that has or could have commercial value or other utility in the business in which the Company is engaged. This includes, but is not limited to, source code, game assets (2D/3D models, textures, animations, sound files), design documents, business strategies, marketing plans, financial information, development methodologies, and any other information disclosed by the Company to the Recipient, whether orally, in writing, or by any other media.</p>
+
+            <h3 class="text-xl font-semibold mt-4 mb-2">2. Obligations of Recipient</h3>
+            <ul class="list-disc list-inside space-y-2">
+                <li>The Recipient agrees to hold all Confidential Information in strict confidence and to take all reasonable precautions to protect such information.</li>
+                <li>The Recipient shall not disclose, copy, modify, reverse-engineer, or distribute any Confidential Information to any third party without the prior written consent of an authorized representative of the Company.</li>
+                <li>The Recipient agrees to use the Confidential Information solely for the purpose of evaluation and direct, authorized contribution to the Company's projects and for no other purpose whatsoever.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold mt-4 mb-2">3. Limited License Grant & Reservation of Rights</h3>
+            <ul class="list-disc list-inside space-y-2">
+                <li>Access to the Company's repositories (e.g., via GitHub) and Confidential Information is granted as a limited, revocable, non-exclusive, non-transferable license under the terms of the <strong class="highlight-term">IWI-PCL</strong>. This license is granted solely for the purpose of direct contribution to projects as approved by the Company.</li>
+                <li>This is a "semi-open source" / "source-available" model. Access is granted on a case-by-case basis to selected parties and contributors only. Any access or permissions granted can be revoked by the Company at any time, for any reason, without prior notice.</li>
+                <li>The Recipient acknowledges that all code, assets, and other materials ("Contributions") developed during their involvement are the sole and exclusive intellectual property of the Company. The Recipient hereby assigns all rights, titles, and interests in any and all such Contributions to the Company.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold mt-4 mb-2">4. <u class="highlight-term">Consequences</u> of Breach</h3>
+            <p>A breach of this Agreement will cause irreparable harm to the Company, for which monetary damages may be inadequate. Therefore, in the event of a breach, the Company shall be entitled to seek the following remedies:</p>
+            <ul class="list-disc list-inside space-y-2">
+                <li>Immediate termination of the Recipient's access to all project materials and revocation of any permissions granted.</li>
+                <li>Injunctive relief to prevent further disclosure or use of Confidential Information.</li>
+                <li>Legal action to recover any and all damages incurred, including but not limited to legal fees, lost profits, and other associated costs.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold mt-4 mb-2">5. Governing Law and Legal Recourse</h3>
+            <p>This Agreement is governed by the laws of the State of Oklahoma and the federal laws of the United States. The Recipient acknowledges that the Confidential Information constitutes valuable trade secrets. The unauthorized acquisition, disclosure, or use of such information may constitute a federal crime under the <strong class="highlight-term">Economic Espionage Act of 1996</strong>, specifically <strong class="highlight-term">18 U.S. Code § 1832 (Theft of trade secrets)</strong>.</p>
+            <ul class="list-disc list-inside space-y-2">
+                <li>Under <strong class="highlight-term">18 U.S.C. § 1832</strong>, anyone who knowingly misappropriates trade secrets to the economic benefit of anyone other than the owner is subject to criminal prosecution.</li>
+                <li>Penalties for individuals can include substantial fines and imprisonment for up to 10 years.</li>
+                <li>The Company reserves the right to cooperate fully with federal law enforcement agencies and pursue all available criminal and civil penalties in the event of such a breach.</li>
+            </ul>
+        </div>
+
+        <!-- Contributor Information Form -->
+        <form id="onboardingForm" class="space-y-6" action="https://formspree.io/f/xblkolvw" method="POST">
+            <!-- Hidden fields for Formspree -->
+            <input type="hidden" name="_subject" value="New Contributor Onboarding: IWI-PCL Agreement">
+            <input type="hidden" name="_replyto" id="formspreeReplyTo">
+            <!-- The _to field is not strictly necessary if your Formspree form is configured to send to a specific email -->
+            <!-- <input type="hidden" name="_to" value="sonydevteam4@gmail.com"> -->
+
+            <h2 class="text-2xl font-bold border-b border-gray-600 pb-2">Contributor Information</h2>
+            <fieldset class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label for="firstName" class="block text-sm font-medium">First Name</label>
+                    <input type="text" id="firstName" name="First Name" class="mt-1 block w-full px-3 py-2 rounded-md" required>
+                </div>
+                <div>
+                    <label for="middleInitial" class="block text-sm font-medium">Middle Initial</label>
+                    <input type="text" id="middleInitial" name="Middle Initial" class="mt-1 block w-full px-3 py-2 rounded-md" maxlength="1">
+                </div>
+                <div>
+                    <label for="lastName" class="block text-sm font-medium">Last Name</label>
+                    <input type="text" id="lastName" name="Last Name" class="mt-1 block w-full px-3 py-2 rounded-md" required>
+                </div>
+            </fieldset>
+            <div>
+                <label for="address" class="block text-sm font-medium">Street Address</label>
+                <input type="text" id="address" name="Street Address" class="mt-1 block w-full px-3 py-2 rounded-md" required>
+            </div>
+            <fieldset class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label for="city" class="block text-sm font-medium">City</label>
+                    <input type="text" id="city" name="City" class="mt-1 block w-full px-3 py-2 rounded-md" required>
+                </div>
+                <div>
+                    <label for="state" class="block text-sm font-medium">State / Province</label>
+                    <input type="text" id="state" name="State / Province" class="mt-1 block w-full px-3 py-2 rounded-md" required>
+                </div>
+                <div>
+                    <label for="zip" class="block text-sm font-medium">ZIP / Postal Code</label>
+                    <input type="text" id="zip" name="ZIP / Postal Code" class="mt-1 block w-full px-3 py-2 rounded-md" required>
+                </div>
+            </fieldset>
+            <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="userEmail" class="block text-sm font-medium">Contact Email Address</label>
+                    <input type="email" id="userEmail" name="Contact Email" class="mt-1 block w-full px-3 py-2 rounded-md" required>
+                </div>
+                <div>
+                    <label for="phone" class="block text-sm font-medium">Phone Number</label>
+                    <input type="text" id="phone" name="Phone Number" class="mt-1 block w-full px-3 py-2 rounded-md">
+                </div>
+            </fieldset>
+            <hr class="border-gray-600">
+            <h2 class="text-2xl font-bold border-b border-gray-600 pb-2">Payment & Access Details</h2>
+            <div>
+                <label for="githubUrl" class="block text-sm font-medium">GitHub Profile URL</label>
+                <input type="url" id="githubUrl" name="GitHub Profile URL" class="mt-1 block w-full px-3 py-2 rounded-md" placeholder="e.g. https://github.com/yourusername" required>
+            </div>
+            <div>
+                <label for="currency" class="block text-sm font-medium">Preferred Currency</label>
+                <select id="currency" name="Preferred Currency" class="mt-1 block w-full px-3 py-2 rounded-md">
+                    <option value="USD">USD</option>
+                    <option value="CAD">CAD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="PKR">PKR</option>
+                    <option value="INR">INR</option>
+                    <option value="MXN">MXN</option>
+                    <option value="CLP">CLP</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Preferred Payment Method</label>
+                <div class="flex flex-wrap gap-x-6 gap-y-2">
+                    <div class="flex items-center"><input type="radio" id="paypal" name="Preferred Payment Method" value="PayPal" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 rounded-full" checked><label for="paypal" class="ml-2 text-gray-300">PayPal</label></div>
+                    <div class="flex items-center"><input type="radio" id="venmo" name="Preferred Payment Method" value="Venmo" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 rounded-full"><label for="venmo" class="ml-2 text-gray-300">Venmo</label></div>
+                    <div class="flex items-center"><input type="radio" id="cashapp" name="Preferred Payment Method" value="CashApp" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 rounded-full"><label for="cashapp" class="ml-2 text-gray-300">CashApp</label></div>
+                    <div class="flex items-center"><input type="radio" id="remitly" name="Preferred Payment Method" value="Remitly" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 rounded-full"><label for="remitly" class="ml-2 text-gray-300">Remitly</label></div>
+                    <div class="flex items-center"><input type="radio" id="bank" name="Preferred Payment Method" value="Direct Deposit" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 rounded-full"><label for="bank" class="ml-2 text-gray-300">Direct Deposit</label></div>
+                </div>
+            </div>
+            <div>
+                <label for="paymentDetails" class="block text-sm font-medium">Payment Details (PayPal email, Venmo/CashApp ID, Bank Account details, etc.)</label>
+                <textarea id="paymentDetails" name="Payment Details" rows="3" class="mt-1 block w-full px-3 py-2 rounded-md" placeholder="e.g. your.email@example.com or @yourvenmoid"></textarea>
+            </div>
+            <hr class="border-gray-600">
+            <div class="form-group flex items-start p-4 bg-gray-900/50 rounded-lg">
+                <input type="checkbox" id="agree" name="Agreement Status" value="Electronically Agreed" required class="h-5 w-5 rounded mt-1 shrink-0 text-blue-600 border-gray-300 focus:ring-blue-500" checked>
+                <label for="agree" class="ml-3 block font-medium">I have read, understood, and voluntarily agree to be legally bound by all the terms and conditions set forth by that of the <strong class="highlight-term">IronWill Interactive Proprietary Contributor License (IWI-PCL)</strong> outlined above.</label>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="submitBtn" class="btn btn-primary px-8 py-3 text-lg font-semibold" disabled>Submit Onboarding Form</button>
+            </div>
+        </form>
+
+        <!-- GitHub Invitation Section (initially hidden) -->
+        <div id="githubInvitation" class="mt-8 p-6 bg-gray-800 rounded-lg text-center hidden">
+            <p>Your onboarding form has been submitted! We will review your details shortly.</p>
+            <p>Once your email is accepted, you will be invited as a contributor to the **BFR: Spiritual Successor to BF3** project on GitHub.</p>
+            <p>Please check the link below periodically. It will show a message confirming your invitation once it's active.</p>
+            <a href="https://github.com/gamedev44/AsterGaspV2" target="_blank" class="mt-4 inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                Go to AsterGaspV2 GitHub Repo
+            </a>
+        </div>
+    </div>
+
+    <!-- Sending Modal -->
+    <div class="modal fade" id="sendingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-body text-center">
+                    <p id="modalMessage">Submitting your onboarding form...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS for Modal functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current date in the NDA text
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+
+            const onboardingForm = document.getElementById('onboardingForm');
+            const userEmailInput = document.getElementById('userEmail');
+            const formspreeReplyTo = document.getElementById('formspreeReplyTo');
+            const submitBtn = document.getElementById('submitBtn'); // Get the submit button
+            const agreeCheckbox = document.getElementById('agree'); // Get the agreement checkbox
+
+            // Function to check form validity and agreement checkbox
+            function checkFormValidityAndAgreement() {
+                const isFormValid = onboardingForm.checkValidity();
+                const isAgreementChecked = agreeCheckbox.checked;
+                submitBtn.disabled = !(isFormValid && isAgreementChecked);
+            }
+
+            // Initial check when the page loads
+            checkFormValidityAndAgreement();
+
+            // Add event listeners to all form elements to re-check validity on input/change
+            onboardingForm.addEventListener('input', checkFormValidityAndAgreement);
+            onboardingForm.addEventListener('change', checkFormValidityAndAgreement);
+
+
+            // Update the _replyto hidden field whenever the user's email changes
+            userEmailInput.addEventListener('input', () => {
+                formspreeReplyTo.value = userEmailInput.value;
+            });
+
+            const modalMessage = document.getElementById('modalMessage');
+            const githubInvitation = document.getElementById('githubInvitation');
+            const sendingModal = new bootstrap.Modal(document.getElementById('sendingModal'));
+
+            onboardingForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent default form submission to handle it with fetch
+
+                // This check is redundant if the button is disabled, but good for robustness
+                if (submitBtn.disabled) {
+                    onboardingForm.reportValidity(); // Show native browser validation messages
+                    return;
+                }
+
+                // Show the "sending" modal
+                modalMessage.textContent = 'Submitting your onboarding form...';
+                sendingModal.show();
+
+                // Collect form data
+                const formData = new FormData(onboardingForm);
+
+                try {
+                    const response = await fetch(onboardingForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json' // Important for Formspree to send JSON response
+                        }
+                    });
+
+                    if (response.ok) {
+                        modalMessage.innerHTML = `
+                            Form submitted successfully!<br>
+                            We will review your details shortly.
+                        `;
+                        // Show GitHub invitation section after successful submission
+                        githubInvitation.classList.remove('hidden');
+                        onboardingForm.reset(); // Clear the form after successful submission
+                        // After reset, re-evaluate button state
+                        checkFormValidityAndAgreement(); // Re-check to disable button after reset
+                    } else {
+                        // Handle non-OK responses (e.g., Formspree validation errors)
+                        const errorData = await response.json();
+                        console.error('Formspree submission error:', errorData);
+                        modalMessage.innerHTML = `
+                            There was an error submitting your form. Please try again.<br>
+                            ${errorData.errors ? errorData.errors.map(e => e.message).join('<br>') : ''}
+                            <br><br>
+                            <strong>Please ensure your Formspree form ID is correct.</strong>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Network or fetch error:', error);
+                    modalMessage.innerHTML = `
+                        A network error occurred. Please check your internet connection and try again.
+                        <br><br>
+                        <strong>Please ensure your Formspree form ID is correct.</strong>
+                    `;
+                } finally {
+                    // Hide the modal after a short delay to allow user to read message
+                    setTimeout(() => {
+                        sendingModal.hide();
+                    }, 3000); // 3 seconds delay
+                }
+            });
+        });
+    </script>
+  
+</body>
+</html>
