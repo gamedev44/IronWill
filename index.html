@@ -4,27 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading...</title>
-<meta name="description" content="Iron Will Interactive (IWI) specializes in software development, Unreal Engine 5.5, Custom Tool Solutions, and immersive interactive experiences. Inspiring confidence through expert craftsmanship.">
-<meta name="keywords" content="Iron Will Interactive, IWI, software development, enterprise software, consulting, DevOps, Unreal Engine, Python, Blender, custom software, interactive experiences, technology solutions">
-<meta name="author" content="Iron Will Interactive / Asterisk">
-<meta name="theme-color" content="#f37021">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://gamedev44.github.io/IronWill/Home.html">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://gamedev44.github.io/IronWill/Home.html">
-<meta property="og:title" content="Iron Will Interactive | Crafting Software that Inspires">
-<meta property="og:description" content="Iron Will Interactive (IWI) specializes in software development, Unreal Engine 5.5, Custom Tool Solutions, and immersive interactive experiences. Inspiring confidence through expert craftsmanship.">
-<meta property="og:image" content="https://gamedev44.github.io/IronWill/assets/social-share-logo.jpg">
-<meta property="og:image:alt" content="Iron Will Interactive Logo">
-<meta property="og:locale" content="en_US">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@IWI_Tech">
-<meta name="twitter:creator" content="@YourPersonalHandle">
-<meta name="twitter:url" content="https://gamedev44.github.io/IronWill/Home.html">
-<meta name="twitter:title" content="Iron Will Interactive | Crafting Software that Inspires">
-<meta name="twitter:description" content="Iron Will Interactive (IWI) specializes in software development, Unreal Engine 5.5, Custom Tool Solutions, and immersive interactive experiences. Inspiring confidence through expert craftsmanship.">
-<meta name="twitter:image" content="https://gamedev44.github.io/IronWill/assets/twitter-share-image.jpg">
-<meta name="twitter:image:alt" content="Iron Will Interactive Logo and text">
+
+    <!-- Meta Tags for SEO and Social Sharing -->
+    <meta name="description" content="Iron Will Interactive (IWI) specializes in software development, Unreal Engine 5.5, Custom Tool Solutions, and immersive interactive experiences. Inspiring confidence through expert craftsmanship.">
+    <meta name="keywords" content="Iron Will Interactive, IWI, software development, enterprise software, consulting, DevOps, Unreal Engine, Python, Blender, custom software, interactive experiences, technology solutions">
+    <meta name="author" content="Iron Will Interactive / Asterisk">
+    <meta name="theme-color" content="#f37021">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://gamedev44.github.io/IronWill/Home.html">
+
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gamedev44.github.io/IronWill/Home.html">
+    <meta property="og:title" content="Iron Will Interactive | Crafting Software that Inspires">
+    <meta property="og:description" content="Iron Will Interactive (IWI) specializes in software development, Unreal Engine 5.5, Custom Tool Solutions, and immersive interactive experiences. Inspiring confidence through expert craftsmanship.">
+    <meta property="og:image" content="https://gamedev44.github.io/IronWill/assets/social-share-logo.jpg">
+    <meta property="og:image:alt" content="Iron Will Interactive Logo">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@IWI_Tech">
+    <meta name="twitter:creator" content="@YourPersonalHandle">
+    <meta name="twitter:url" content="https://gamedev44.github.io/IronWill/Home.html">
+    <meta name="twitter:title" content="Iron Will Interactive | Crafting Software that Inspires">
+    <meta name="twitter:description" content="Iron Will Interactive (IWI) specializes in software development, Unreal Engine 5.5, Custom Tool Solutions, and immersive interactive experiences. Inspiring confidence through expert craftsmanship.">
+    <meta name="twitter:image" content="https://gamedev44.github.io/IronWill/assets/twitter-share-image.jpg">
+    <meta name="twitter:image:alt" content="Iron Will Interactive Logo and text">
+
+    <!-- Tailwind CSS CDN for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* General styling for the body */
+        body {
+            font-family: 'Inter', sans-serif; /* Apply Inter font */
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars during animation */
+            background-color: #f0f0f0; /* Light background for the loading screen */
+        }
+
         /* Custom CSS for the spinning dot loader - Made Bigger */
         .loader {
             width: fit-content;
@@ -74,13 +96,6 @@
         }
 
         /* General styling for the loading screen container */
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            overflow: hidden; /* Prevent scrollbars during animation */
-            background-color: #f0f0f0; /* Light background for the loading screen */
-        }
-
         #loading-screen {
             position: fixed;
             top: 0;
@@ -115,6 +130,7 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen Container -->
     <div id="loading-screen" class="visible">
         <main class="flex flex-col items-center justify-center p-4">
             <!-- Logo image - No shadow or border-radius for transparent logo -->
