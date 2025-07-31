@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- =================================================================== -->
+    <!-- Basic Meta Tags -->
+    <!-- =================================================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Voice Spectral Analysis Tool</title>
+
+    <!-- =================================================================== -->
+    <!-- SEO Meta Tags -->
+    <!-- =================================================================== -->
+    <meta name="description" content="An advanced web-based tool for real-time voice spectral analysis. Visualize audio frequencies, analyze spectrograms, and process voice data with high precision.">
+    <meta name="keywords" content="voice analysis, spectral analysis, audio processing, spectrogram, frequency analysis, voice tool, audio visualization, real-time audio">
+    <meta name="author" content="Your Name or Company Name">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Canonical URL: Helps prevent duplicate content issues in SEO -->
+    <link rel="canonical" href="https://www.yourwebsite.com/analysis-tool">
+
+    <!-- =================================================================== -->
+    <!-- Open Graph / Facebook Meta Tags -->
+    <!-- =================================================================== -->
+    <meta property="og:title" content="Advanced Voice Spectral Analysis Tool">
+    <meta property="og:description" content="An advanced web-based tool for real-time voice spectral analysis. Visualize audio frequencies, analyze spectrograms, and process voice data with high precision.">
+    <meta property="og:image" content="https://placehold.co/1200x630/1a202c/ffffff?text=Voice+Analysis">
+    <meta property="og:url" content="https://www.yourwebsite.com/analysis-tool">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Your Site Name">
+
+    <!-- =================================================================== -->
+    <!-- Twitter Card Meta Tags -->
+    <!-- =================================================================== -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Advanced Voice Spectral Analysis Tool">
+    <meta name="twitter:description" content="An advanced web-based tool for real-time voice spectral analysis. Visualize audio frequencies, analyze spectrograms, and process voice data with high precision.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/1a202c/ffffff?text=Voice+Analysis">
+    <!-- Optional: Add your Twitter username -->
+    <!-- <meta name="twitter:site" content="@yourtwitterhandle"> -->
+
+    <!-- =================================================================== -->
+    <!-- Browser/UI Meta Tags -->
+    <!-- =================================================================== -->
+    <meta name="theme-color" content="#1a202c"> <!-- Sets the browser chrome color on mobile -->
+    
+    <!-- Favicon Links: Replace with your actual favicon files -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <!-- =================================================================== -->
+    <!-- Stylesheets and Scripts -->
+    <!-- =================================================================== -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #111827;
+            --bg-med: #1f2937;
+            --border-color: #374151;
+            --primary-blue: #3b82f6;
+            --playhead-red: #ef4444;
+            --text-light: #e5e7eb;
+            --text-med: #9ca3af;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+        .card {
+            background-color: var(--bg-med);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .btn-primary { background-color: var(--primary-blue); color: white; }
+        .btn-primary:hover { background-color: #2563eb; }
+        .btn-secondary { background-color: #4b5563; color: white; }
+        .btn-secondary:hover { background-color: var(--border-color); }
+        .btn-outline { background-color: transparent; border-color: var(--border-color); }
+        .btn-outline:hover { background-color: var(--border-color); }
+        .btn:active { transform: scale(0.98); }
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem;
+            border: 2px dashed var(--border-color);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .file-input-label:hover { border-color: var(--primary-blue); }
+        .loader {
+            border: 4px solid #4b5563;
+            border-top: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #advanced-viewer.fullscreen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 50;
+            padding: 1rem; background-color: var(--bg-dark); display: flex; flex-direction: column;
+        }
+        #advanced-viewer.fullscreen #viewer-grid { flex-grow: 1; }
+        .canvas-wrapper { position: relative; background-color: #000; cursor: grab; }
+        .canvas-wrapper:active { cursor: grabbing; }
+        .spectrogram-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .playhead {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background-color: var(--playhead-red);
+            pointer-events: none;
+            display: none;
+            z-index: 10;
+        }
+        .playhead::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 10px solid var(--playhead-red);
+        }
+        .progress-bar-container {
+            position: relative;
+            width: 100%;
+            height: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .progress-bar-bg {
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background-color: #4b5563;
+            border-radius: 3px;
+        }
+        .progress-bar-fg {
+            position: absolute;
+            height: 6px;
+            background-color: var(--primary-blue);
+            border-radius: 3px;
+            width: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4">
+    <div class="w-full max-w-7xl mx-auto">
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold text-white">Advanced Voice Spectral Analysis</h1>
+            <p class="text-lg text-gray-400 mt-2">Upload, Play, Compare, and Analyze with Zoom, Pan, and Overlay.</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Source Audio Card -->
+            <div id="source-card" class="card">
+                <h2 class="text-xl font-semibold mb-3 text-white">1. Source Audio</h2>
+                <div id="source-dropzone">
+                    <input type="file" id="source-file-input" class="hidden" accept="audio/*">
+                    <label for="source-file-input" class="file-input-label flex-col">
+                        <svg class="w-10 h-10 text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-4-4V7a4 4 0 014-4h10a4 4 0 014 4v5a4 4 0 01-4 4H7zM15 9l-3 3m0 0l-3-3m3 3V5"></path></svg>
+                        <span id="source-file-name" class="text-gray-400 text-sm text-center">Drag & Drop or Click to Upload</span>
+                    </label>
+                </div>
+                <div id="source-loader" class="hidden flex justify-center my-4"><div class="loader"></div></div>
+                <audio id="source-audio" class="hidden"></audio>
+            </div>
+
+            <!-- Comparison Audio Card -->
+            <div id="comparison-card" class="card">
+                <h2 class="text-xl font-semibold mb-3 text-white">2. Comparison Audio (Optional)</h2>
+                <div id="comparison-dropzone">
+                    <input type="file" id="comparison-file-input" class="hidden" accept="audio/*">
+                    <label for="comparison-file-input" class="file-input-label flex-col">
+                         <svg class="w-10 h-10 text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-4-4V7a4 4 0 014-4h10a4 4 0 014 4v5a4 4 0 01-4 4H7zM15 9l-3 3m0 0l-3-3m3 3V5"></path></svg>
+                        <span id="comparison-file-name" class="text-gray-400 text-sm text-center">Drag & Drop or Click to Upload</span>
+                    </label>
+                </div>
+                <div id="comparison-loader" class="hidden flex justify-center my-4"><div class="loader"></div></div>
+                <audio id="comparison-audio" class="hidden"></audio>
+            </div>
+        </main>
+
+        <!-- Advanced Analysis Viewer -->
+        <div id="advanced-viewer" class="card mt-6 hidden">
+             <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                <h2 id="viewer-title" class="text-2xl font-bold text-white">Analysis</h2>
+                <div class="flex items-center gap-2">
+                    <button id="fullscreen-btn" class="btn btn-outline" title="Toggle Fullscreen"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 0h-4m4 0l-5-5"></path></svg></button>
+                     <button id="reset-view-btn" class="btn btn-outline" title="Reset Zoom & Pan"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"></path></svg></button>
+                    <button id="overlay-toggle-btn" class="btn btn-secondary">Toggle Overlay</button>
+                </div>
+            </div>
+            
+            <div id="viewer-grid" class="grid grid-cols-[auto_1fr] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
+                <canvas id="y-axis-canvas" class="bg-gray-800 rounded-md"></canvas>
+                <div id="canvas-wrapper" class="canvas-wrapper w-full h-96 rounded-md overflow-hidden">
+                    <canvas id="source-spectrogram-canvas" class="spectrogram-canvas"></canvas>
+                    <canvas id="comparison-spectrogram-canvas" class="spectrogram-canvas" style="display: none;"></canvas>
+                    <div id="playhead" class="playhead"></div>
+                </div>
+                <div></div>
+                <canvas id="x-axis-canvas" class="bg-gray-800 rounded-md"></canvas>
+            </div>
+            
+            <div id="player-controls" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                <div id="source-player-controls" class="hidden"></div>
+                <div id="comparison-player-controls" class="hidden"></div>
+            </div>
+
+            <div id="viewer-controls" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-700">
+                <div id="overlay-controls" class="hidden"></div>
+                <div id="similarity-results" class="hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const FFT_SIZE = 2048;
+
+        let sourceFile = null, comparisonFile = null;
+        const viewerState = { zoom: 1, offsetX: 0, offsetY: 0, isPanning: false, lastPanX: 0, lastPanY: 0, isOverlay: false, sourceAlpha: 0.7, comparisonAlpha: 0.7 };
+
+        const advancedViewer = document.getElementById('advanced-viewer');
+        const viewerTitle = document.getElementById('viewer-title');
+        const canvasWrapper = document.getElementById('canvas-wrapper');
+        const sourceCanvas = document.getElementById('source-spectrogram-canvas');
+        const comparisonCanvas = document.getElementById('comparison-spectrogram-canvas');
+        const xAxisCanvas = document.getElementById('x-axis-canvas');
+        const yAxisCanvas = document.getElementById('y-axis-canvas');
+        const overlayToggleBtn = document.getElementById('overlay-toggle-btn');
+        const overlayControlsContainer = document.getElementById('overlay-controls');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const resetViewBtn = document.getElementById('reset-view-btn');
+        const similarityResultsContainer = document.getElementById('similarity-results');
+        const playhead = document.getElementById('playhead');
+        
+        let sourcePlayer, comparisonPlayer;
+
+        class Player {
+            constructor(type, fileData) {
+                this.type = type;
+                this.audioEl = document.getElementById(`${type}-audio`);
+                this.file = fileData;
+                this.isPlaying = false;
+                this.isScrubbing = false;
+
+                this.controlsContainer = document.getElementById(`${type}-player-controls`);
+                this.controlsContainer.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <button id="${type}-play-btn" class="btn btn-primary p-2">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
+                        </button>
+                        <div id="${type}-progress-bar-container" class="progress-bar-container">
+                            <div class="progress-bar-bg"></div>
+                            <div id="${type}-progress-bar-fg" class="progress-bar-fg"></div>
+                        </div>
+                        <span id="${type}-time-display" class="text-sm font-mono w-24 text-right">0:00 / 0:00</span>
+                    </div>`;
+                
+                this.playBtn = document.getElementById(`${type}-play-btn`);
+                this.pauseIconHTML = `<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M5.75 4.5a.75.75 0 00-.75.75v10a.75.75 0 001.5 0V5.25a.75.75 0 00-.75-.75zM14.25 4.5a.75.75 0 00-.75.75v10a.75.75 0 001.5 0V5.25a.75.75 0 00-.75-.75z"></path></svg>`;
+                this.playIconHTML = this.playBtn.innerHTML;
+                this.progressBarContainer = document.getElementById(`${type}-progress-bar-container`);
+                this.progressBarFg = document.getElementById(`${type}-progress-bar-fg`);
+                this.timeDisplay = document.getElementById(`${type}-time-display`);
+
+                // Bind methods for event listeners to maintain the correct 'this' context
+                this.boundScrub = this.scrub.bind(this);
+                this.boundEndScrub = this.endScrub.bind(this);
+
+                this.addEventListeners();
+                this.updateTimeDisplay();
+            }
+
+            addEventListeners() {
+                this.playBtn.onclick = () => this.togglePlay();
+                this.audioEl.onplay = () => this.onPlay();
+                this.audioEl.onpause = () => this.onPause();
+                this.audioEl.ontimeupdate = () => this.updateProgress();
+                this.audioEl.onloadedmetadata = () => this.updateTimeDisplay();
+
+                this.progressBarContainer.onmousedown = (e) => this.startScrub(e);
+            }
+
+            togglePlay() { this.audioEl.paused ? this.audioEl.play() : this.audioEl.pause(); }
+            
+            onPlay() {
+                this.isPlaying = true;
+                this.playBtn.innerHTML = this.pauseIconHTML;
+            }
+            
+            onPause() {
+                this.isPlaying = false;
+                // FIX: Check if the button still exists in the DOM before modifying it.
+                if (this.playBtn.isConnected) {
+                    this.playBtn.innerHTML = this.playIconHTML;
+                }
+            }
+
+            updateProgress() {
+                if (this.isScrubbing || !this.audioEl.duration) return;
+                const progress = this.audioEl.currentTime / this.audioEl.duration;
+                this.progressBarFg.style.width = `${progress * 100}%`;
+                
+                const activePlayer = (sourcePlayer && sourcePlayer.isPlaying) ? sourcePlayer : (comparisonPlayer && comparisonPlayer.isPlaying) ? comparisonPlayer : null;
+
+                if (this.isPlaying || (activePlayer === this && !activePlayer.isPlaying) || !activePlayer) {
+                    const playheadPos = (this.audioEl.currentTime / this.audioEl.duration) * 100;
+                    playhead.style.left = `${playheadPos}%`;
+                    playhead.style.display = 'block';
+                }
+                
+                this.updateTimeDisplay();
+            }
+
+            updateTimeDisplay() {
+                if (!this.audioEl.duration || isNaN(this.audioEl.duration)) return;
+                const formatTime = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+                this.timeDisplay.textContent = `${formatTime(this.audioEl.currentTime)} / ${formatTime(this.audioEl.duration)}`;
+            }
+
+            startScrub(e) {
+                this.isScrubbing = true;
+                window.addEventListener('mousemove', this.boundScrub);
+                window.addEventListener('mouseup', this.boundEndScrub);
+                this.scrub(e);
+            }
+
+            scrub(e) {
+                if (!this.isScrubbing) return;
+                e.preventDefault();
+                const rect = this.progressBarContainer.getBoundingClientRect();
+                const progress = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+                if (this.audioEl.duration) {
+                    this.audioEl.currentTime = progress * this.audioEl.duration;
+                    this.updateProgress();
+                }
+            }
+
+            endScrub() {
+                this.isScrubbing = false;
+                window.removeEventListener('mousemove', this.boundScrub);
+                window.removeEventListener('mouseup', this.boundEndScrub);
+            }
+        }
+
+        function setupFileHandler(type) {
+            const dropzone = document.getElementById(`${type}-dropzone`);
+            const fileInput = document.getElementById(`${type}-file-input`);
+            const fileNameEl = document.getElementById(`${type}-file-name`);
+            const loader = document.getElementById(`${type}-loader`);
+            const audioEl = document.getElementById(`${type}-audio`);
+
+            const processFile = async (file) => {
+                loader.style.display = 'flex';
+                fileNameEl.textContent = file.name;
+                
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+                    const spectralData = await analyzeAudio(audioBuffer);
+                    const fileData = { buffer: audioBuffer, data: spectralData, name: file.name };
+                    audioEl.src = URL.createObjectURL(file);
+
+                    if (type === 'source') {
+                        sourceFile = fileData;
+                        sourcePlayer = new Player('source', fileData);
+                    } else {
+                        comparisonFile = fileData;
+                        comparisonPlayer = new Player('comparison', fileData);
+                    }
+                    updateUI();
+                } catch (e) {
+                    console.error("Error processing audio:", e);
+                    alert("Failed to process audio file.");
+                    fileNameEl.textContent = 'Drag & Drop or Click to Upload';
+                } finally {
+                    loader.style.display = 'none';
+                }
+            };
+            
+            dropzone.ondragover = e => e.preventDefault();
+            dropzone.ondrop = e => { e.preventDefault(); if (e.dataTransfer.files.length) processFile(e.dataTransfer.files[0]); };
+            fileInput.onchange = e => { if (e.target.files.length) processFile(e.target.files[0]); };
+        }
+        setupFileHandler('source');
+        setupFileHandler('comparison');
+
+        async function analyzeAudio(audioBuffer) {
+            const offlineCtx = new OfflineAudioContext(1, audioBuffer.length, audioBuffer.sampleRate);
+            const source = offlineCtx.createBufferSource();
+            source.buffer = audioBuffer;
+            const analyser = offlineCtx.createAnalyser();
+            analyser.fftSize = FFT_SIZE;
+            const scp = offlineCtx.createScriptProcessor(FFT_SIZE, 1, 1);
+            source.connect(analyser);
+            analyser.connect(scp);
+            scp.connect(offlineCtx.destination);
+            const spectralSnapshots = [];
+            scp.onaudioprocess = () => {
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(dataArray);
+                spectralSnapshots.push(dataArray);
+            };
+            source.start();
+            await offlineCtx.startRendering();
+            return spectralSnapshots;
+        }
+
+        function updateUI() {
+            const hasSource = !!sourceFile;
+            const hasComparison = !!comparisonFile;
+
+            if (hasSource) {
+                advancedViewer.style.display = 'block';
+                document.getElementById('source-player-controls').style.display = 'block';
+                viewerState.isOverlay = false;
+                overlayToggleBtn.classList.replace('btn-primary', 'btn-secondary');
+                
+                comparisonCanvas.style.display = 'none';
+                overlayToggleBtn.style.display = hasComparison ? 'inline-flex' : 'none';
+                overlayControlsContainer.style.display = 'none';
+                similarityResultsContainer.style.display = hasComparison ? 'block' : 'none';
+                document.getElementById('comparison-player-controls').style.display = hasComparison ? 'block' : 'none';
+                
+                if (hasComparison) {
+                    viewerTitle.textContent = "Comparison Analysis";
+                    calculateSimilarity();
+                } else {
+                    viewerTitle.textContent = "Source File Analysis";
+                }
+                resetView();
+            } else {
+                advancedViewer.style.display = 'none';
+            }
+        }
+        
+        function drawAll() {
+            if (!sourceFile) return;
+            
+            const sCtx = sourceCanvas.getContext('2d');
+            sCtx.globalAlpha = (viewerState.isOverlay) ? viewerState.sourceAlpha : 1.0;
+            drawSpectrogram(sCtx, sourceFile.data);
+
+            if (comparisonFile) {
+                const cCtx = comparisonCanvas.getContext('2d');
+                cCtx.globalAlpha = (viewerState.isOverlay) ? viewerState.comparisonAlpha : 1.0;
+                comparisonCanvas.style.display = 'block';
+                drawSpectrogram(cCtx, comparisonFile.data);
+            } else {
+                 comparisonCanvas.style.display = 'none';
+            }
+            
+            drawAxes();
+        }
+
+        function drawSpectrogram(ctx, data) {
+            const { width, height } = ctx.canvas;
+            ctx.clearRect(0, 0, width, height);
+            const numSamples = data.length, numBins = data[0].length;
+            const viewWidth = width / viewerState.zoom, viewHeight = height / viewerState.zoom;
+            const startX = viewerState.offsetX, startY = viewerState.offsetY;
+            const startSample = Math.floor(startX / width * numSamples);
+            const endSample = Math.ceil((startX + viewWidth) / width * numSamples);
+            const startBin = Math.floor(startY / height * numBins);
+            const endBin = Math.ceil((startY + viewHeight) / height * numBins);
+
+            for (let i = startSample; i < endSample && i < numSamples; i++) {
+                const snapshot = data[i];
+                const x = (i / numSamples * width - startX) * viewerState.zoom;
+                for (let j = startBin; j < endBin && j < numBins; j++) {
+                    const value = snapshot[j], percent = value / 255;
+                    const hue = 240 - (percent * 240), lightness = 10 + (percent * 60);
+                    ctx.fillStyle = `hsl(${hue}, 90%, ${lightness}%)`;
+                    const y = height - ((j / numBins * height - startY) * viewerState.zoom);
+                    const barHeight = (height / numBins) * viewerState.zoom;
+                    ctx.fillRect(x, y - barHeight, (width / numSamples) * viewerState.zoom + 1.5, barHeight + 1.5);
+                }
+            }
+        }
+        
+        function drawAxes() {
+            const xCtx = xAxisCanvas.getContext('2d'), yCtx = yAxisCanvas.getContext('2d');
+            const { width: xw, height: xh } = xAxisCanvas, { width: yw, height: yh } = yAxisCanvas;
+            xCtx.clearRect(0,0,xw,xh); yCtx.clearRect(0,0,yw,yh);
+            xCtx.fillStyle = yCtx.fillStyle = '#9ca3af';
+            xCtx.font = yCtx.font = '12px Inter';
+            yCtx.textAlign = 'right'; yCtx.textBaseline = 'middle'; xCtx.textAlign = 'center';
+
+            const maxFreq = audioCtx.sampleRate / 2, freqRange = maxFreq / viewerState.zoom;
+            const startFreq = (viewerState.offsetY / yh) * maxFreq * (1 - 1 / viewerState.zoom);
+            for (let i = 0; i <= 10; i++) {
+                const p = i / 10, freqAtPos = startFreq + (p * freqRange), yPos = yh - (p * yh);
+                if (yPos >= -10 && yPos <= yh + 10) yCtx.fillText(`${(freqAtPos / 1000).toFixed(1)} kHz`, yw - 8, yPos);
+            }
+
+            const duration = sourceFile.buffer.duration, timeRange = duration / viewerState.zoom;
+            const startTime = (viewerState.offsetX / xw) * duration * (1 - 1/ viewerState.zoom);
+             for (let i = 0; i <= 10; i++) {
+                const p = i / 10, timeAtPos = startTime + (p * timeRange), xPos = p * xw;
+                if (xPos >= -10 && xPos <= xw + 10) xCtx.fillText(`${timeAtPos.toFixed(2)}s`, xPos, xh / 2);
+            }
+        }
+
+        canvasWrapper.onwheel = e => {
+            e.preventDefault();
+            const rect = canvasWrapper.getBoundingClientRect(), mouseX = e.clientX - rect.left, mouseY = e.clientY - rect.top;
+            const zoomFactor = 1.1, oldZoom = viewerState.zoom;
+            viewerState.zoom *= (e.deltaY < 0) ? zoomFactor : 1/zoomFactor;
+            viewerState.zoom = Math.max(1, Math.min(viewerState.zoom, 50));
+            viewerState.offsetX += (mouseX / oldZoom) - (mouseX / viewerState.zoom);
+            viewerState.offsetY += (mouseY / oldZoom) - (mouseY / viewerState.zoom);
+            clampOffsets(); drawAll();
+        };
+
+        canvasWrapper.onmousedown = e => { viewerState.isPanning = true; viewerState.lastPanX = e.clientX; viewerState.lastPanY = e.clientY; };
+        window.onmouseup = () => viewerState.isPanning = false;
+        window.onmousemove = e => {
+            if (!viewerState.isPanning) return;
+            const dx = e.clientX - viewerState.lastPanX, dy = e.clientY - viewerState.lastPanY;
+            viewerState.offsetX -= dx / viewerState.zoom; viewerState.offsetY -= dy / viewerState.zoom;
+            viewerState.lastPanX = e.clientX; viewerState.lastPanY = e.clientY;
+            clampOffsets(); drawAll();
+        };
+
+        function clampOffsets() {
+            const { width, height } = sourceCanvas;
+            const maxOffsetX = width - width / viewerState.zoom, maxOffsetY = height - height / viewerState.zoom;
+            viewerState.offsetX = Math.max(0, Math.min(viewerState.offsetX, maxOffsetX));
+            viewerState.offsetY = Math.max(0, Math.min(viewerState.offsetY, maxOffsetY));
+        }
+
+        function resetView() { viewerState.zoom = 1; viewerState.offsetX = 0; viewerState.offsetY = 0; drawAll(); }
+        resetViewBtn.onclick = resetView;
+
+        overlayToggleBtn.onclick = () => {
+            if (!comparisonFile) return;
+            viewerState.isOverlay = !viewerState.isOverlay;
+            overlayControlsContainer.style.display = viewerState.isOverlay ? 'block' : 'none';
+            comparisonCanvas.style.display = 'block';
+            overlayToggleBtn.classList.toggle('btn-primary'); overlayToggleBtn.classList.toggle('btn-secondary');
+            drawAll();
+        };
+        
+        function setupOverlayControls() {
+            overlayControlsContainer.innerHTML = `<h3 class="font-semibold mb-2">Overlay Opacity</h3>
+                <div class="grid grid-cols-[auto_1fr_auto] gap-x-3 items-center">
+                    <label for="source-opacity" class="text-sm font-medium text-blue-400">Source</label>
+                    <input type="range" id="source-opacity" min="0" max="1" step="0.05" value="0.7" class="w-full">
+                    <span id="source-opacity-value" class="text-sm w-10 text-right">70%</span>
+                    <label for="comparison-opacity" class="text-sm font-medium text-green-400">Compare</label>
+                    <input type="range" id="comparison-opacity" min="0" max="1" step="0.05" value="0.7" class="w-full">
+                    <span id="comparison-opacity-value" class="text-sm w-10 text-right">70%</span>
+                </div>`;
+            document.getElementById('source-opacity').oninput = e => {
+                viewerState.sourceAlpha = parseFloat(e.target.value);
+                document.getElementById('source-opacity-value').textContent = `${Math.round(viewerState.sourceAlpha * 100)}%`;
+                if (viewerState.isOverlay) drawAll();
+            };
+            document.getElementById('comparison-opacity').oninput = e => {
+                viewerState.comparisonAlpha = parseFloat(e.target.value);
+                document.getElementById('comparison-opacity-value').textContent = `${Math.round(viewerState.comparisonAlpha * 100)}%`;
+                if (viewerState.isOverlay) drawAll();
+            };
+        }
+        setupOverlayControls();
+
+        function setupSimilarityResults() {
+             similarityResultsContainer.innerHTML = `<h3 class="font-semibold mb-2">Similarity Score</h3>
+                <p id="similarity-score" class="text-3xl font-bold text-center text-blue-400">--%</p>`;
+        }
+        setupSimilarityResults();
+
+        fullscreenBtn.onclick = () => {
+            if (document.fullscreenElement) { document.exitFullscreen(); } 
+            else { advancedViewer.requestFullscreen().catch(err => alert(`Error: ${err.message}`)); }
+        };
+        document.onfullscreenchange = () => {
+            advancedViewer.classList.toggle('fullscreen', !!document.fullscreenElement);
+            setTimeout(handleResize, 50);
+        };
+        
+        function calculateSimilarity() {
+            const spec1 = sourceFile.data, spec2 = comparisonFile.data;
+            const len1 = spec1.length, len2 = spec2.length, maxLen = Math.max(len1, len2);
+            let totalDifference = 0, count = 0;
+            for (let i = 0; i < maxLen; i++) {
+                const s1 = spec1[Math.floor(i * len1 / maxLen)], s2 = spec2[Math.floor(i * len2 / maxLen)];
+                if (s1 && s2) {
+                    for (let j = 0; j < s1.length; j++) {
+                        totalDifference += Math.abs(s1[j] - s2[j]);
+                        count++;
+                    }
+                }
+            }
+            const similarity = 100 - ((totalDifference / count) / 255 * 100);
+            document.getElementById('similarity-score').textContent = `${Math.max(0, similarity).toFixed(1)}%`;
+        }
+        
+        function handleResize() {
+            if (!canvasWrapper.isConnected) return;
+            const sCtx = sourceCanvas.getContext('2d'), cCtx = comparisonCanvas.getContext('2d');
+            sCtx.canvas.width = cCtx.canvas.width = canvasWrapper.clientWidth;
+            sCtx.canvas.height = cCtx.canvas.height = canvasWrapper.clientHeight;
+            const xCtx = xAxisCanvas.getContext('2d');
+            xCtx.canvas.width = canvasWrapper.clientWidth; xCtx.canvas.height = 30;
+            const yCtx = yAxisCanvas.getContext('2d');
+            yCtx.canvas.width = 80; yCtx.canvas.height = canvasWrapper.clientHeight;
+            if(sourceFile) drawAll();
+        }
+        
+        const resizeObserver = new ResizeObserver(() => window.requestAnimationFrame(handleResize));
+        resizeObserver.observe(canvasWrapper);
+        handleResize();
+    });
+    </script>
+</body>
+</html>
