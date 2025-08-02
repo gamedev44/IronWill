@@ -220,7 +220,7 @@
       margin-bottom: 0.75rem;
     }
     .member a {
-      display: inline-block;
+      display: block; /* Change to block to make each link a separate block */
       margin-top: 0.75rem;
       padding: 0.6rem 1.2rem;
       font-size: 1rem;
@@ -233,7 +233,6 @@
     .member a:hover {
       background: #d35d1c;
     }
-
     footer {
       background: var(--bg-alt);
       border-top: 1px solid var(--border-color);
@@ -249,7 +248,6 @@
     footer a:hover {
       text-decoration: underline;
     }
-
     .theme-toggle {
       position: absolute;
       top: 1rem;
@@ -268,7 +266,6 @@
       color: white;
       border-color: var(--accent);
     }
-
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -342,7 +339,6 @@
     .modal-button:hover {
       background-color: #d35d1c;
     }
-
     @media (max-width: 768px) {
       header {
         padding: 1rem;
@@ -450,16 +446,17 @@
         <a href="https://gist.github.com/gamedev44/e65ef3e39c67804f928d8c5722ba70f2" target="_blank" rel="noopener noreferrer">View Profile</a>
       </div>
       <div class="member">
-  <img src="https://avatars.githubusercontent.com/u/121737155?v=4" alt="Techno" />
-  <h3>Techno</h3>
-  <p class="role">Beta Tester • Twitch Streamer</p>
-  <p class="description">
-    From Louisiana, USA – Techno is a dedicated beta tester and engaging Twitch streamer who helps improve the game by providing critical feedback and connecting with the community.
-  </p>
-  <a href="https://github.com/Emperortechno" target="_blank" rel="noopener noreferrer">View Profile</a>
-</div>
+        <img src="https://avatars.githubusercontent.com/u/121737155?v=4" alt="Techno" />
+        <h3>Techno</h3>
+        <p class="role">Beta Tester • Twitch Streamer</p>
+        <p class="description">
+          From Louisiana, USA – Techno is a dedicated beta tester and engaging Twitch streamer who helps improve the game by providing critical feedback and connecting with the community.
+        </p>
+        <a href="https://github.com/Emperortechno" target="_blank" rel="noopener noreferrer">View Profile</a>
+        <!-- The new 'View Twitch' button for Techno -->
+        <a href="https://www.twitch.tv/emperortechno" target="_blank" rel="noopener noreferrer">View Twitch</a>
+      </div>
     </div>
-
     <div class="discord-widget-container">
       <h2>Join Our Discord</h2>
       <iframe src="https://discord.com/widget?id=1401165744888348712&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
@@ -488,4 +485,29 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const themeToggle =
+      const themeToggle = document.getElementById('theme-toggle');
+      const body = document.body;
+
+      // Check for saved theme preference on page load
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light-mode') {
+        body.classList.add('light-mode');
+        themeToggle.textContent = 'Switch to Dark Mode';
+      }
+
+      // Add event listener for the theme toggle button
+      themeToggle.addEventListener('click', () => {
+        if (body.classList.contains('light-mode')) {
+          body.classList.remove('light-mode');
+          themeToggle.textContent = 'Switch to Light Mode';
+          localStorage.setItem('theme', 'dark-mode');
+        } else {
+          body.classList.add('light-mode');
+          themeToggle.textContent = 'Switch to Dark Mode';
+          localStorage.setItem('theme', 'light-mode');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
