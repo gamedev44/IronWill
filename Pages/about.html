@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Iron Will Interactive - About Us</title>
-  <meta name="description" content="Meet the team behind Iron Will Interactive. Learn about our vision, mission, and the developers powering our projects.">
-  <meta name="keywords" content="Iron Will Interactive, IWI, Asterisk, Bleedous, about us, software development, AI, ML, dev team">
-  <meta name="author" content="Iron Will Interactive">
-  <meta name="theme-color" content="#f37021">
-  <link rel="canonical" href="https://gamedev44.github.io/IronWill/about.html">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://gamedev44.github.io/IronWill/about.html">
-  <meta property="og:title" content="Iron Will Interactive | About Us">
-  <meta property="og:description" content="Meet the team behind Iron Will Interactive. Learn about our vision, mission, and the developers powering our projects.">
-  <meta property="og:image" content="https://gamedev44.github.io/IronWill/assets/social-share-logo.jpg">
-  <meta property="og:locale" content="en_US">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Iron Will Interactive | About Us">
-  <meta name="twitter:description" content="Meet the developers of Iron Will Interactive.">
-  <meta name="twitter:image" content="https://gamedev44.github.io/IronWill/assets/twitter-share-image.jpg">
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Meet the team behind Iron Will Interactive. Learn about our vision, mission, and the developers powering our projects." />
+  <meta name="keywords" content="Iron Will Interactive, IWI, Asterisk, Bleedous, about us, software development, AI, ML, dev team" />
+  <meta name="author" content="Iron Will Interactive" />
+  <meta name="theme-color" content="#f37021" />
+  <link rel="canonical" href="https://gamedev44.github.io/IronWill/about.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://gamedev44.github.io/IronWill/about.html" />
+  <meta property="og:title" content="Iron Will Interactive | About Us" />
+  <meta property="og:description" content="Meet the team behind Iron Will Interactive. Learn about our vision, mission, and the developers powering our projects." />
+  <meta property="og:image" content="https://gamedev44.github.io/IronWill/assets/social-share-logo.jpg" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Iron Will Interactive | About Us" />
+  <meta name="twitter:description" content="Meet the developers of Iron Will Interactive." />
+  <meta name="twitter:image" content="https://gamedev44.github.io/IronWill/assets/twitter-share-image.jpg" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <style>
-    /* Dark Mode Variables (Default) */
     :root {
-      --bg-start: #0f0f0f; /* Darker start for gradient */
-      --bg-end: #1a1a1a;   /* Lighter end for gradient */
+      --bg-start: #0f0f0f;
+      --bg-end: #1a1a1a;
       --bg-alt: #1a1a1a;
       --text: #f4f4f4;
       --accent: #f37021;
@@ -36,22 +35,19 @@
       --border-color: #333;
       --footer-text-color: #777;
       --radius: 8px;
-      /* Modal specific colors for dark mode */
       --modal-bg: #2a2a2a;
       --modal-text: #f4f4f4;
       --modal-border: #444;
     }
-    /* Light Mode Variables */
     body.light-mode {
-      --bg-start: #f4f4f4; /* Lighter start for gradient */
-      --bg-end: #ffffff;   /* Darker end for gradient */
+      --bg-start: #f4f4f4;
+      --bg-end: #ffffff;
       --bg-alt: #ffffff;
       --text: #333333;
-      --accent: #f37021; /* Accent color remains the same */
+      --accent: #f37021;
       --hover: #e0e0e0;
       --border-color: #cccccc;
       --footer-text-color: #888;
-      /* Modal specific colors for light mode */
       --modal-bg: #ffffff;
       --modal-text: #333333;
       --modal-border: #cccccc;
@@ -61,24 +57,20 @@
       padding: 0;
       box-sizing: border-box;
     }
-    html, body {
-      height: 100%;
-      /* Allow scrolling on body */
-      overflow-y: auto;
-    }
-    /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
-    body::-webkit-scrollbar {
-      width: 0px; /* For vertical scrollbar */
-      height: 0px; /* For horizontal scrollbar */
-    }
+    html,
     body {
+      height: 100%;
+      overflow-y: auto;
       font-family: 'Inter', sans-serif;
-      /* Apply gradient background */
       background: linear-gradient(to bottom right, var(--bg-start), var(--bg-end));
       color: var(--text);
       display: flex;
       flex-direction: column;
-      transition: background 0.5s ease, color 0.5s ease; /* Smooth transition for theme changes */
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+    body::-webkit-scrollbar {
+      width: 0px;
+      height: 0px;
     }
     header {
       background: var(--bg-alt);
@@ -86,36 +78,35 @@
       flex-direction: column;
       align-items: center;
       padding: 1rem 2rem;
-      border-bottom: 1px solid var(--border-color); /* Use variable */
-      position: relative; /* For theme toggle button positioning */
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
     }
-    /* Styling for the text-based logo */
     .header-logo-text {
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-decoration: none; /* Remove underline from link */
-      color: inherit; /* Inherit color from parent for main text */
-      margin-bottom: 1rem; /* Added tiny space between logo and nav */
-      cursor: pointer; /* Indicate it's clickable */
-      transition: transform 0.2s ease-in-out; /* Smooth hover effect */
+      text-decoration: none;
+      color: inherit;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
     }
     .header-logo-text:hover {
-        transform: scale(1.02); /* Slightly enlarge on hover */
+      transform: scale(1.02);
     }
     .header-logo-text .main-title {
-      font-size: 3.5rem; /* Made significantly bigger */
-      font-weight: 800; /* Extra bold */
-      color: var(--text); /* Main text color */
-      line-height: 1; /* Adjust line height for tight spacing */
-      text-transform: uppercase; /* Match original logo style */
-      letter-spacing: 0.05em; /* Add some letter spacing */
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     .header-logo-text .tagline {
-      font-size: 1.2rem; /* Smaller for tagline */
-      font-weight: 400; /* Normal weight */
-      color: var(--accent); /* Accent color for tagline */
-      margin-top: 0.5rem; /* Space between title and tagline */
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--accent);
+      margin-top: 0.5rem;
       text-align: center;
     }
     nav {
@@ -123,7 +114,7 @@
       gap: 2rem;
       justify-content: center;
       margin-top: 0.5rem;
-      flex-wrap: wrap; /* Allow navigation items to wrap on smaller screens */
+      flex-wrap: wrap;
     }
     .nav-item {
       position: relative;
@@ -133,7 +124,7 @@
       text-decoration: none;
       padding: 0.75rem 1rem;
       border-radius: var(--radius);
-      transition: background 0.3s, color 0.3s; /* Smooth transition for hover and text color */
+      transition: background 0.3s, color 0.3s;
     }
     .nav-link:hover {
       background: var(--hover);
@@ -144,11 +135,11 @@
       top: 100%;
       left: 0;
       background: var(--bg-alt);
-      border: 1px solid var(--border-color); /* Use variable */
+      border: 1px solid var(--border-color);
       border-radius: var(--radius);
       min-width: 200px;
       z-index: 10;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .nav-item:hover .dropdown {
       display: block;
@@ -168,23 +159,24 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start; /* Align content to the top */
+      justify-content: flex-start;
       text-align: center;
       padding: 2rem;
-      max-width: 1000px; /* Constrain main content width */
-      margin: auto; /* Center main content */
+      max-width: 1000px;
+      margin: auto;
     }
-    h1, h2 {
+    h1,
+    h2 {
       font-size: 2.25rem;
       margin-bottom: 0.5rem;
-      color: var(--accent); /* Ensure heading color changes */
+      color: var(--accent);
       text-align: center;
     }
     p {
       font-size: 1.2rem;
       max-width: 800px;
       margin: auto;
-      color: var(--text); /* Ensure paragraph color changes */
+      color: var(--text);
       line-height: 1.6;
       margin-bottom: 1rem;
     }
@@ -196,7 +188,7 @@
       margin-top: 2rem;
     }
     .member {
-      background: #222; /* Use a fixed dark background for members for consistency */
+      background: #222;
       padding: 1.5rem;
       border-radius: var(--radius);
       width: 280px;
@@ -209,19 +201,19 @@
       object-fit: cover;
       border-radius: 50%;
       margin-bottom: 0.75rem;
-      border: 3px solid var(--accent); /* Accent border around image */
+      border: 3px solid var(--accent);
     }
     .member h3 {
       margin-bottom: 0.5rem;
       font-size: 1.4rem;
       color: var(--text);
     }
-    .member .role { /* New style for role */
+    .member .role {
       font-size: 1rem;
-      color: var(--accent); /* Use accent color for role */
+      color: var(--accent);
       margin-bottom: 0.5rem;
     }
-    .member .description { /* New style for description */
+    .member .description {
       font-size: 0.9rem;
       color: var(--text);
       line-height: 1.4;
@@ -244,10 +236,10 @@
 
     footer {
       background: var(--bg-alt);
-      border-top: 1px solid var(--border-color); /* Use variable */
+      border-top: 1px solid var(--border-color);
       text-align: center;
       padding: 2rem 1rem;
-      color: var(--footer-text-color); /* Use variable */
+      color: var(--footer-text-color);
     }
     footer a {
       color: var(--accent);
@@ -257,7 +249,7 @@
     footer a:hover {
       text-decoration: underline;
     }
-    /* Theme Toggle Button */
+
     .theme-toggle {
       position: absolute;
       top: 1rem;
@@ -276,18 +268,18 @@
       color: white;
       border-color: var(--accent);
     }
-    /* Welcome Modal Styling */
+
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+      background-color: rgba(0, 0, 0, 0.7);
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 1000; /* Above everything else */
+      z-index: 1000;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -327,7 +319,7 @@
       justify-content: center;
       margin-bottom: 1.5rem;
     }
-    .modal-checkbox-container input[type="checkbox"] {
+    .modal-checkbox-container input[type='checkbox'] {
       margin-right: 0.5rem;
       width: 1.2rem;
       height: 1.2rem;
@@ -348,19 +340,18 @@
       transition: background-color 0.3s ease;
     }
     .modal-button:hover {
-      background-color: #d35d1c; /* Darken accent on hover */
+      background-color: #d35d1c;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       header {
         padding: 1rem;
       }
       .header-logo-text .main-title {
-        font-size: 2.5rem; /* Adjust font size for mobile */
+        font-size: 2.5rem;
       }
       .header-logo-text .tagline {
-        font-size: 1rem; /* Adjust font size for mobile */
+        font-size: 1rem;
       }
       nav {
         flex-direction: column;
@@ -371,14 +362,14 @@
         padding: 0.5rem 0.75rem;
       }
       .dropdown {
-        position: static; /* Make dropdowns stack on smaller screens */
+        position: static;
         border: none;
         box-shadow: none;
         background: transparent;
         min-width: unset;
       }
       .dropdown a {
-        padding-left: 2rem; /* Indent dropdown items */
+        padding-left: 2rem;
       }
       h1 {
         font-size: 1.75rem;
@@ -387,7 +378,7 @@
         font-size: 1rem;
       }
       .theme-toggle {
-        position: static; /* Place toggle button below logo on small screens */
+        position: static;
         margin-top: 1rem;
       }
       .modal-content {
@@ -400,24 +391,27 @@
         width: 100%;
       }
     }
+    .discord-widget-container {
+      margin-top: 3rem;
+      text-align: center;
+    }
+    .discord-widget-container h2 {
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">
-      <!-- Text-based logo with click functionality -->
-      <a href="https://gamedev44.github.io/IronWill/" class="header-logo-text">
-        <span class="main-title">IRONWILL INTERACTIVE</span>
-        <span class="tagline">Confidently Crafting Software that Inspires</span>
-      </a>
-    </div>
+    <a href="https://gamedev44.github.io/IronWill/" class="header-logo-text">
+      <span class="main-title">IRONWILL INTERACTIVE</span>
+      <span class="tagline">Confidently Crafting Software that Inspires</span>
+    </a>
     <nav>
       <div class="nav-item">
         <a href="#" class="nav-link">Company</a>
         <div class="dropdown">
           <a href="/IronWill/Pages/about.html">About</a>
         </div>
-      </div>
       </div>
       <div class="nav-item">
         <a href="#" class="nav-link">Forms</a>
@@ -442,30 +436,33 @@
     <p>Iron Will Interactive is dedicated to confidently crafting software that inspires. Our mission is to build robust, innovative, and scalable technology solutions with a relentless focus on excellence and impact.</p>
     <div class="team">
       <div class="member">
-        <img src="https://avatars.githubusercontent.com/u/22969506?v=4" alt="Asterisk">
+        <img src="https://avatars.githubusercontent.com/u/22969506?v=4" alt="Asterisk" />
         <h3>Asterisk</h3>
         <p class="role">Generalist • Developer • Designer</p>
         <p class="description">From Oklahoma, USA – Asterisk is a multi-discipline powerhouse. From programming and UI to animation, sound, modeling, and texturing – he's a swiss army knife of development. Vision-driven and versatile, he pushes every project forward through sheer will and polish.</p>
-        <a href="https://gist.github.com/gamedev44/04c21006def2d0ffe54ecc1b57aca2cd" target="_blank">View Profile</a>
+        <a href="https://gist.github.com/gamedev44/04c21006def2d0ffe54ecc1b57aca2cd" target="_blank" rel="noopener noreferrer">View Profile</a>
       </div>
       <div class="member">
-        <img src="https://avatars.githubusercontent.com/u/63004987?v=4" alt="Bleedous">
+        <img src="https://avatars.githubusercontent.com/u/63004987?v=4" alt="Bleedous" />
         <h3>Bleedous</h3>
         <p class="role">3D Modeling Expert • Blender Specialist</p>
         <p class="description">From Lahore, Pakistan – Bleedous is a master of form and realism. Specializing in 3D modeling and Blender, he brings the visual soul to life in every project. When Asterisk sets the pace, Bleedous builds the world, ensuring no idea stays just a concept.</p>
-        <a href="https://gist.github.com/gamedev44/e65ef3e39c67804f928d8c5722ba70f2" target="_blank">View Profile</a>
+        <a href="https://gist.github.com/gamedev44/e65ef3e39c67804f928d8c5722ba70f2" target="_blank" rel="noopener noreferrer">View Profile</a>
       </div>
-        <!-- Discord embed iframe added here -->
-  <div style="margin-top: 3rem; display: flex; justify-content: center;">
-    <iframe
-      src="https://discord.com/widget?id=1401165744888348712&theme=dark"
-      width="350"
-      height="500"
-      allowtransparency="true"
-      frameborder="0"
-      sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
-      style="border-radius: var(--radius); border: 1px solid var(--border-color);"
-    ></iframe>  
+      <div class="member">
+  <img src="https://avatars.githubusercontent.com/u/121737155?v=4" alt="Techno" />
+  <h3>Techno</h3>
+  <p class="role">Beta Tester • Twitch Streamer</p>
+  <p class="description">
+    From Louisiana, USA – Techno is a dedicated beta tester and engaging Twitch streamer who helps improve the game by providing critical feedback and connecting with the community.
+  </p>
+  <a href="https://github.com/Emperortechno" target="_blank" rel="noopener noreferrer">View Profile</a>
+</div>
+    </div>
+
+    <div class="discord-widget-container">
+      <h2>Join Our Discord</h2>
+      <iframe src="https://discord.com/widget?id=1401165744888348712&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
     </div>
   </main>
 
@@ -477,13 +474,12 @@
     <p style="margin-top: 1rem; color: var(--footer-text-color)">&copy; 2025 Iron Will Interactive. All rights reserved.</p>
   </footer>
 
-  <!-- Welcome Modal -->
   <div id="welcome-modal-overlay" class="modal-overlay">
     <div class="modal-content">
       <h2>Welcome to Iron Will Interactive!</h2>
       <p>We're thrilled to have you here. Explore our services, learn about our mission, and discover how we craft software that inspires.</p>
       <div class="modal-checkbox-container">
-        <input type="checkbox" id="do-not-show-again">
+        <input type="checkbox" id="do-not-show-again" />
         <label for="do-not-show-again">Don't show this again</label>
       </div>
       <button id="modal-got-it" class="modal-button">Got It!</button>
@@ -492,62 +488,4 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const themeToggle = document.getElementById('theme-toggle');
-      const body = document.body;
-
-      // Theme Toggle Logic
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'light-mode') {
-        body.classList.add('light-mode');
-        themeToggle.textContent = 'Switch to Dark Mode';
-      } else {
-        themeToggle.textContent = 'Switch to Light Mode';
-      }
-
-      themeToggle.addEventListener('click', () => {
-        body.classList.toggle('light-mode');
-        if (body.classList.contains('light-mode')) {
-          themeToggle.textContent = 'Switch to Dark Mode';
-          localStorage.setItem('theme', 'light-mode');
-        } else {
-          themeToggle.textContent = 'Switch to Light Mode';
-          localStorage.setItem('theme', 'dark-mode');
-        }
-      });
-
-      // Welcome Modal Logic
-      const welcomeModalOverlay = document.getElementById('welcome-modal-overlay');
-      const modalGotItButton = document.getElementById('modal-got-it');
-      const doNotShowAgainCheckbox = document.getElementById('do-not-show-again');
-
-      const showWelcomeModal = () => {
-        // Only show if the user hasn't opted out
-        if (localStorage.getItem('hideWelcomeModal') !== 'true') {
-          welcomeModalOverlay.classList.add('show');
-        }
-      };
-
-      const hideWelcomeModal = () => {
-        welcomeModalOverlay.classList.remove('show');
-      };
-
-      // Show modal on page load if not opted out
-      showWelcomeModal();
-
-      // Event listener for "Got It!" button
-      modalGotItButton.addEventListener('click', () => {
-        hideWelcomeModal();
-      });
-
-      // Event listener for "Don't show this again" checkbox
-      doNotShowAgainCheckbox.addEventListener('change', (event) => {
-        if (event.target.checked) {
-          localStorage.setItem('hideWelcomeModal', 'true');
-        } else {
-          localStorage.removeItem('hideWelcomeModal'); // Allow it to show again if unchecked
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+      const themeToggle =
