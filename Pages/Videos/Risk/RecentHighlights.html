@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Risk's Youtube Highlights Catalog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- Loading Icon --- */
+        .loader-logo {
+            width: 90px;
+            height: 24px;
+            padding: 2px 0;
+            box-sizing: border-box;
+            display: flex;
+            animation: l5-0 3s infinite steps(6);
+            background:
+                linear-gradient(#000 0 0) 0 0/0% 100% no-repeat,
+                radial-gradient(circle 3px, #eeee89 90%, #0000) 0 0/20% 100%
+                #000;
+            overflow: hidden;
+        }
+        .loader-logo::before {
+            content: "";
+            width: 20px;
+            transform: translate(-100%);
+            border-radius: 50%;
+            background: #ffff2d;
+            animation:
+                l5-1 .25s .153s infinite steps(5) alternate,
+                l5-2 3s infinite linear;
+        }
+        @keyframes l5-1{
+            0% {clip-path: polygon(50% 50%,100% 0,100% 0,0 0,0 100%,100% 100%,100% 100%)}
+            100% {clip-path: polygon(50% 50%,100% 65%,100% 0,0 0,0 100%,100% 100%,100% 35%)}
+        }
+        @keyframes l5-2{
+            100% {transform: translate(90px)}
+        }
+        @keyframes l5-0{
+            100% {background-size:120% 100%,20% 100%}
+        }
+
+        /* --- Loading Text --- */
+        .loader-text {
+            width: fit-content;
+            font-size: 40px;
+            font-family: monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #0000;
+            -webkit-text-stroke: 1px #808080; /* Changed to gray for visibility */
+            background: conic-gradient(#fff 0 0) -1ch/1ch 100% no-repeat text;
+            animation: l13 2s steps(8,jump-none) infinite;
+        }
+        .loader-text:before {
+            content: "Loading";
+        }
+        @keyframes l13 {
+            to {background-position: 100%}
+        }
+
+        /* --- Cloud Connect Icon --- */
+        .loader-cloud {
+            width: 108px;
+            height: 60px;
+            color: #269af2;
+            --c: radial-gradient(farthest-side,currentColor 96%,#0000);
+            background:
+                var(--c) 100% 100% /30% 60%,
+                var(--c) 70% 0 /50% 100%,
+                var(--c) 0 100% /36% 68%,
+                var(--c) 27% 18% /26% 40%,
+                linear-gradient(currentColor 0 0) bottom/67% 58%;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        .loader-cloud:after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            opacity: 0.4;
+            animation: l7 1s infinite;
+        }
+        @keyframes l7 {
+            to {transform:scale(1.8);opacity:0}
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-white min-h-screen p-6">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const videoData = [
+            { id: 1, title: "AsterSplash UE5 Advanced Physical Particle Integrated Water Shader", url: "https://www.youtube.com/watch?v=7L6YOvtEM_E", category: "UE5" },
+            { id: 2, title: "UltraSonic Radar (Arduino UNO)", url: "https://www.youtube.com/watch?v=3KCZjcYu6kY", category: "Electronics" },
+            { id: 3, title: "Aster Blaster | PS2-Styled Side-Scrolling Shooter", url: "https://www.youtube.com/watch?v=QnMOuNXSb5s", category: "UE5" },
+            { id: 4, title: "Planet Prototype -Lite /WIP", url: "https://www.youtube.com/watch?v=OUMsZiX0VtQ", category: "UE5" },
+            { id: 5, title: "Bullet Problem Fix: Blender Constraints", url: "https://www.youtube.com/watch?v=4ZMIRQMsp4A", category: "Blender" },
+            { id: 6, title: "AsterWeather Dynamic Weather Actor/Component", url: "https://www.youtube.com/watch?v=X2JziDV7cIc", category: "UE5" },
+            { id: 7, title: "Reflex Streaming App (Twitch Killer)", url: "https://www.youtube.com/watch?v=yH82G9tqFzQ", category: "App" },
+            { id: 8, title: "Galactic Soda Textures in Sketchbook", url: "https://www.youtube.com/watch?v=IHCr-B5Fb_c", category: "Art" },
+            { id: 9, title: "Aster-Strand -Blender Hair Addon", url: "https://www.youtube.com/watch?v=eoW3cgLiXXw", category: "Blender" },
+            { id: 10, title: "AsterWeather Lightning Update v2", url: "https://www.youtube.com/watch?v=BTiwWTMZ4Ak", category: "UE5" },
+            { id: 11, title: "Update on Division Problem Solving", url: "https://www.youtube.com/watch?v=80VRDYNzSu4", category: "Math" },
+            { id: 12, title: "Dividing w/ Obtrusive Divisors", url: "https://www.youtube.com/watch?v=DwE7gypLd3Q", category: "Math" },
+            { id: 13, title: "Advanced Custom Shader [UE5.4]", url: "https://www.youtube.com/watch?v=8rn0j8_6xv4", category: "UE5" },
+            { id: 14, title: "Froxel Dave Armature Showcase", url: "https://www.youtube.com/watch?v=2lyHUlF_05E", category: "Blender" },
+            { id: 15, title: "Hair System WIP in Blender", url: "https://www.youtube.com/watch?v=NJkuMRkSlNM", category: "Blender" },
+            { id: 16, title: "Astro-Flea -Blender- Hair System Addon", url: "https://www.youtube.com/watch?v=Opl2jCVRL1k", category: "Blender" },
+            { id: 17, title: "Procedural Rock generation in Blender", url: "https://www.youtube.com/watch?v=xre49rz1AxE", category: "Blender" },
+            { id: 18, title: "Quick Shader Study in Sketchbook", url: "https://www.youtube.com/watch?v=Nw1EW8EjwG8", category: "Art" },
+            { id: 19, title: "Reflex-Engine [WIP] - Unreal Engine 5", url: "https://www.youtube.com/watch?v=BgcBKayYoDs", category: "UE5" },
+            { id: 20, title: "Reflex-Engine [WIP] - Unreal Engine 5", url: "https://www.youtube.com/watch?v=x0e1A1yO-xE", category: "UE5" },
+            { id: 21, title: "Procedural Clouds for UE5", url: "https://www.youtube.com/watch?v=ZXeoErseLek", category: "UE5" },
+            { id: 22, title: "Blender Physics - Car Crash", url: "https://www.youtube.com/watch?v=W1NRSyoavkA", category: "Blender" },
+            { id: 23, title: "Flipping Normals in Blender", url: "https://www.youtube.com/watch?v=YsCdJbLE9lI", category: "Blender" },
+            { id: 24, title: "How to: Voxelizer in Unity", url: "https://www.youtube.com/watch?v=VArK7RSuGhw", category: "Unity" },
+            { id: 25, title: "How to: Make a simple website", url: "https://www.youtube.com/watch?v=lHyk1MTpovQ", category: "WebDev" },
+        ];
+
+        function App() {
+            const [filter, setFilter] = useState("All");
+            const [search, setSearch] = useState("");
+            const [activeVideoId, setActiveVideoId] = useState(null);
+            const [isLoading, setIsLoading] = useState(true);
+
+            useEffect(() => {
+                const timer = setTimeout(() => {
+                    setIsLoading(false);
+                }, 5000); // 5 seconds
+                return () => clearTimeout(timer);
+            }, []);
+
+            const filtered = videoData.filter(v =>
+                (filter === "All" || v.category === filter) &&
+                v.title.toLowerCase().includes(search.toLowerCase())
+            );
+
+            const categories = ["All", ...new Set(videoData.map(v => v.category))];
+
+            const getYouTubeId = (url) => {
+                try {
+                    const urlObj = new URL(url);
+                    return urlObj.searchParams.get("v");
+                } catch (e) {
+                    return null;
+                }
+            };
+
+            return (
+                <>
+                    {/* Conditional rendering of the loading screen */}
+                    {isLoading && (
+                        <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center space-y-4 z-50 transition-opacity duration-1000 ease-in-out">
+                            <div className="loader-cloud mb-8"></div>
+                            <p className="text-xl text-blue-400 font-semibold text-center animate-pulse">
+                                Fetching latest highlights from Risk's Youtube Feed.
+                            </p>
+                            <div className="flex flex-col items-center space-y-4">
+                                <div className="loader-logo"></div>
+                                <div className="loader-text"></div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Main content, hidden while loading */}
+                    <div className={`${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-1000`}>
+                        <div className="max-w-7xl mx-auto py-8">
+                            <h1 className="text-4xl font-bold mb-8 text-center text-blue-400">Risk's Youtube Highlights Catalog</h1>
+                            <div className="flex flex-col sm:flex-row gap-4 mb-8 items-center justify-center">
+                                <select
+                                    value={filter}
+                                    onChange={e => {
+                                        setFilter(e.target.value);
+                                        setActiveVideoId(null);
+                                    }}
+                                    className="bg-gray-800 text-white px-4 py-2 rounded-lg border-2 border-gray-700 focus:outline-none focus:border-blue-500 transition-all duration-300 w-full sm:w-auto"
+                                >
+                                    {categories.map(cat => (
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
+                                </select>
+                                <input
+                                    type="text"
+                                    value={search}
+                                    onChange={e => {
+                                        setSearch(e.target.value);
+                                        setActiveVideoId(null);
+                                    }}
+                                    placeholder="Search..."
+                                    className="bg-gray-800 text-white px-4 py-2 rounded-lg border-2 border-gray-700 focus:outline-none focus:border-blue-500 transition-all duration-300 w-full"
+                                />
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {filtered.length > 0 ? (
+                                    filtered.map(video => {
+                                        const videoId = getYouTubeId(video.url);
+                                        const isVideoActive = activeVideoId === video.id;
+                                        return (
+                                            <div key={video.id} className="bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col transform hover:-translate-y-1">
+                                                <h2 className="text-xl font-semibold mb-3 text-blue-300">{video.title}</h2>
+                                                {isVideoActive ? (
+                                                    <div className="relative aspect-video w-full mb-3 rounded-lg overflow-hidden">
+                                                        <iframe
+                                                            className="w-full h-full"
+                                                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                                                            title={video.title}
+                                                            frameBorder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                            allowFullScreen
+                                                        ></iframe>
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        onClick={() => setActiveVideoId(video.id)}
+                                                        className="relative aspect-video w-full mb-3 rounded-lg overflow-hidden cursor-pointer group"
+                                                    >
+                                                        <img
+                                                            src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                                                            alt={video.title}
+                                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                        />
+                                                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                                                <path d="M8 5v14l11-7z" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <a href={video.url} target="_blank" className="text-blue-400 text-sm hover:underline mt-auto">Watch on YouTube</a>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <p className="text-gray-400 text-center col-span-full">No videos found matching your criteria.</p>
+                                )}
+                            </div>
+                            <div className="mt-10 text-center">
+                                <a href="https://gamedev44.github.io/IronWill/" className="text-blue-500 hover:underline transition-colors duration-200">
+                                    ← Back to Main Site
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
