@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive HØP Feature List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .scroll-container {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .dropdown-menu {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        /* Custom scrollbar styling for the dropdown menu */
+        .dropdown-menu::-webkit-scrollbar {
+            width: 8px;
+        }
+        .dropdown-menu::-webkit-scrollbar-track {
+            background: #4b5563; /* Tailwind gray-600 */
+        }
+        .dropdown-menu::-webkit-scrollbar-thumb {
+            background-color: #6b7280; /* Tailwind gray-500 */
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 p-4 sm:p-8">
+    <div class="max-w-6xl mx-auto bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-10">
+        <h1 class="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-6 text-center">Comprehensive HØP Feature List</h1>
+        
+        <!-- Search Input and Dropdown Container -->
+        <div class="relative mb-8">
+            <label for="search-input" class="block text-gray-400 text-sm font-medium mb-2">Search Features:</label>
+            <input type="text" id="search-input" placeholder="e.g., Leap+, tadpole.db, chat..." class="w-full p-3 rounded-lg bg-gray-700 border-2 border-gray-600 focus:outline-none focus:border-blue-500 text-white placeholder-gray-400 transition-colors">
+            
+            <!-- Jump-to dropdown menu -->
+            <div id="suggestions-dropdown" class="absolute z-10 w-full mt-2 bg-gray-700 border border-gray-600 rounded-lg shadow-lg dropdown-menu hidden">
+                <ul id="suggestions-list" class="divide-y divide-gray-600">
+                    <!-- Suggestions will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="md:flex md:space-x-8">
+            <!-- Table of Contents Sidebar -->
+            <div id="toc-sidebar" class="md:w-1/4 mb-8 md:mb-0 hidden md:block">
+                <h2 class="text-2xl font-semibold mb-4 text-white">Table of Contents</h2>
+                <ul id="toc-list" class="space-y-2 text-gray-300">
+                    <li class="toc-item"><a href="#features-available-to-all-users-høp" class="hover:text-blue-400 transition-colors">🧩 Features Available to All Users (HØP)</a></li>
+                    <li class="toc-item"><a href="#leap-enhanced-features" class="hover:text-blue-400 transition-colors">🚀 Leap+ Enhanced Features</a></li>
+                    <li class="toc-item"><a href="#coming-soon" class="hover:text-blue-400 transition-colors">🔜 Coming Soon</a></li>
+                    <li class="toc-item"><a href="#i-core-platform--user-management" class="hover:text-blue-400 transition-colors">I. Core Platform & User Management</a></li>
+                    <li class="toc-item"><a href="#ii-communication-features" class="hover:text-blue-400 transition-colors">II. Communication Features</a></li>
+                    <li class="toc-item"><a href="#iii-server-management--organization" class="hover:text-blue-400 transition-colors">III. Server Management & Organization</a></li>
+                    <li class="toc-item"><a href="#iv-user-experience--social-features" class="hover:text-blue-400 transition-colors">IV. User Experience & Social Features</a></li>
+                    <li class="toc-item"><a href="#v-backend--integrations" class="hover:text-blue-400 transition-colors">V. Backend & Integrations</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content Area -->
+            <div id="main-content" class="md:w-3/4">
+                <!-- Features Available to All Users (HØP) -->
+                <section class="mb-10 content-section" data-title="Features Available to All Users (HØP)">
+                    <h2 id="features-available-to-all-users-høp" class="text-2xl font-semibold mb-4 text-white"><a href="#features-available-to-all-users-høp" class="hover:underline">🧩 Features Available to All Users (HØP)</a></h2>
+                    <div class="overflow-x-auto rounded-lg">
+                        <table class="w-full text-left rounded-lg overflow-hidden">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4">Feature</th>
+                                    <th class="py-3 px-4">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">💬 Secure Chat</td>
+                                    <td class="py-3 px-4">End-to-end encrypted channels and DMs</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">📁 File Sharing</td>
+                                    <td class="py-3 px-4">Drag & drop file uploads with preview and comment support</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">📅 Calendar & Scheduling</td>
+                                    <td class="py-3 px-4">Integrated planning, event reminders, and sync with personal calendars</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🎨 Themes & Customization</td>
+                                    <td class="py-3 px-4">Custom channel layouts, light/dark modes, and color themes</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🔁 Automation Bots</td>
+                                    <td class="py-3 px-4">Built-in workflow, moderation, and utility bots</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🧩 Plugin System</td>
+                                    <td class="py-3 px-4">Extend functionality with plugins (code, UI components, more)</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🪪 Identity Profiles</td>
+                                    <td class="py-3 px-4">Unified identity with badges, roles, and multi-community profiles</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">📣 Announcement Channels</td>
+                                    <td class="py-3 px-4">Server-wide pinned posts with priority visibility</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🎙️ Voice & Video Channels</td>
+                                    <td class="py-3 px-4">Group voice calls, screen share, and camera feed (basic resolution)</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🖥️ Live Streaming</td>
+                                    <td class="py-3 px-4">Basic live stream viewing & limited creator slots (HØP users, limited beta)</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🧑‍🤝‍🧑 Real-Time Collaboration (Coming Soon)</td>
+                                    <td class="py-3 px-4">Live cursors, shared docs, whiteboards (read-only in HØP, full in Leap+)</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">📊 Server Insights</td>
+                                    <td class="py-3 px-4">Basic analytics (message volume, online stats, user trends)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- Leap+ Enhanced Features -->
+                <section class="mb-10 content-section" data-title="Leap+ Enhanced Features">
+                    <h2 id="leap-enhanced-features" class="text-2xl font-semibold mb-4 text-white"><a href="#leap-enhanced-features" class="hover:underline">🚀 Leap+ Enhanced Features</a></h2>
+                    <div class="overflow-x-auto rounded-lg">
+                        <table class="w-full text-left rounded-lg overflow-hidden">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4">Tier</th>
+                                    <th class="py-3 px-4">Feature</th>
+                                    <th class="py-3 px-4">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4" rowspan="3">🥉 Leap+ Basic</td>
+                                    <td class="py-3 px-4">High-Quality Audio/Video</td>
+                                    <td class="py-3 px-4">1080p streams, noise suppression, higher bitrate voice</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">Cloud Storage Boost</td>
+                                    <td class="py-3 px-4">5x file storage/server, 2x upload limit/user</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">Role-Gated Access</td>
+                                    <td class="py-3 px-4">Dynamic access and content by roles</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4" rowspan="5">🥇 Leap+ Pro</td>
+                                    <td class="py-3 px-4">Unlimited Plugins & Scripts</td>
+                                    <td class="py-3 px-4">Deploy backend/client plugins (overlays, etc.)</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">Priority CDN & Edge Nodes</td>
+                                    <td class="py-3 px-4">Low-latency delivery via premium edge routing</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">DevOps Tools</td>
+                                    <td class="py-3 px-4">Remote containers, deploy tools, bot debug panels</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">Stream Creator Studio</td>
+                                    <td class="py-3 px-4">OBS overlays, chat interactivity, stream subsync</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">Admin Workspace Snapshots</td>
+                                    <td class="py-3 px-4">Export server state with PNG metadata, generate diffs</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Coming Soon -->
+                <section class="mb-10 content-section" data-title="Coming Soon">
+                    <h2 id="coming-soon" class="text-2xl font-semibold mb-4 text-white"><a href="#coming-soon" class="hover:underline">🔜 Coming Soon</a></h2>
+                    <div class="overflow-x-auto rounded-lg">
+                        <table class="w-full text-left rounded-lg overflow-hidden">
+                            <thead class="bg-gray-700 text-gray-300 uppercase text-sm">
+                                <tr>
+                                    <th class="py-3 px-4">Feature</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🤝 Multiplayer Coding</td>
+                                    <td class="py-3 px-4">🛠️ In Development</td>
+                                    <td class="py-3 px-4">Real-time pair programming with language server support</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">✍️ Interactive Docs</td>
+                                    <td class="py-3 px-4">✅ Initial Release</td>
+                                    <td class="py-3 px-4">Embed documents, code blocks, and PDFs directly into threads</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🗃️ App Directory</td>
+                                    <td class="py-3 px-4">🛠️ In Development</td>
+                                    <td class="py-3 px-4">Browse, upload, and auto-deploy community plugins to enhance server functionality</td>
+                                </tr>
+                                <tr class="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                    <td class="py-3 px-4">🤖 API, Webhooks & Bots</td>
+                                    <td class="py-3 px-4">🛠️ In Development</td>
+                                    <td class="py-3 px-4">Build and deploy custom bots and tools using our powerful API and webhook system</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <hr class="border-gray-700 my-8">
+
+                <!-- Core Platform & User Management -->
+                <section class="mb-10 content-section" data-title="I. Core Platform & User Management">
+                    <h2 id="i-core-platform--user-management" class="text-2xl font-semibold mb-4 text-white"><a href="#i-core-platform--user-management" class="hover:underline">I. Core Platform & User Management</a></h2>
+                    <div class="space-y-6">
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="app-init" class="text-xl font-medium mb-2 text-white">1. Application Initialization & Loading</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Boot-up sequence with essential scripts and styles</li>
+                                <li>Custom loading spinner (HØP logo animation)</li>
+                                <li>Auth preloading using `User.me()` to prevent UI flicker</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="user-auth" class="text-xl font-medium mb-2 text-white">2. User Authentication & Session Management</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Automatic session detection (`User.me()`)</li>
+                                <li>Secure external login via tadpole.db with callback redirection</li>
+                                <li>Login prompt with mascot, message, and sign-in CTA</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="user-entity" class="text-xl font-medium mb-2 text-white">3. User Entity & Profile Data</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Core fields: id, full_name, email, role, timestamps</li>
+                                <li>Extended profile: username, display_name, avatar, bio</li>
+                                <li>User status & activity: online, away, busy, invisible</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="app-owner" class="text-xl font-medium mb-2 text-white">4. Application Owner Recognition & Privileges</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Owner flagged via `isAppOwner()`</li>
+                                <li>Automatic permanent Leap+ (`is_leap_plus = true`)</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="ui-layout" class="text-xl font-medium mb-2 text-white">5. Global UI Layout & Responsiveness</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Universal layout wrapper</li>
+                                <li>Responsive sidebar behavior for mobile/desktop</li>
+                                <li>Mobile menu toggle & close buttons</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="theming-system" class="text-xl font-medium mb-2 text-white">6. Comprehensive Theming System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>10+ predefined themes (e.g., HØP Dark, Matrix)</li>
+                                <li>Live theme switcher with persistent localStorage</li>
+                                <li>Themed scrollbars and UI elements</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="leap-sub" class="text-xl font-medium mb-2 text-white">7. Leap+ Premium Subscription Management</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Tracks subscription metadata on `User`</li>
+                                <li>Stripe integration for checkout and webhooks</li>
+                                <li>Dedicated LeapPlus page with upgrade options</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="leap-sharing" class="text-xl font-medium mb-2 text-white">8. Leap+ Benefit Sharing</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Share Leap+ with up to 5 users</li>
+                                <li>Modal for managing shared users</li>
+                                <li>Revoke shared access at any time</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="sidebar-layout" class="text-xl font-medium mb-2 text-white">9. Persistent Sidebar Layout Configuration</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Drag-and-drop server/sidebar order</li>
+                                <li>Tank expansion state saved per user</li>
+                                <li>Config auto-synced to backend</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="hq-server" class="text-xl font-medium mb-2 text-white">10. HØP Official HQ Server Provisioning</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Auto-created on first login</li>
+                                <li>Populated with default channels</li>
+                                <li>Ownership assigned to new user</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <hr class="border-gray-700 my-8">
+                
+                <!-- Communication Features -->
+                <section class="mb-10 content-section" data-title="II. Communication Features">
+                    <h2 id="ii-communication-features" class="text-2xl font-semibold mb-4 text-white"><a href="#ii-communication-features" class="hover:underline">II. Communication Features</a></h2>
+                    <div class="space-y-6">
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="chat-core" class="text-xl font-medium mb-2 text-white">11. Real-time Chat Core</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Instant message send/receive</li>
+                                <li>History fetching with placeholder</li>
+                                <li>Auto-scroll to latest</li>
+                                <li>System feedback messages</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="rich-text" class="text-xl font-medium mb-2 text-white">12. Rich Text Markdown</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Full formatting (bold, italics, code, lists, etc.)</li>
+                                <li>Syntax-highlighted code blocks</li>
+                                <li>Inline media, links, blockquotes</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="message-edit" class="text-xl font-medium mb-2 text-white">13. Message Editing & Deletion</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>In-place edit with “(edited)” tag</li>
+                                <li>Soft delete with `[message deleted]`</li>
+                                <li>Contextual action buttons on hover</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="message-reply" class="text-xl font-medium mb-2 text-white">14. Message Reply & Context Menu</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Threaded replies with visual quote</li>
+                                <li>Right-click context options (reply, copy, edit, delete, react)</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="emoji-reactions" class="text-xl font-medium mb-2 text-white">15. Emoji Reactions System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Reaction picker with emoji list</li>
+                                <li>Live reaction display and user highlighting</li>
+                                <li>Toggle reaction with single click</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="file-sharing" class="text-xl font-medium mb-2 text-white">16. File & Media Sharing</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Multi-file type upload</li>
+                                <li>Auto media rendering via `MediaRenderer.jsx`</li>
+                                <li>HTML iframe previews with sandbox</li>
+                                <li>Upload feedback with errors</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="mention-system" class="text-xl font-medium mb-2 text-white">17. @ Mention System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Live autocomplete for users & roles</li>
+                                <li>Styled mentions with tooltips</li>
+                                <li>Backend mention parsing for notifications</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="slash-commands" class="text-xl font-medium mb-2 text-white">18. Slash Command System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Auto-hinting with descriptions</li>
+                                <li>Secure server-side execution</li>
+                                <li>Command set: mod, channel, utility</li>
+                                <li>Feedback in chat channel</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="call-integration" class="text-xl font-medium mb-2 text-white">19. Call & Livestream Integration (ZegoCloud)</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`CallSession` entity manages session metadata</li>
+                                <li>On-demand SDK loading</li>
+                                <li>Inline call view in chat UI</li>
+                                <li>Participant heartbeat sync</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="voice-video-calling" class="text-xl font-medium mb-2 text-white">20. Voice & Video Calling</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Instant voice/video buttons in chat</li>
+                                <li>Visible active call indicators</li>
+                                <li>Call resolution adapts to user preferences</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="livestreaming" class="text-xl font-medium mb-2 text-white">21. Livestreaming Support</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Livestream setup modal</li>
+                                <li>Stream title/category selection</li>
+                                <li>Host/audience logic with ZegoCloud</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="audio-feedback" class="text-xl font-medium mb-2 text-white">22. Audio Feedback System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Sounds for new messages, join/leave calls</li>
+                                <li>`playSound()` and `stopSound()` utility</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <hr class="border-gray-700 my-8">
+
+                <!-- Server Management & Organization -->
+                <section class="mb-10 content-section" data-title="III. Server Management & Organization">
+                    <h2 id="iii-server-management--organization" class="text-2xl font-semibold mb-4 text-white"><a href="#iii-server-management--organization" class="hover:underline">III. Server Management & Organization</a></h2>
+                    <div class="space-y-6">
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="server-entity" class="text-xl font-medium mb-2 text-white">23. Server Entity Management</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Core: name, description, icon, tier, moderation</li>
+                                <li>Visibility flags and integrations</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="channel-entity" class="text-xl font-medium mb-2 text-white">24. Channel Entity Management</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Types: river, hop_in, app</li>
+                                <li>Slowmode, lock, NSFW, categories</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="user-server-membership" class="text-xl font-medium mb-2 text-white">25. User-Server Membership</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`UserServer` links with role, nickname, status</li>
+                                <li>Role array enables permission granularity</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="role-based-access" class="text-xl font-medium mb-2 text-white">26. Role-Based Access Control</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Role entity: color, name, permissions</li>
+                                <li>Permission system enforced on backend</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="server-tagging" class="text-xl font-medium mb-2 text-white">27. Server Tagging</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Tags with icon and color</li>
+                                <li>Assigned per member, shown in UI</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="mod-logs" class="text-xl font-medium mb-2 text-white">28. Mod Logs</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Auto-records all mod actions</li>
+                                <li>Created by backend moderation commands</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="server-discovery" class="text-xl font-medium mb-2 text-white">29. Server Discovery</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Public server listing with search</li>
+                                <li>Join/Create server buttons</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="server-cards" class="text-xl font-medium mb-2 text-white">30. Server Cards</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Quick overview with tier badge</li>
+                                <li>Direct join button</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="server-tooltips" class="text-xl font-medium mb-2 text-white">31. Server Tooltips</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Hover tooltips with member/channel stats</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="create-server-wizard" class="text-xl font-medium mb-2 text-white">32. Create Server Wizard</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Multi-step setup: tier, config, review</li>
+                                <li>Live icon preview</li>
+                                <li>Auto channel setup</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="join-server-invite" class="text-xl font-medium mb-2 text-white">33. Join Server via Invite</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>6-char invite code input with validation</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="server-settings-modal" class="text-xl font-medium mb-2 text-white">34. Server Settings Modal</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Tabbed sections for config, roles, users, apps, etc.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="overview-settings" class="text-xl font-medium mb-2 text-white">35. Overview Settings</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Edit name, icon, description</li>
+                                <li>Content filter, verification settings</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="integrations-settings" class="text-xl font-medium mb-2 text-white">36. Integrations Settings</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>MyInstants toggle</li>
+                                <li>Placeholder for webhooks and bots</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="invite-links" class="text-xl font-medium mb-2 text-white">37. Server Invite Links</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Custom expiration and max uses</li>
+                                <li>Direct friend invite</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="channel-sidebar" class="text-xl font-medium mb-2 text-white">38. Channel Sidebar</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Drag-and-drop channel/category order</li>
+                                <li>Context menus for channel actions</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="channel-modals" class="text-xl font-medium mb-2 text-white">39. Channel Modals</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Create/Edit channel forms with all options</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="member-sidebar" class="text-xl font-medium mb-2 text-white">40. Member Sidebar</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Grouped by online/offline</li>
+                                <li>Rich profile preview with mod actions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <hr class="border-gray-700 my-8">
+
+                <!-- User Experience & Social Features -->
+                <section class="mb-10 content-section" data-title="IV. User Experience & Social Features">
+                    <h2 id="iv-user-experience--social-features" class="text-2xl font-semibold mb-4 text-white"><a href="#iv-user-experience--social-features" class="hover:underline">IV. User Experience & Social Features</a></h2>
+                    <div class="space-y-6">
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="user-profile" class="text-xl font-medium mb-2 text-white">41. User Profile Modal</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Full profile with social stats and actions</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="user-tooltip" class="text-xl font-medium mb-2 text-white">42. User Hover Tooltip</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Quick info popup with achievements and badges</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="friends-system" class="text-xl font-medium mb-2 text-white">43. Friends System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Tabs: Friends, Pending, Blocked, Add Friend</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="friend-requests" class="text-xl font-medium mb-2 text-white">44. Friend Requests</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Accept, decline, or block from pending tab</li>
+                                <li>Add by tag (e.g., `user#1234`)</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="dashboard" class="text-xl font-medium mb-2 text-white">45. Dashboard</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Welcome message and global stats</li>
+                                <li>Server discovery suggestions</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="features-page" class="text-xl font-medium mb-2 text-white">46. Features Page</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Categorized features with modal overview</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="achievements" class="text-xl font-medium mb-2 text-white">47. Achievements System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Track milestones like invites or messages</li>
+                                <li>Display latest badge in profile/tooltip</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="notifications" class="text-xl font-medium mb-2 text-white">48. Notification System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Real-time polling for unread alerts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-700 my-8">
+
+                <!-- Backend & Integrations -->
+                <section class="mb-10 content-section" data-title="V. Backend & Integrations">
+                    <h2 id="v-backend--integrations" class="text-2xl font-semibold mb-4 text-white"><a href="#v-backend--integrations" class="hover:underline">V. Backend & Integrations</a></h2>
+                    <div class="space-y-6">
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="tadpole-db" class="text-xl font-medium mb-2 text-white">49. tadpole.db SDK</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Full CRUD for entities</li>
+                                <li>Dynamic schema access</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="core-integrations" class="text-xl font-medium mb-2 text-white">50. Core Integrations</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`SendEmail`, `UploadFile`, `GenerateImage`</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="stripe-integration" class="text-xl font-medium mb-2 text-white">51. Stripe Integration</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Secure checkout & webhook handler for Leap+</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="deno-deploy" class="text-xl font-medium mb-2 text-white">52. Deno Deploy Backend</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Serverless architecture</li>
+                                <li>Secure token authentication</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="zego-cloud" class="text-xl font-medium mb-2 text-white">53. ZegoCloud Integration</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Dynamic SDK loading</li>
+                                <li>Kit tokens and scenario config</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="persistent-settings" class="text-xl font-medium mb-2 text-white">54. Persistent Settings</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Notification, privacy, and video settings</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="drag-drop" class="text-xl font-medium mb-2 text-white">55. Drag-and-Drop System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>UI powered by `@hello-pangea/dnd`</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="ui-component-library" class="text-xl font-medium mb-2 text-white">56. UI Component Library</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`shadcn/ui`, `lucide-react` for icons and layout</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="frontend-utils" class="text-xl font-medium mb-2 text-white">57. Frontend Utilities</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`createPageUrl()` for clean navigation</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="toast-notifications" class="text-xl font-medium mb-2 text-white">58. Toast Notifications</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`sonner` for in-app toast messages</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="date-time" class="text-xl font-medium mb-2 text-white">59. Date & Time Formatting</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Consistent formatting using `date-fns` and `moment`</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="client-caching" class="text-xl font-medium mb-2 text-white">60. Client-Side Caching</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`localStorage` for theme and session persistence</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="moderation-modals" class="text-xl font-medium mb-2 text-white">61. User Moderation Modals</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Kick/Ban users with reason entry</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="embedded-apps" class="text-xl font-medium mb-2 text-white">62. Embedded App System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`AppRenderer` securely renders 3rd-party apps</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="user-status" class="text-xl font-medium mb-2 text-white">63. Dynamic User Status</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Colored dots for status display</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="conservation-system" class="text-xl font-medium mb-2 text-white">64. Conservation System</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Tracks user donations and favorite cause</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="custom-badges" class="text-xl font-medium mb-2 text-white">65. Custom User Badges</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Personal badge icons and visibility settings</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="account-settings" class="text-xl font-medium mb-2 text-white">66. User Account Settings</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Placeholder modal with multiple planned tabs</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="live-member-count" class="text-xl font-medium mb-2 text-white">67. Live Member Count Updates</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Real-time `member_count` tracking</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="api-endpoints" class="text-xl font-medium mb-2 text-white">68. Backend API Endpoints</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Example: `sendSMS` custom function</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="data-polling" class="text-xl font-medium mb-2 text-white">69. Real-time Data Polling</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>`setInterval` for messages, calls, members, notifications</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="component-search" class="text-xl font-medium mb-2 text-white">70. Component-Level Search</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Built into members sidebar, server discovery, friends list</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="user-management" class="text-xl font-medium mb-2 text-white">71. User Management Settings</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Placeholder in server settings</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="custom-server-visuals" class="text-xl font-medium mb-2 text-white">72. Custom Server Visuals</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>Supports unique branding per server</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-gray-700 rounded-lg">
+                            <h3 id="advanced-filtering" class="text-xl font-medium mb-2 text-white">73. Advanced Filtering & Sorting</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li>System-wide data filtering planned</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <hr class="border-gray-700 my-8">
+                
+                <p class="text-sm text-gray-400 text-center"><strong>Last Updated:</strong> `2025-08-07`</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search-input');
+            const tocList = document.getElementById('toc-list');
+            const suggestionsDropdown = document.getElementById('suggestions-dropdown');
+            const suggestionsList = document.getElementById('suggestions-list');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            // Collect all potential jump-to targets from main content
+            const jumpTargets = Array.from(document.querySelectorAll('#main-content h2, #main-content h3')).map(header => {
+                return {
+                    text: header.textContent.trim(),
+                    id: header.id,
+                };
+            });
+
+            function filterContent(query) {
+                const lowerCaseQuery = query.toLowerCase();
+
+                // Clear and hide suggestions if query is empty
+                if (query.trim() === '') {
+                    suggestionsList.innerHTML = '';
+                    suggestionsDropdown.classList.add('hidden');
+                    // Show all main content sections and TOC items
+                    contentSections.forEach(section => section.classList.remove('hidden'));
+                    document.querySelectorAll('.toc-item').forEach(item => item.classList.remove('hidden'));
+                    return;
+                }
+
+                // Filter content sections
+                contentSections.forEach(section => {
+                    const textContent = section.textContent.toLowerCase();
+                    if (textContent.includes(lowerCaseQuery)) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+
+                // Generate and display dropdown suggestions
+                const suggestions = jumpTargets.filter(target => target.text.toLowerCase().includes(lowerCaseQuery));
+                suggestionsList.innerHTML = ''; // Clear previous suggestions
+
+                if (suggestions.length > 0) {
+                    suggestions.forEach(target => {
+                        const li = document.createElement('li');
+                        li.className = 'py-2 px-4 cursor-pointer hover:bg-gray-600 transition-colors rounded-lg';
+                        li.textContent = target.text;
+                        li.setAttribute('data-target', target.id);
+                        suggestionsList.appendChild(li);
+                    });
+                    suggestionsDropdown.classList.remove('hidden');
+                } else {
+                    suggestionsDropdown.classList.add('hidden');
+                }
+            }
+
+            // Event listener for search input
+            searchInput.addEventListener('input', (e) => {
+                filterContent(e.target.value);
+            });
+
+            // Event listener for clicks on suggestions
+            suggestionsList.addEventListener('click', (e) => {
+                const targetId = e.target.getAttribute('data-target');
+                if (targetId) {
+                    // Smooth scroll to the target section
+                    document.getElementById(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    // Clear the input and hide the dropdown after jumping
+                    searchInput.value = '';
+                    suggestionsDropdown.classList.add('hidden');
+                    // Show all sections again for a clean view after the jump
+                    contentSections.forEach(section => section.classList.remove('hidden'));
+                }
+            });
+
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!suggestionsDropdown.contains(e.target) && e.target !== searchInput) {
+                    suggestionsDropdown.classList.add('hidden');
+                }
+            });
+
+            // Set up initial links for TOC
+            document.querySelectorAll('#toc-list a').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
