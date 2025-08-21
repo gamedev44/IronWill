@@ -303,51 +303,52 @@
     filter: brightness(1.1); /* Fallback for darken */
   }
 
+  /* Dissolution Notice Styles */
+  .notice {
+    width: 100%;
+    max-width: 960px;
+    margin: 2rem auto 0;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: left;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+  .notice h2 {
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+    font-size: 1.75rem;
+  }
+  .status-chip {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    background: var(--hover);
+  }
+  .notice h3 { margin-top: 1.25rem; margin-bottom: 0.5rem; }
+  .notice ul { padding-left: 1.25rem; }
+  .muted { color: var(--footer-text-color); font-size: 0.95rem; }
+  details.notice-original { margin-top: 1rem; }
+  details.notice-original summary { cursor: pointer; margin-bottom: 0.75rem; }
+
   /* Responsive adjustments */
   @media (max-width: 768px) {
-    header {
-      padding: 1rem;
-    }
-    .header-logo-text .main-title {
-      font-size: 2.5rem; /* Adjust font size for mobile */
-    }
-    .header-logo-text .tagline {
-      font-size: 1rem; /* Adjust font size for mobile */
-    }
-    nav {
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    .nav-link {
-      padding: 0.5rem 0.75rem;
-    }
-    .dropdown {
-      position: static; /* Make dropdowns stack on smaller screens */
-      border: none;
-      box-shadow: none;
-      background: transparent;
-      min-width: unset;
-    }
-    .dropdown a {
-      padding-left: 2rem; /* Indent dropdown items */
-    }
-    h1 {
-      font-size: 1.75rem;
-    }
-    p {
-      font-size: 1rem;
-    }
-    .theme-toggle {
-      position: static; /* Place toggle button below logo on small screens */
-      margin-top: 1rem;
-    }
-    .modal-content {
-      padding: 1.5rem;
-    }
-    .modal-content h2 {
-      font-size: 1.5rem;
-    }
+    header { padding: 1rem; }
+    .header-logo-text .main-title { font-size: 2.5rem; }
+    .header-logo-text .tagline { font-size: 1rem; }
+    nav { flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+    .nav-link { padding: 0.5rem 0.75rem; }
+    .dropdown { position: static; border: none; box-shadow: none; background: transparent; min-width: unset; }
+    .dropdown a { padding-left: 2rem; }
+    h1 { font-size: 1.75rem; }
+    p { font-size: 1rem; }
+    .theme-toggle { position: static; margin-top: 1rem; }
+    .modal-content { padding: 1.5rem; }
+    .modal-content h2 { font-size: 1.5rem; }
   }
 </style>
 </head>
@@ -391,6 +392,50 @@
         <h2 class="text-2xl font-bold mb-4 text-accent">Our Mission</h2>
         <p class="text-lg">At Iron Will Interactive, we are dedicated to pushing the boundaries of technology to create impactful and innovative software solutions. We believe in the power of strong will and meticulous craftsmanship to deliver products that not only meet but exceed expectations.</p>
         <p class="mt-4 text-lg">Whether it's cutting-edge AI, robust enterprise systems, or immersive interactive experiences, our team is committed to excellence and inspiring confidence in every line of our work.</p>
+    </section>
+
+    <!-- Added: Dissolution Notice Section (content preserved and expanded) -->
+    <section id="dissolution-notice" class="notice" aria-labelledby="notice-title">
+      <h2 id="notice-title">⚠️ Ironwill – Upcoming Dissolution</h2>
+      <div class="status-chip">Status: Dissolving in the coming weeks (final decision)</div>
+      <p><strong>Why:</strong></p>
+      <ul>
+        <li>Gamedev stopped being fun; it’s become a grind, not a passion.</li>
+        <li>The rest of the team hasn’t truly shown up or made their parts clear.</li>
+        <li>We repeatedly asked for commitment and clarity. It didn’t happen.</li>
+      </ul>
+      <p class="muted">I’m not leaving anyone in the dust—they left themselves there by not stepping up sooner when we practically begged them to.</p>
+
+      <h3>Quick Summary</h3>
+      <ul>
+        <li>All Ironwill gamedev is winding down now.</li>
+        <li>Repositories and assets will be archived (read‑only).</li>
+        <li>Final payouts will be completed during the wind‑down period.</li>
+        <li>A final post will confirm completion and closure.</li>
+      </ul>
+
+      <h3>Personal Note to <strong>Hamza Ahmed / Bleedous</strong></h3>
+      <p>Thank you for the modeling help you brought—genuinely. I’m sorry this ends here and that the shift impacts work you have touched. None of this is about your talent; it’s about energy, consistency, and clarity that never materialized across the team. I wish you solid gigs ahead—if you want references, introductions, or a short write‑up for your portfolio, I’ll provide them. Thanks for stepping in when you could.</p>
+
+      <h3>Message to <strong>Hamza Ahmed Co-Founder</strong></h3>
+      <ul>
+        <li>You’ll receive the remaining <strong>$200</strong> owed, plus any additional earnings that come in during dissolution.</li>
+        <li>You have co‑choice after dissolution:
+          <ol>
+            <li>Reform Ironwill and run it yourself; or</li>
+            <li>I shutter everything fully as planned.</li>
+          </ol>
+          Tell me which you want. I’ll also share job leads if you’re seeking paid work.
+        </li>
+      </ul>
+
+      <h3>Wind‑Down Plan</h3>
+      <ul>
+        <li><strong>Now → Completion:</strong> Halt dev; freeze scope; move repos to read‑only.</li>
+        <li><strong>Payouts:</strong> Settle remaining amounts and any late‑arriving earnings.</li>
+        <li><strong>Archives:</strong> Snapshot assets, credits, and project histories for personal portfolios.</li>
+        <li><strong>Final Post:</strong> Confirm dissolution complete; no further gamedev under Ironwill.</li>
+      </ul>
     </section>
   </main>
   <footer>
