@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Project Speedverse: Last-Minute Fundraiser ⚡</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind to use the Inter font and custom colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-green': '#10b981', // A nice, deep green
+                        'dark-bg': '#1f2937', // Dark gray for background
+                        'soft-white': '#f3f4f6', // Off-white text
+                        'modal-dark': '#111827', // Even darker for modal background
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Ensures smooth transitions for hover effects */
+        .transition-colors {
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        /* Modal specific styling (Tailwind classes handle most of this, but adding custom transition for the content) */
+        .modal-content-transition {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .modal-overlay {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-soft-white font-sans min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-2xl bg-gray-800 p-8 md:p-10 rounded-xl shadow-2xl border-t-4 border-primary-green">
+
+        <!-- Header and Urgent Message -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-primary-green mb-2 leading-tight">
+                Emergency Project Kickstart!
+            </h1>
+            <p class="text-xl text-gray-300 font-medium">
+                We need just <span class="text-yellow-400 font-bold">$56</span> by Christmas!
+            </p>
+        </header>
+
+        <!-- Goal Tracker Card -->
+        <div class="bg-gray-700 p-6 rounded-lg mb-8 shadow-inner">
+            <h2 class="text-2xl font-bold mb-4">Funding Goal Tracker</h2>
+
+            <!-- Christmas Goal -->
+            <div class="mb-4">
+                <div class="flex justify-between text-sm font-semibold mb-1">
+                    <span>Christmas Target: <span class="text-primary-green">$199</span></span>
+                    <span>Current: <span class="text-soft-white">$143</span></span>
+                </div>
+                <div class="w-full bg-gray-600 rounded-full h-3">
+                    <!-- Progress Bar (143/199 ≈ 71.8%) -->
+                    <div class="bg-primary-green h-3 rounded-full" style="width: 71.8%"></div>
+                </div>
+                <p class="text-xs mt-1 text-gray-400">
+                    71.8% toward our immediate $199 goal! Almost there!
+                </p>
+            </div>
+
+            <!-- Overall Goal -->
+            <div>
+                <div class="flex justify-between text-sm font-semibold mb-1">
+                    <span>Overall Project Goal (Phase 1): <span class="text-yellow-400">$716</span></span>
+                </div>
+                <div class="w-full bg-gray-600 rounded-full h-3">
+                    <!-- Progress Bar (143/716 ≈ 19.97%) -->
+                    <div class="bg-yellow-400 h-3 rounded-full" style="width: 19.97%"></div>
+                </div>
+                <p class="text-xs mt-1 text-gray-400">
+                    This funding unlocks essential software, like the 3D asset tools and engine extensions we linked.
+                </p>
+            </div>
+        </div>
+        
+        <!-- The Main Call to Action Button -->
+        <div class="text-center mb-8">
+            <a href="https://cash.app/$4sterCash" target="_blank"
+               class="inline-flex items-center justify-center w-full sm:w-auto px-12 py-4 text-2xl font-extrabold text-gray-900 bg-primary-green rounded-full shadow-lg hover:bg-green-400 active:scale-95 transition-all duration-200 uppercase tracking-widest">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7 mr-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.01 60.01 0 0 0 16.03 2.15l.659-.97a.75.75 0 0 0-.82-.871l-.105-.03c-.636-.201-1.348-.392-2.115-.558l-.107-.023c-1.36-.288-2.646-.516-3.868-.674-.836-.109-1.638-.175-2.39-.188-1.026-.017-2.039.06-2.98.243-.615.118-1.189.284-1.706.495-.595.244-1.139.544-1.603.901-.462.355-.845.75-1.157 1.258a.75.75 0 0 0-.083.829l.635.845a60.057 60.057 0 0 1-.22-.39c-.066-.118-.11-.237-.134-.366a1.125 1.125 0 0 1 .453-1.042c.24-.183.513-.343.805-.487.424-.207.88-.382 1.353-.526.974-.3 2.003-.497 3.094-.524 1.166-.029 2.378.09 3.493.364.717.177 1.398.406 2.035.69l.138.065.04.019a.75.75 0 0 0 .546-1.118l-.553-.74a60.021 60.021 0 0 0 2.227-1.125 60.021 60.021 0 0 0 2.227-1.125a.75.75 0 0 0 .15-.758l-.66-1.321a.75.75 0 0 0-1.14-.383l-.689.345a58.991 58.991 0 0 1-5.18-.544 58.991 58.991 0 0 1-5.18-.544c-1.39-.144-2.733-.311-4.02-.497-.68-.099-1.35-.188-2.01-.264a1.125 1.125 0 0 1-1.04-.453l-.366-.549a.75.75 0 0 0-1.282.476l.338.834a59.006 59.006 0 0 0 1.259 3.033" />
+                </svg>
+                Please Donate Now
+            </a>
+            <p class="text-sm mt-3 text-gray-400">
+                You're making a direct impact on our December target. Thank you!
+            </p>
+        </div>
+
+        <!-- Project Details and Links -->
+        <section class="text-gray-300">
+            <h3 class="text-2xl font-bold text-soft-white mb-4 border-b border-gray-700 pb-2">
+                What Your Donation Funds
+            </h3>
+            <ul class="list-disc list-inside space-y-2 ml-4 mb-6">
+                <li>
+                    Closing the gap to hit our **$199 Christmas Milestone** (we are at $143!).
+                </li>
+                <li>
+                    Acquiring essential software and assets for 3D modeling and engine integration, including licenses for:
+                    <span class="text-primary-green font-semibold">Modeling Tools, Rigging Extensions, and Real-Time Rendering Frameworks.</span>
+                </li>
+                <li>
+                    Supporting the overall project goal of **$716** which covers initial development, and pre-production costs.
+                </li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-soft-white mb-4 border-b border-gray-700 pb-2">
+                Find Out More
+            </h3>
+            <p class="mb-4">
+                Want to see what you're supporting? Check out the **Project Speedverse** website for full details on the game and our mission:
+            </p>
+            <a href="https://gamedev44.github.io/IronWill/" target="_blank"
+               class="text-blue-400 hover:text-blue-300 font-semibold underline transition-colors">
+                Visit the Project Speedverse Website &rarr;
+            </a>
+        </section>
+
+    </div>
+
+    <!-- CODE MESSAGE AND LINK MODAL -->
+    <div id="share-modal-overlay" class="modal-overlay fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center transition-opacity" style="opacity: 0; pointer-events: none;">
+        <div id="share-modal-content" class="bg-modal-dark p-8 rounded-xl shadow-2xl max-w-lg w-11/12 border border-gray-700 modal-content-transition transform scale-95">
+            <h2 class="text-3xl font-extrabold text-primary-green mb-4 text-center">
+                Share the Speedverse! 🚀
+            </h2>
+            <p class="text-gray-300 mb-6 text-center">
+                Help us close the gap by sharing this unique code and the fundraiser link with your community. Every share helps!
+            </p>
+            
+            <!-- Code Display Box -->
+            <div class="mb-6">
+                <label for="share-code" class="block text-sm font-medium text-gray-400 mb-2">Your Unique Sharing Code</label>
+                <div class="relative">
+                    <input type="text" id="share-code" value="SPEEDVERSE-ALPHA-716" readonly
+                           class="w-full bg-gray-700 text-soft-white p-3 rounded-lg font-mono text-center text-lg select-all border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-green">
+                </div>
+            </div>
+
+            <!-- Link and Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="copy-link-btn" class="flex-1 inline-flex items-center justify-center p-3 text-sm font-semibold text-gray-900 bg-yellow-400 rounded-lg hover:bg-yellow-300 active:scale-[.99] transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+                        <path d="M15.75 3a.75.75 0 0 0-.75.75v5.757a3 3 0 0 1-.954 2.155l-.946.946a3 3 0 0 0-.954 2.155V19.5a.75.75 0 0 0 1.5 0v-4.543a1.5 1.5 0 0 1 .477-1.077l.946-.946A1.5 1.5 0 0 1 15 9.507V3.75a.75.75 0 0 0-.75-.75Z" />
+                        <path d="M8.75 3a.75.75 0 0 0-.75.75v5.757a3 3 0 0 1-.954 2.155l-.946.946a3 3 0 0 0-.954 2.155V19.5a.75.75 0 0 0 1.5 0v-4.543a1.5 1.5 0 0 1 .477-1.077l.946-.946A1.5 1.5 0 0 1 9 9.507V3.75a.75.75 0 0 0-.75-.75Z" />
+                        <path fill-rule="evenodd" d="M16 4.75a.75.75 0 0 0-1.5 0V9a.75.75 0 0 0 1.5 0V4.75Z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M9 4.75a.75.75 0 0 0-1.5 0V9a.75.75 0 0 0 1.5 0V4.75Z" clip-rule="evenodd" />
+                    </svg>
+                    Copy Link
+                </button>
+                <button id="close-modal-btn" class="flex-1 inline-flex items-center justify-center p-3 text-sm font-semibold text-soft-white bg-gray-600 rounded-lg hover:bg-gray-500 active:scale-[.99] transition-all">
+                    Close
+                </button>
+            </div>
+            
+            <p id="copy-message" class="text-xs text-center mt-3 text-primary-green opacity-0 transition-opacity">
+                Link copied to clipboard! Share the word!
+            </p>
+        </div>
+    </div>
+    <!-- END MODAL -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modalOverlay = document.getElementById('share-modal-overlay');
+        const modalContent = document.getElementById('share-modal-content');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const copyLinkBtn = document.getElementById('copy-link-btn');
+        const copyMessage = document.getElementById('copy-message');
+
+        const fundraiserLink = window.location.href; // The URL of the current page
+
+        // --- Modal Logic ---
+        const showModal = () => {
+            modalOverlay.style.opacity = '1';
+            modalOverlay.style.pointerEvents = 'auto';
+            modalContent.style.transform = 'scale(1)';
+        };
+
+        const hideModal = () => {
+            modalOverlay.style.opacity = '0';
+            modalOverlay.style.pointerEvents = 'none';
+            modalContent.style.transform = 'scale(0.95)';
+        };
+
+        // Show modal immediately on load
+        showModal();
+
+        // Close button listener
+        closeModalBtn.addEventListener('click', hideModal);
+
+        // Close modal when clicking outside the content
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                hideModal();
+            }
+        });
+
+        // --- Copy Link Logic ---
+        copyLinkBtn.addEventListener('click', () => {
+            // Because navigator.clipboard.writeText might not work in some environments (like iframes),
+            // we use the older execCommand method as a fallback for reliable clipboard interaction.
+
+            const tempInput = document.createElement('input');
+            tempInput.value = fundraiserLink;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+
+            try {
+                document.execCommand('copy');
+                // Show success message
+                copyMessage.textContent = 'Link copied to clipboard! Share the word!';
+                copyMessage.classList.remove('opacity-0');
+                copyMessage.classList.add('opacity-100');
+                
+                setTimeout(() => {
+                    copyMessage.classList.remove('opacity-100');
+                    copyMessage.classList.add('opacity-0');
+                }, 3000);
+                
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+                copyMessage.textContent = 'Copy failed. Please manually copy the URL from the browser address bar.';
+                copyMessage.classList.remove('opacity-0');
+                copyMessage.classList.add('opacity-100');
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        });
+    });
+</script>
+</body>
+</html>
