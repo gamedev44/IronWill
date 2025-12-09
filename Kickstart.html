@@ -50,6 +50,10 @@ tailwind.config = {
 <style>
 body {
     background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    cursor: url(https://cur.cursors-4u.net/food/foo-1/foo10.cur), auto !important;
+    cursor: url(https://cur.cursors-4u.net/food/foo-1/foo10.cur) 12 12, auto !important;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 .transition-colors { 
     transition: background-color 0.3s, transform 0.1s; 
@@ -120,6 +124,38 @@ body {
 .flash-yellow-glow {
     animation: flash-yellow 1.8s ease-in-out infinite;
 }
+
+@keyframes snowfall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.snowflake {
+    position: fixed;
+    color: white;
+    pointer-events: none;
+    z-index: 9999;
+    user-select: none;
+    will-change: transform, opacity;
+    text-shadow: 0 0 3px rgba(255,255,255,0.9), 0 0 6px rgba(255,255,255,0.5);
+    font-weight: bold;
+}
+
+.snowflake-bg {
+    position: fixed;
+    color: rgba(255,255,255,0.6);
+    pointer-events: none;
+    z-index: 1;
+    user-select: none;
+    text-shadow: 0 0 2px rgba(255,255,255,0.4);
+}
+
+.snowflake-fractal {
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.8));
+}
+</style>
 </style>
 </head>
 <body class="text-soft-white font-sans min-h-screen flex items-center justify-center p-4">
@@ -391,6 +427,173 @@ body {
             }
         }
     };
+
+    // Snowflake cursor trail effect - Based on your p5.js code
+    let snowflakes = [];
+    let bgSnowflakes = [];
+    let prevMouseX = -1;
+    let prevMouseY = -1;
+    const cursorXOffset = 18;
+    const cursorYOffset = 25;
+    const emissionRate = 3;
+    const gravity = 0.08;
+    const maxSnowflakes = 800;
+    const maxBgSnowflakes = 50;
+
+    class Snowflake {
+        constructor(x, y, isBackground = false) {
+            this.x = x;
+            this.y = y;
+            this.velX = (Math.random() - 0.5) * 2;
+            this.velY = isBackground ? Math.random() * 1 + 0.5 : Math.random() * -1 - 0.5;
+            this.accX = 0;
+            this.accY = 0;
+            this.size = isBackground ? Math.random() * 8 + 6 : Math.random() * 8 + 10;
+            this.rotation = Math.random() * 360;
+            this.rotationSpeed = (Math.random() - 0.5) * 2;
+            this.opacity = isBackground ? 0.6 : 1;
+            this.element = null;
+            this.isBackground = isBackground;
+            this.createElements();
+        }
+
+        createElements() {
+            this.element = document.createElement('div');
+            this.element.className = this.isBackground ? 'snowflake-bg' : 'snowflake';
+            this.element.style.left = this.x + 'px';
+            this.element.style.top = this.y + 'px';
+            this.element.style.fontSize = this.size + 'px';
+            this.element.innerHTML = '❄';
+            document.body.appendChild(this.element);
+        }
+
+        applyForce(fx, fy) {
+            this.accX += fx;
+            this.accY += fy;
+        }
+
+        update() {
+            if (this.isBackground) {
+                // Background snow falls straight down with slight drift
+                this.applyForce((Math.random() - 0.5) * 0.05, 0.02);
+                this.velX += this.accX;
+                this.velY += this.accY;
+                this.velX *= 0.98;
+                this.velY *= 0.99;
+            } else {
+                // Cursor snow with full physics
+                this.applyForce(0, gravity);
+                this.applyForce((Math.random() - 0.5) * 0.02, 0);
+                this.velX += this.accX;
+                this.velY += this.accY;
+                this.velX *= 0.995;
+                this.velY *= 0.995;
+            }
+            
+            // Update position
+            this.x += this.velX;
+            this.y += this.velY;
+            
+            // Update rotation
+            this.rotation += Math.sqrt(this.velX * this.velX + this.velY * this.velY) * 0.5;
+            
+            // Reset acceleration
+            this.accX = 0;
+            this.accY = 0;
+            
+            // Fade out near bottom
+            if (this.y > window.innerHeight - 100) {
+                this.opacity -= 0.01;
+            }
+            
+            // Update DOM
+            if (this.element) {
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+                this.element.style.transform = `rotate(${this.rotation}deg)`;
+                this.element.style.opacity = this.opacity;
+            }
+        }
+
+        isOffScreen() {
+            return this.y > window.innerHeight + 20 || this.opacity <= 0 || this.x < -20 || this.x > window.innerWidth + 20;
+        }
+
+        remove() {
+            if (this.element && this.element.parentNode) {
+                this.element.parentNode.removeChild(this.element);
+            }
+        }
+    }
+
+    // Create background snowflakes
+    function createBgSnowflake() {
+        const x = Math.random() * window.innerWidth;
+        const y = -20;
+        bgSnowflakes.push(new Snowflake(x, y, true));
+    }
+
+    // Initialize some background snow
+    for (let i = 0; i < 30; i++) {
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        bgSnowflakes.push(new Snowflake(x, y, true));
+    }
+
+    // Animation loop
+    function animateSnowflakes() {
+        // Update cursor snowflakes
+        for (let i = snowflakes.length - 1; i >= 0; i--) {
+            snowflakes[i].update();
+            
+            if (snowflakes[i].isOffScreen()) {
+                snowflakes[i].remove();
+                snowflakes.splice(i, 1);
+            }
+        }
+        
+        // Update background snowflakes
+        for (let i = bgSnowflakes.length - 1; i >= 0; i--) {
+            bgSnowflakes[i].update();
+            
+            if (bgSnowflakes[i].isOffScreen()) {
+                bgSnowflakes[i].remove();
+                bgSnowflakes.splice(i, 1);
+            }
+        }
+        
+        // Add new background snowflakes randomly
+        if (bgSnowflakes.length < maxBgSnowflakes && Math.random() < 0.1) {
+            createBgSnowflake();
+        }
+        
+        // Keep array size reasonable
+        if (snowflakes.length > maxSnowflakes) {
+            const removed = snowflakes.shift();
+            removed.remove();
+        }
+        
+        requestAnimationFrame(animateSnowflakes);
+    }
+
+    // Mouse movement handler
+    document.addEventListener('mousemove', (e) => {
+        const mouseHasMoved = (e.clientX !== prevMouseX || e.clientY !== prevMouseY);
+        
+        if (mouseHasMoved) {
+            for (let i = 0; i < emissionRate; i++) {
+                const emissionX = e.clientX + cursorXOffset + (Math.random() - 0.5) * 10;
+                const emissionY = e.clientY + cursorYOffset + (Math.random() - 0.5) * 10;
+                snowflakes.push(new Snowflake(emissionX, emissionY, false));
+            }
+            
+            prevMouseX = e.clientX;
+            prevMouseY = e.clientY;
+        }
+    });
+
+    // Start animation
+    animateSnowflakes();
 
     document.addEventListener('DOMContentLoaded', () => {
         updateOverallProgressBar();
