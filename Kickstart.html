@@ -60,6 +60,66 @@ body {
 .modal-overlay { 
     transition: opacity 0.3s ease; 
 }
+
+@keyframes pulse-glow {
+    0%, 100% {
+        opacity: 0.15;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
+
+.pulse-yellow-glow {
+    animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+@keyframes candy-cane-flow {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 48px 0;
+    }
+}
+
+.candy-cane-stripes {
+    background: linear-gradient(
+        -45deg,
+        #ef4444 0%,
+        #ef4444 12.5%,
+        #ffffff 12.5%,
+        #ffffff 25%,
+        #10b981 25%,
+        #10b981 37.5%,
+        #ffffff 37.5%,
+        #ffffff 50%,
+        #ef4444 50%,
+        #ef4444 62.5%,
+        #ffffff 62.5%,
+        #ffffff 75%,
+        #10b981 75%,
+        #10b981 87.5%,
+        #ffffff 87.5%,
+        #ffffff 100%
+    );
+    background-size: 48px 48px;
+    animation: candy-cane-flow 2s linear infinite;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+@keyframes flash-yellow {
+    0%, 100% {
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.flash-yellow-glow {
+    animation: flash-yellow 1.8s ease-in-out infinite;
+}
 </style>
 </head>
 <body class="text-soft-white font-sans min-h-screen flex items-center justify-center p-4">
@@ -78,8 +138,9 @@ body {
                 <span>Christmas Target: <span class="text-primary-green">$199</span></span>
                 <span>Current: <span class="text-soft-white">$149</span></span>
             </div>
-            <div class="w-full bg-gray-600 rounded-full h-3">
-                <div class="bg-primary-green h-3 rounded-full" style="width: 74.87%"></div>
+            <div class="w-full bg-gray-600 rounded-full h-3 relative overflow-hidden">
+                <div class="absolute inset-0 bg-yellow-400 flash-yellow-glow rounded-full"></div>
+                <div class="candy-cane-stripes h-3 rounded-full relative z-10" style="width: 74.87%"></div>
             </div>
             <p class="text-xs mt-1 text-gray-400">74.87% toward our immediate $199 goal! Almost there!</p>
         </div>
@@ -91,16 +152,20 @@ body {
             <!-- Segmented Progress Bar -->
             <div class="flex w-full h-4 rounded-full bg-gray-600 overflow-hidden relative shadow-md">
                 <div class="h-full flex-1 relative z-10 border-r border-gray-800">
-                    <div id="phase-0-fill" class="h-full transition-all duration-500"></div>
+                    <div id="phase-0-bg" class="absolute inset-0 bg-yellow-400 pulse-yellow-glow"></div>
+                    <div id="phase-0-fill" class="h-full transition-all duration-500 relative z-10"></div>
                 </div>
                 <div class="h-full flex-1 relative z-10 border-r border-gray-800">
-                    <div id="phase-1-fill" class="h-full transition-all duration-500"></div>
+                    <div id="phase-1-bg" class="absolute inset-0 bg-yellow-400 pulse-yellow-glow"></div>
+                    <div id="phase-1-fill" class="h-full transition-all duration-500 relative z-10"></div>
                 </div>
                 <div class="h-full flex-1 relative z-10 border-r border-gray-800">
-                    <div id="phase-2-fill" class="h-full transition-all duration-500"></div>
+                    <div id="phase-2-bg" class="absolute inset-0 bg-yellow-400 pulse-yellow-glow"></div>
+                    <div id="phase-2-fill" class="h-full transition-all duration-500 relative z-10"></div>
                 </div>
                 <div class="h-full flex-1 relative z-10">
-                    <div id="phase-3-fill" class="h-full transition-all duration-500"></div>
+                    <div id="phase-3-bg" class="absolute inset-0 bg-yellow-400 pulse-yellow-glow"></div>
+                    <div id="phase-3-fill" class="h-full transition-all duration-500 relative z-10"></div>
                 </div>
             </div>
             
@@ -243,7 +308,7 @@ body {
         </ul>
 
         <h3 class="text-2xl font-bold text-soft-white mb-4 border-b border-gray-700 pb-2">Find Out More</h3>
-        <p class="mb-4">Want to see who's Behind this Project? Check out the <strong>Iron Will Interactive</strong> website for full details on the Team and our mission:</p>
+        <p class="mb-4">Want to see who's Behind this Project? Check out the <strong>Iron Will</strong> website for full details on the Team and our mission:</p>
         <a href="https://gamedev44.github.io/IronWill/" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold underline transition-colors">Visit the Iron Will Website →</a>
     </section>
 
