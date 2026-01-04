@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
+<title>Ideation AI</title>
+<meta name="description" content="Generate, favorite, and kickoff app ideas in minutes. High-velocity brainstorming for developers and founders.">
+<meta name="keywords" content="app ideas, startup generator, SaaS ideas, rapid prototyping, builder tools">
+<meta name="author" content="Your Name/Brand">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yourdomain.com/">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ideation AI">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#030305">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+<meta name="referrer" content="no-referrer-when-downgrade">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+<meta name="generator" content="Hand-coded">
+<meta name="rating" content="General">
+<meta name="geo.region" content="US">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #030305;
+            color: #fafafa;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass {
+            background: rgba(12, 12, 16, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #030305; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+
+        .blueprint-modal { max-height: 85vh; overflow-y: auto; }
+
+        .toast {
+            transform: translateY(100px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast.show { transform: translateY(0); }
+
+        .spinner {
+            border: 2px solid rgba(255,255,255,0.1);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 16px; height: 16px;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .card-enter {
+            animation: cardSlideIn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+        
+        .card-exit {
+            animation: cardSlideOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            pointer-events: none;
+        }
+
+        @keyframes cardSlideIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes cardSlideOut {
+            from { opacity: 1; transform: scale(1) translateY(0); }
+            to { opacity: 0; transform: scale(0.9) translateY(-20px); }
+        }
+
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+
+    <div class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-blue-600/5 blur-[150px] rounded-full -z-10 pointer-events-none"></div>
+    <div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/5 blur-[150px] rounded-full -z-10 pointer-events-none"></div>
+
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] toast pointer-events-none">
+        <div class="glass px-6 py-3 rounded-2xl flex items-center gap-3 shadow-2xl border-blue-500/20">
+            <span id="toastEmoji">⚡</span>
+            <span id="toastMsg" class="font-bold text-sm tracking-wide uppercase">Action Confirmed</span>
+        </div>
+    </div>
+
+    <div class="flex-grow max-w-6xl w-full mx-auto px-4 md:px-6 pt-8 md:pt-12">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 md:mb-16 gap-6">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-black tracking-tighter italic uppercase">Ideation<span class="gradient-text">AI</span></h1>
+                <p class="text-zinc-500 mt-2 flex items-center gap-2 text-[10px] uppercase font-bold tracking-[0.3em]">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    Vibe Gen Fresh App Ideas In Seconds & Get building in Minutes Not Days. 
+                </p>
+            </div>
+            <div class="flex gap-3 w-full md:w-auto">
+                <button onclick="openSplicer()" class="flex-1 md:flex-none px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-2xl font-black transition-all uppercase tracking-tight text-sm">New Mutation</button>
+                <button onclick="toggleVault()" class="flex-1 md:flex-none px-6 py-3 glass rounded-2xl font-bold transition-all flex items-center justify-center gap-2 text-sm">
+                    Vaulted (<span id="bangerCount" class="text-blue-400">0</span>)
+                </button>
+            </div>
+        </header>
+
+        <div id="mainView">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
+                <div class="flex flex-col">
+                    <h2 id="viewTitle" class="text-2xl font-black tracking-tight italic uppercase">Current Cycle</h2>
+                    <p class="text-[10px] mono text-zinc-600 uppercase tracking-widest mt-1">Procedural Ideas for Production Ready Products</p>
+                </div>
+                <div class="flex gap-3 w-full md:w-auto">
+                    <button onclick="generateNewCycle()" class="flex-1 md:flex-none text-[10px] px-5 py-3 glass rounded-xl font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-white/10 transition-colors">
+                        Re-Synthesize
+                    </button>
+                    <button id="aiWildcardBtn" onclick="generateAIWildcard()" class="flex-1 md:flex-none text-[10px] px-5 py-3 bg-blue-600/10 border border-blue-500/20 rounded-xl font-bold uppercase tracking-[0.2em] text-blue-400 hover:bg-blue-600/20 transition-all">
+                        Deep AI Strike
+                    </button>
+                </div>
+            </div>
+            <div id="ideaGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[400px] mb-24"></div>
+        </div>
+    </div>
+
+    <footer class="w-full py-12 px-6 flex flex-col items-center justify-center gap-4 bg-black/40 backdrop-blur-md">
+        <div class="flex items-center gap-4 opacity-30 hover:opacity-100 transition-opacity">
+            <div class="h-[1px] w-12 bg-zinc-700"></div>
+            <span class="text-[10px] font-black uppercase tracking-[0.4em] italic text-zinc-400">Ironwill Interactive .LLC</span>
+            <div class="h-[1px] w-12 bg-zinc-700"></div>
+        </div>
+        <p class="text-zinc-600 text-[8px] mono uppercase tracking-widest">Digital Forge // © 2024-2025</p>
+    </footer>
+
+    <!-- Modals -->
+    <div id="splicerModal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl hidden flex items-center justify-center z-50 p-4">
+        <div class="glass max-w-xl w-full p-8 rounded-[2.5rem] relative border-zinc-700/50">
+            <h2 class="text-2xl font-black mb-2 italic uppercase">Seed the Mutation</h2>
+            <p class="text-zinc-500 text-xs mb-8 uppercase tracking-widest font-bold">Inject a base concept to force high-signal output</p>
+            <div class="space-y-6">
+                <input id="baseWordInput" type="text" placeholder="e.g. 'Fitness', 'Code', 'Deepseek'" class="w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-5 outline-none text-white font-bold placeholder:text-zinc-700">
+                <button onclick="runMutationAnalysis()" id="generateBtn" class="w-full py-5 bg-white text-black rounded-2xl font-black text-xl uppercase tracking-tighter hover:bg-blue-500 hover:text-white transition-all">Synthesize</button>
+            </div>
+            <button onclick="closeSplicer()" class="absolute top-8 right-8 text-zinc-500 text-3xl hover:text-white">&times;</button>
+        </div>
+    </div>
+
+    <div id="blueprintModal" class="fixed inset-0 bg-black/98 hidden flex items-center justify-center z-[60] p-4">
+        <div class="glass max-w-2xl w-full p-10 rounded-[2.5rem] relative border-blue-500/20 blueprint-modal">
+            <div id="blueprintContent"></div>
+            <button onclick="closeBlueprint()" class="mt-10 w-full py-4 bg-zinc-900 border border-zinc-800 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-white hover:text-black transition-all">Close Initialization</button>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = "";
+        let bangers = JSON.parse(localStorage.getItem('zeromina_bangers')) || [];
+        let lastShownIds = new Set();
+        let currentFeed = [];
+        let isViewingVault = false;
+
+        const MASTER_DB = [
+            { id: 'b1', title: "StackSync", desc: "One-click tech stack provisioning. Input project goal; get a tailored repo.", vibe: "Dev", why: "Setup kills momentum.", tags: ["Utility"], archetype: "Banger" },
+            { id: 'b2', title: "TaskRPG", desc: "Gamifies productivity by turning Jira/Linear tickets into 8-bit RPG loot.", vibe: "Game", why: "Dopamine beats discipline.", tags: ["Focus"], archetype: "Banger" },
+            { id: 'b3', title: "SentryOS", desc: "AI noise cancellation for life. Auto-triages notifications by context.", vibe: "Focus", why: "Context switching is decay.", tags: ["Health"], archetype: "Banger" },
+            { id: 'b4', title: "Lootbox.ai", desc: "SaaS subscription box: 3 high-intent keywords + 5 domains monthly.", vibe: "Money", why: "Ideation is the bottleneck.", tags: ["SaaS"], archetype: "Banger" },
+            { id: 'b5', title: "ShadowPitch", desc: "AI VC simulator that roasts your pitch until logic is bulletproof.", vibe: "Meta", why: "Echo chambers are dangerous.", tags: ["Growth"], archetype: "Banger" },
+            { id: 'b6', title: "GhostGraph", desc: "Visualizes and kills data access links across all SaaS platforms.", vibe: "Sec", why: "Data leaks are oil spills.", tags: ["Web3"], archetype: "Banger" },
+            { id: 'b7', title: "FlowState", desc: "Locks distracting sites unless you maintain 60 WPM or active code.", vibe: "Grind", why: "Willpower is finite.", tags: ["Focus"], archetype: "Banger" },
+            { id: 'b8', title: "BioMint", desc: "Converts health metrics into credits for gym/food.", vibe: "Health", why: "Gamified wellness sticks.", tags: ["Fitness"], archetype: "Banger" },
+            { id: 'b9', title: "CodeCold", desc: "Deep-freeze storage for legacy repos that keeps them searchable but offline.", vibe: "Dev", why: "Storage bloat is real.", tags: ["Cloud"], archetype: "Banger" },
+            { id: 'b10', title: "PayWall", desc: "Easiest 2-line-of-code integration to gate any React component.", vibe: "Money", why: "Monetization is too hard.", tags: ["Dev"], archetype: "Banger" },
+            { id: 'b11', title: "QuickCut", desc: "AI that finds the 'viral' 60 seconds in any long-form podcast instantly.", vibe: "Media", why: "Attention spans are shrinking.", tags: ["AI"], archetype: "Banger" },
+            { id: 'b12', title: "GhostLog", desc: "Audit logs that prove you did the work without revealing the underlying IP.", vibe: "Sec", why: "Privacy is a feature.", tags: ["Web3"], archetype: "Banger" },
+            { id: 'b13', title: "BulkBuy", desc: "Group-buying power for solo-founders to get enterprise SaaS discounts.", vibe: "Money", why: "Solo-scaling is expensive.", tags: ["SaaS"], archetype: "Banger" },
+            { id: 'b14', title: "LeadPipe", desc: "Zero-latency pipeline from social signals to your CRM.", vibe: "Sales", why: "Speed to lead is everything.", tags: ["Growth"], archetype: "Banger" },
+            { id: 'b15', title: "CleanSlate", desc: "One-click tool to wipe all your PII from the top 50 data brokers.", vibe: "Sec", why: "Your data is being sold.", tags: ["Privacy"], archetype: "Banger" },
+            { id: 'b16', title: "WorkFlow", desc: "Visual automation for physical tasks (warehouse/logistics) using AR.", vibe: "Grind", why: "Ops is the new frontier.", tags: ["AR"], archetype: "Banger" },
+            { id: 'b17', title: "SiteSnap", desc: "Instantly clone any landing page into a clean, editable Figma file.", vibe: "Design", why: "Designers start at 1, not 0.", tags: ["Utility"], archetype: "Banger" },
+            { id: 'b18', title: "IronClad", desc: "Smart contracts for freelancers that auto-release funds on GitHub push.", vibe: "Money", why: "Getting paid shouldn't be hard.", tags: ["FinTech"], archetype: "Banger" },
+            { id: 'b19', title: "DeepAudit", desc: "Scans your AWS bill and finds the 'ghost' services killing your margin.", vibe: "Money", why: "Cloud waste is a silent killer.", tags: ["DevOps"], archetype: "Banger" },
+            { id: 'b20', title: "BaseCase", desc: "The simplest possible boilerplate for any AI-agent based startup.", vibe: "Dev", why: "Complexity is the enemy.", tags: ["AI"], archetype: "Banger" },
+            { id: 'b21', title: "NightOwl", desc: "Browser extension that shifts your UI to high-contrast for 2AM grinds.", vibe: "Grind", why: "The best work happens late.", tags: ["Utility"], archetype: "Banger" },
+            { id: 'b22', title: "SideKick", desc: "AI pair programmer that only speaks when it detects a logic error.", vibe: "Dev", why: "Noise is not help.", tags: ["Focus"], archetype: "Banger" },
+            { id: 'b23', title: "PureSignal", desc: "Filters your X/LinkedIn feed for actual news, removes the 'hustle-porn'.", vibe: "Meta", why: "Algorithms are toxic.", tags: ["Focus"], archetype: "Banger" },
+            { id: 'b24', title: "CheckPoint", desc: "Micro-SaaS that manages on-site visitor logs for small offices.", vibe: "B2B", why: "Legacy hardware sucks.", tags: ["SaaS"], archetype: "Banger" },
+            { id: 'b25', title: "MintLog", desc: "Automated tax tracking for every NFT and On-Chain transaction.", vibe: "Money", why: "Crypto taxes are hell.", tags: ["Web3"], archetype: "Banger" }
+        ];
+
+        const DNA = {
+            Prefixes: ["Stack", "Ghost", "Flow", "Data", "Code", "Link", "Snap", "Pure", "Deep", "Hard", "Auto", "Quick", "Iron", "Base", "Solo"],
+            Suffixes: ["Sync", "Graph", "State", "Mint", "Bolt", "Log", "Pipe", "Wall", "Grid", "Scale", "Path", "Core", "Node", "Vault", "Point"],
+            Theses: [
+                "Friction is the enemy of adoption.",
+                "Unbundling creates the next unicorn.",
+                "Dopamine loops scale faster than utility.",
+                "Local-first is the only way to build.",
+                "Speed of iteration > quality of initial code.",
+                "Ownership economy beats the rent economy.",
+                "The best UI is no UI.",
+                "If it's not automated, it's a liability."
+            ]
+        };
+
+        function generateNewCycle() {
+            isViewingVault = false;
+            document.getElementById('viewTitle').innerText = "Current Cycle";
+            
+            currentFeed = [];
+            while (currentFeed.length < 3) {
+                const isBanger = Math.random() > 0.4;
+                if (isBanger) {
+                    const freshBangers = MASTER_DB.filter(b => !lastShownIds.has(b.id));
+                    const selected = (freshBangers.length > 0 ? freshBangers : MASTER_DB)[Math.floor(Math.random() * (freshBangers.length || MASTER_DB.length))];
+                    lastShownIds.add(selected.id);
+                    currentFeed.push(selected);
+                } else {
+                    currentFeed.push(generateProceduralBanger());
+                }
+            }
+
+            if (lastShownIds.size > 20) lastShownIds.clear();
+            renderGrid(currentFeed);
+        }
+
+        function generateProceduralBanger(seed = null) {
+            const pre = DNA.Prefixes[Math.floor(Math.random() * DNA.Prefixes.length)];
+            const suf = DNA.Suffixes[Math.floor(Math.random() * DNA.Suffixes.length)];
+            const name = seed ? `${seed}${suf}` : `${pre}${suf}`;
+            
+            return {
+                id: 'proc-' + Math.random().toString(36).substr(2, 9),
+                title: name,
+                desc: `A high-frequency ${seed || 'productivity'} layer using ${pre.toLowerCase()} protocols to bypass traditional UX bottlenecks.`,
+                vibe: seed ? "Themed" : "Signal",
+                why: DNA.Theses[Math.floor(Math.random() * DNA.Theses.length)],
+                tags: ["Mutation"],
+                archetype: "Mutation"
+            };
+        }
+
+        function renderGrid(ideas) {
+            const grid = document.getElementById('ideaGrid');
+            grid.innerHTML = ideas.map((idea, i) => createCardHtml(idea, i)).join('');
+        }
+
+        function createCardHtml(idea, index) {
+            const isSaved = bangers.some(b => b.id === idea.id);
+            const ideaStr = JSON.stringify(idea).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+            const borderClass = idea.archetype === "Banger" ? 'border-blue-500/40' : 'border-zinc-800';
+
+            return `
+            <div id="card-${idea.id}" class="glass p-8 rounded-[2.5rem] ${borderClass} transition-all hover:border-blue-500/30 group card-enter" style="animation-delay: ${index*0.05}s">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="text-[9px] px-3 py-1.5 rounded-full bg-white/5 font-black uppercase tracking-[0.2em] border border-white/5 text-zinc-500">${idea.vibe}</span>
+                    <button onclick='toggleBanger(${ideaStr})' class="p-1">
+                        <svg class="w-5 h-5 transition-all ${isSaved ? 'text-blue-500 fill-blue-500 scale-110' : 'text-zinc-700'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </button>
+                </div>
+                <h3 class="text-3xl font-black mb-4 group-hover:gradient-text transition-all italic tracking-tighter uppercase leading-none">${idea.title}</h3>
+                <p class="text-zinc-500 text-xs mb-8 leading-relaxed line-clamp-3 font-medium uppercase tracking-tight">${idea.desc}</p>
+                <div class="bg-zinc-900/40 p-5 rounded-2xl mb-8 border border-white/5">
+                    <p class="text-[9px] text-blue-400 uppercase font-black mb-1.5 tracking-tighter">The Thesis</p>
+                    <p class="text-[11px] text-zinc-400 italic font-medium leading-tight">"${idea.why}"</p>
+                </div>
+                <button onclick='openBlueprint(${ideaStr})' class="w-full py-4 bg-zinc-900/80 hover:bg-white hover:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] border border-zinc-800 transition-all">
+                    Initialize
+                </button>
+            </div>`;
+        }
+
+        async function generateAIWildcard() {
+            const btn = document.getElementById('aiWildcardBtn');
+            btn.innerHTML = `<div class="spinner mx-auto"></div>`;
+            try {
+                const prompt = `Generate 3 hyper-modern startup ideas that are high-signal. Return JSON: [{title, desc, vibe, why, tags}].`;
+                const result = await callGemini(prompt);
+                const ideas = Array.isArray(result) ? result.slice(0, 3) : [result];
+                currentFeed = ideas.map(idea => ({...idea, id: 'ai-' + Math.random().toString(36).substr(2, 9), archetype: "Banger"}));
+                renderGrid(currentFeed);
+                showToast("Deep Neural Signal Locked", "⚡");
+            } catch(e) {
+                showToast("System Overload", "🚫");
+            } finally {
+                btn.innerHTML = "Deep AI Strike";
+            }
+        }
+
+        async function callGemini(prompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } })
+            });
+            const data = await response.json();
+            return JSON.parse(data.candidates[0].content.parts[0].text);
+        }
+
+        function runMutationAnalysis() {
+            const topic = document.getElementById('baseWordInput').value.trim();
+            if (!topic) return;
+            closeSplicer();
+            document.getElementById('viewTitle').innerText = `DNA Split: ${topic}`;
+            currentFeed = Array.from({length: 3}, () => generateProceduralBanger(topic));
+            renderGrid(currentFeed);
+            showToast(`Synthesizing ${topic}`, "🧬");
+        }
+
+        function toggleBanger(idea) {
+            const idx = bangers.findIndex(b => b.id === idea.id);
+            const cardEl = document.getElementById(`card-${idea.id}`);
+            
+            if (idx === -1) {
+                bangers.push(idea);
+                showToast("Vaulted", "💾");
+                
+                // Dynamic Replacement Logic
+                if (!isViewingVault) {
+                    replaceCard(idea.id);
+                }
+            } else {
+                bangers.splice(idx, 1);
+                showToast("Purged", "🗑️");
+                if (isViewingVault) {
+                   replaceCard(idea.id, true);
+                }
+            }
+            
+            localStorage.setItem('zeromina_bangers', JSON.stringify(bangers));
+            document.getElementById('bangerCount').innerText = bangers.length;
+        }
+
+        function replaceCard(oldId, vaultView = false) {
+            const cardEl = document.getElementById(`card-${oldId}`);
+            if (!cardEl) return;
+
+            cardEl.classList.add('card-exit');
+            
+            setTimeout(() => {
+                if (vaultView) {
+                    // Just re-render the vault if we are deleting from there
+                    renderGrid(bangers);
+                } else {
+                    // Generate new mutation and swap
+                    const newIdea = generateProceduralBanger();
+                    const feedIdx = currentFeed.findIndex(i => i.id === oldId);
+                    if (feedIdx !== -1) currentFeed[feedIdx] = newIdea;
+                    
+                    const temp = document.createElement('div');
+                    temp.innerHTML = createCardHtml(newIdea, 0);
+                    const newCard = temp.firstElementChild;
+                    
+                    cardEl.parentNode.replaceChild(newCard, cardEl);
+                }
+            }, 400);
+        }
+
+        function openBlueprint(idea) {
+            document.getElementById('blueprintModal').classList.remove('hidden');
+            document.getElementById('blueprintContent').innerHTML = `
+                <div class="mb-6 flex items-center gap-3">
+                    <span class="px-4 py-1.5 bg-blue-500 text-white text-[9px] font-black rounded-full uppercase tracking-widest italic">${idea.vibe} Signal</span>
+                </div>
+                <h2 class="text-6xl font-black gradient-text mb-6 italic uppercase tracking-tighter leading-none">${idea.title}</h2>
+                <p class="text-zinc-400 mb-10 leading-relaxed text-xl font-medium">${idea.desc}</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                    <div class="p-6 bg-zinc-900 rounded-3xl border border-white/5">
+                        <h4 class="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-3">Market Hook</h4>
+                        <p class="text-zinc-300 text-sm leading-snug">Targets user burnout by injecting artificial dopamine loops into standard ${idea.vibe.toLowerCase()} workflows.</p>
+                    </div>
+                    <div class="p-6 bg-zinc-900 rounded-3xl border border-white/5">
+                        <h4 class="text-[10px] font-black uppercase tracking-widest text-purple-400 mb-3">Core Stack</h4>
+                        <p class="text-zinc-300 text-sm leading-snug">Next.js 15, Tailwind v4, Bun, and a local-first SQLite sync engine for 0ms latency.</p>
+                    </div>
+                </div>
+                <div class="p-6 bg-white/5 rounded-3xl border border-white/10">
+                    <p class="text-[11px] text-zinc-500 uppercase font-black mb-2 tracking-[0.2em]">Strategic Thesis</p>
+                    <p class="text-zinc-200 italic text-lg leading-tight">"${idea.why}"</p>
+                </div>
+            `;
+        }
+
+        function toggleVault() {
+            isViewingVault = !isViewingVault;
+            document.getElementById('viewTitle').innerText = isViewingVault ? "Stored Bangers" : "Current Cycle";
+            renderGrid(isViewingVault ? bangers : currentFeed);
+        }
+
+        function openSplicer() { document.getElementById('splicerModal').classList.remove('hidden'); }
+        function closeSplicer() { document.getElementById('splicerModal').classList.add('hidden'); }
+        function closeBlueprint() { document.getElementById('blueprintModal').classList.add('hidden'); }
+        function showToast(msg, emoji = "⚡") {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            document.getElementById('toastEmoji').innerText = emoji;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        window.onload = () => {
+            document.getElementById('bangerCount').innerText = bangers.length;
+            generateNewCycle();
+        };
+    </script>
+</body>
+</html>
