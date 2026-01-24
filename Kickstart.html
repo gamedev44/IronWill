@@ -3,33 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎉 Half Way To January Lap Goals! Project Speedverse Milestone Nearly Reached! 🎉</title>
+<title>Project Speedverse - Final Update</title>
 
-<meta name="description" content="December goal EXCEEDED! We've raised $75 Towards Lap 2. Help us to hit our January 2026 goal for VSE!">
-<meta name="keywords" content="Project Speedverse, fundraiser, game development, crowdfunding, January goal, software license, Iron Will Interactive">
-<meta name="author" content="Iron Will Interactive">
-<meta name="robots" content="index, follow">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://gamedev44.github.io/IronWill/Kickstart.html">
-<meta property="og:title" content="🎉 December Goal Exceeded! Project Speedverse 🎉">
-<meta property="og:description" content="Now racing toward our January goal to unlock the Vehicle Sound Engine. Were Half Way, Help Us Boost Toward the Finish Line">
-<meta property="og:image" content="https://placehold.co/1200x630/10b981/ffffff?text=DECEMBER+GOAL+EXCEEDED">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@IWI_Tech">
-<meta name="theme-color" content="#10b981">
-
+<meta name="description" content="An official announcement regarding the cessation of Project Speedverse development.">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
     theme: {
         extend: {
             colors: {
-                'primary-green': '#10b981',
-                'dark-bg': '#1f2937',
-                'soft-white': '#f3f4f6',
-                'modal-dark': '#111827',
+                'status-red': '#ef4444',
+                'dark-bg': '#0a0a0a',
+                'soft-white': '#e5e7eb',
             },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
@@ -41,291 +26,85 @@ tailwind.config = {
 
 <style>
 body {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-    cursor: url(https://cur.cursors-4u.net/food/foo-1/foo10.cur), auto !important;
-    cursor: url(https://cur.cursors-4u.net/food/foo-1/foo10.cur) 12 12, auto !important;
+    background: #0a0a0a;
     image-rendering: -webkit-optimize-contrast;
 }
-.transition-colors { 
-    transition: background-color 0.3s, transform 0.1s; 
+.glitch-border {
+    border-top: 4px solid #ef4444;
 }
-@keyframes pulse-glow {
-    0%, 100% { opacity: 0.15; }
-    50% { opacity: 0.35; }
-}
-.pulse-yellow-glow {
-    animation: pulse-glow 2.5s ease-in-out infinite;
-}
-@keyframes candy-cane-flow {
-    0% { background-position: 0 0; }
-    100% { background-position: 48px 0; }
-}
-.candy-cane-stripes {
-    background: linear-gradient(
-        -45deg,
-        #ef4444 0%, #ef4444 12.5%,
-        #ffffff 12.5%, #ffffff 25%,
-        #10b981 25%, #10b981 37.5%,
-        #ffffff 37.5%, #ffffff 50%,
-        #ef4444 50%, #ef4444 62.5%,
-        #ffffff 62.5%, #ffffff 75%,
-        #10b981 75%, #10b981 87.5%,
-        #ffffff 87.5%, #ffffff 100%
-    );
-    background-size: 48px 48px;
-    animation: candy-cane-flow 2s linear infinite;
-}
-.snowflake {
-    position: fixed;
-    color: white;
-    pointer-events: none;
-    z-index: 9999;
-    user-select: none;
-    text-shadow: 0 0 3px rgba(255,255,255,0.9);
-}
-.snowflake-bg {
-    position: fixed;
-    color: rgba(255,255,255,0.4);
-    pointer-events: none;
-    z-index: 1;
+.dead-text {
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
 }
 </style>
 </head>
 <body class="text-soft-white font-sans min-h-screen flex items-center justify-center p-4">
 
-<div class="w-full max-w-2xl bg-gray-800 p-8 md:p-10 rounded-xl shadow-2xl border-t-4 border-primary-green relative overflow-hidden">
+<div class="w-full max-w-2xl bg-zinc-900 p-8 md:p-12 rounded-lg shadow-2xl glitch-border relative overflow-hidden">
     <!-- Header -->
-    <header class="text-center mb-8">
-        <div class="inline-block bg-green-900/50 px-4 py-1 rounded-full text-primary-green text-sm font-bold mb-4 border border-green-500/30">
-            🎄 A Very Merry Milestone 🎄
+    <header class="text-center mb-10">
+        <div class="inline-block bg-red-950/30 px-4 py-1 rounded text-status-red text-xs font-bold mb-4 border border-red-500/20 tracking-tighter uppercase">
+            System Shutdown / Development Halted
         </div>
-        <h1 class="text-4xl md:text-5xl font-extrabold text-primary-green mb-4 leading-tight">December Goal Exceeded! 🎉</h1>
-        <div class="bg-gray-900/50 p-6 rounded-lg border border-gray-700 mb-6">
-            <p class="text-lg italic text-gray-300">
-                "We hit $209! Now we're stretching the roadmap into 4 Laps to ready a massive 3-4 level demo before April. Time to polish the engine and support our artists!"
+        <h1 class="text-4xl md:text-5xl font-black text-status-red mb-4 leading-tight dead-text uppercase">End of the Road</h1>
+        
+        <div class="bg-black/50 p-6 rounded border border-zinc-800 mb-6">
+            <p class="text-lg italic text-zinc-400">
+                "We’re calling it. It’s time to face the facts: this dream was way too good to ever come true given our luck. We clearly don't have the backing or the expertise to cross the finish line, and it's better to walk away now than to keep chasing a ghost."
             </p>
-            <p class="mt-2 font-bold text-primary-green">— The Iron Will Team</p>
+            <p class="mt-4 font-bold text-zinc-500">— The Iron Will Team</p>
         </div>
-        <p class="text-xl text-gray-300 font-medium uppercase tracking-wide">
-            Total Raised: <span class="text-yellow-400 font-bold">$209</span> 
-            <span class="text-gray-500 mx-2">/</span> 
-            Grand Goal: <span class="text-primary-green font-bold">$900.99</span>
-        </p>
     </header>
 
-    <!-- Funding Goal Tracker Section -->
-    <div class="bg-gray-700 p-6 rounded-lg mb-8 shadow-inner">
-        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-            The Grand Prix Roadmap (4 Laps) 🏁
+    <!-- Final Status Section -->
+    <div class="bg-zinc-800/50 p-6 rounded-lg mb-8 border border-zinc-700">
+        <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-zinc-300">
+            Final Project Status 🏁
         </h2>
         
-        <!-- Current Lap: Jan -->
+        <!-- Progress Bar (Frozen) -->
         <div class="mb-6">
-            <div class="flex justify-between text-sm font-semibold mb-1">
-                <span>LAP 2 (January): VSE Sound Engine</span>
-                <span class="flex gap-2">
-                    <span class="text-primary-green">$75.00 Earned</span>
-                    <span class="text-gray-500">/</span>
-                    <span class="text-blue-400">$68.00 Left</span>
-                </span>
+            <div class="flex justify-between text-xs font-bold mb-2 text-zinc-500">
+                <span>PROJECT LIFECYCLE</span>
+                <span>TERMINATED @ 23.2%</span>
             </div>
-            <div class="w-full bg-gray-600 rounded-full h-4 relative overflow-hidden shadow-inner border border-gray-800">
-                <div class="candy-cane-stripes h-4 rounded-full relative z-10 shadow-[0_0_10px_rgba(16,185,129,0.3)]" style="width: 52.4%;"></div>
-            </div>
-            <p class="text-[10px] mt-1 text-gray-400 font-medium">December rollover contribution: 52.4% complete</p>
-        </div>
-
-        <!-- 4 Lap Visual Progress Bar -->
-        <div class="mt-8 mb-8">
-            <div class="flex justify-between items-end mb-3">
-                <h3 class="text-sm font-bold text-gray-300 uppercase tracking-widest">Global Race Progress</h3>
-                <span class="text-xs font-bold text-primary-green">23.2% OF TOTAL</span>
-            </div>
-            <div class="flex w-full h-5 rounded-full bg-gray-900 overflow-hidden relative shadow-lg border border-gray-600">
-                <!-- Lap 1 (Dec) -->
-                <div class="h-full border-r border-gray-800 bg-primary-green" style="width: 22.1%;"></div>
-                <!-- Lap 2 (Jan) -->
-                <div class="h-full border-r border-gray-800 bg-gray-700 relative" style="width: 21.0%;">
-                     <div class="absolute inset-0 bg-yellow-400/20 pulse-yellow-glow"></div>
-                     <div class="h-full bg-primary-green" style="width: 52.4%;"></div>
-                </div>
-                <!-- Lap 3 (Feb/Mar) -->
-                <div class="h-full border-r border-gray-800 bg-gray-700" style="width: 36.4%;"></div>
-                <!-- Lap 4 (April Mapping) -->
-                <div class="h-full bg-gray-700" style="width: 20.5%;"></div>
-            </div>
-            <div class="flex justify-between text-[9px] text-gray-500 mt-2 font-black uppercase italic">
-                <span class="text-primary-green">LAP 1 (DEC) ✓</span>
-                <span class="text-yellow-400">LAP 2 (JAN)</span>
-                <span>LAP 3 (FEB/MAR)</span>
-                <span>LAP 4 (APRIL ART)</span>
+            <div class="w-full bg-zinc-900 rounded-full h-3 relative overflow-hidden border border-zinc-700">
+                <div class="bg-zinc-600 h-full w-[23.2%] shadow-[0_0_15px_rgba(239,68,68,0.2)]"></div>
             </div>
         </div>
 
-        <!-- Details Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-gray-800 p-3 rounded border border-gray-600">
-                <p class="text-[10px] text-gray-500 font-bold uppercase">February Goal</p>
-                <p class="text-sm font-bold text-soft-white">Street Racing AI</p>
-                <p class="text-lg font-black text-yellow-400">$209</p>
+        <div class="grid grid-cols-1 gap-4 text-sm">
+            <div class="p-4 bg-black/40 rounded border border-zinc-700/50">
+                <p class="text-zinc-500 uppercase text-[10px] font-black mb-1">Conclusion</p>
+                <p class="text-zinc-300">The technical debt and lack of high-level systems expertise have proven to be insurmountable. The funding required to hire the talent needed to bridge this gap is simply not there.</p>
             </div>
-            <div class="bg-gray-800 p-3 rounded border border-gray-600">
-                <p class="text-[10px] text-gray-500 font-bold uppercase">March Goal</p>
-                <p class="text-sm font-bold text-soft-white">Police AI System</p>
-                <p class="text-lg font-black text-red-500">$119</p>
+            <div class="p-4 bg-black/40 rounded border border-zinc-700/50">
+                <p class="text-zinc-500 uppercase text-[10px] font-black mb-1">Notice</p>
+                <p class="text-zinc-300">All planned milestones for 2026—including the VSE Engine, AI Systems, and Mapping—are cancelled indefinitely.</p>
             </div>
-            <div class="bg-gray-800 p-3 rounded border border-gray-600 md:col-span-2">
-                <p class="text-[10px] text-gray-500 font-bold uppercase">April - Final Stretch</p>
-                <p class="text-sm font-bold text-soft-white">Mapping & Artist Donations</p>
-                <p class="text-lg font-black text-blue-400">$174</p>
-            </div>
-        </div>
-
-        <div class="mt-6 border-t border-gray-600 pt-4">
-            <p class="text-xs font-bold text-gray-400 uppercase mb-2">Inventory Queue:</p>
-            <ul class="text-xs text-gray-300 space-y-2">
-                <li class="flex items-center gap-2">
-                    <span class="text-green-500">✅</span> 
-                    <del class="text-gray-500">R Tune 2.0 (Unlocked & Licensed)</del>
-                </li>
-                <li><span class="text-yellow-500">⏳</span> <span class="text-yellow-400 font-bold">JAN:</span> <a href="https://www.fab.com/listings/405ebfaf-2feb-4240-98b3-b99e611aae70" class="text-blue-400 hover:underline" target="_blank">VSE Sound Engine ($143 - ON SALE!)</a></li>
-                <li><span class="text-yellow-500">⏳</span> <span class="text-gray-400">FEB:</span> <a href="https://www.fab.com/listings/e39a4aa3-5680-4a1e-bf14-68b1f0465b03" class="text-blue-400 hover:underline" target="_blank">Street Racing AI ($209)</a></li>
-                <li><span class="text-yellow-500">⏳</span> <span class="text-gray-400">MAR:</span> <a href="https://www.fab.com/listings/1faf1cbb-186f-4aa1-aedd-c53972d28f15" class="text-blue-400 hover:underline" target="_blank">Police AI ($119)</a></li>
-                <li class="bg-blue-900/20 p-2 rounded"><span class="text-blue-400">🎨</span> <span class="text-blue-300 font-bold">APRIL:</span> Artist Fund for Mapping & Modeling ($174)</li>
-            </ul>
         </div>
     </div>
 
-    <!-- Donate Button -->
-    <div class="text-center mb-8">
-        <a href="https://cash.app/$4sterCash" target="_blank"
-           class="inline-flex items-center justify-center w-full sm:w-auto px-12 py-4 text-2xl font-extrabold text-gray-900 bg-primary-green rounded-full shadow-lg hover:bg-green-400 active:scale-95 transition-all duration-200 uppercase tracking-widest">
-            🚀 Accelerate Lap 2
+    <!-- Final Message -->
+    <div class="text-center">
+        <div class="text-zinc-600 text-xs mb-8 uppercase tracking-[0.2em]">
+            This project is no longer accepting contributions.
+        </div>
+        <a href="https://gamedev44.github.io/IronWill/" class="text-zinc-500 hover:text-white transition-colors text-sm underline">
+            Return to Archive
         </a>
-        <p class="text-sm mt-3 text-gray-400 italic">"This spacing gives us plenty of time to build a nice 3-4 level demo!"</p>
-    </div>
-
-    <!-- Project Details -->
-    <section class="text-gray-300 mb-8 border-t border-gray-700 pt-8 text-sm">
-        <h3 class="text-xl font-bold text-soft-white mb-4">The Q1 Mission</h3>
-        <p class="mb-4">Project Speedverse is raising the remaining <strong>$517.99</strong> for software licenses plus an additional <strong>$174</strong> for our environment artists and car modelers. This roadmap ensures we reach April with a polished, playable demo featuring full sound and AI integration.</p>
-        <a href="https://gamedev44.github.io/IronWill/" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold underline transition-colors">Iron Will HQ →</a>
-    </section>
-</div>
-
-<!-- Share Modal (Automatic) -->
-<div id="share-modal-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-80 z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none">
-    <div id="share-modal-content" class="bg-modal-dark p-8 rounded-xl shadow-2xl max-w-lg w-11/12 border border-gray-700 transform transition-transform duration-300 scale-95">
-        <h2 class="text-3xl font-extrabold text-primary-green mb-4 text-center">
-            New Lap Unlocked! 🏁
-        </h2>
-        <p class="text-gray-300 mb-6 text-center">
-            December is complete! We are now pushing through the <strong>4-Lap Roadmap</strong> to reach the April demo milestone.
-        </p>
-        
-        <div class="mb-6">
-            <label for="share-code" class="block text-sm font-medium text-gray-400 mb-2 text-center uppercase tracking-widest">Share Project Speedverse</label>
-            <input type="text" id="share-code" value="https://gamedev44.github.io/IronWill/Kickstart.html" readonly
-                   class="w-full bg-gray-700 text-soft-white p-3 rounded-lg font-mono text-center text-sm select-all border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-green">
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-3">
-            <button id="copy-link-btn" class="flex-1 inline-flex items-center justify-center p-3 text-sm font-semibold text-gray-900 bg-yellow-400 rounded-lg hover:bg-yellow-300 transition-all">
-                Copy Link
-            </button>
-            <button id="close-modal-btn" class="flex-1 inline-flex items-center justify-center p-3 text-sm font-semibold text-soft-white bg-gray-600 rounded-lg hover:bg-gray-500 transition-all">
-                Close
-            </button>
-        </div>
     </div>
 </div>
 
 <script>
-    // Snowflake logic
-    let snowflakes = [];
-    let bgSnowflakes = [];
-    const gravity = 0.08;
-
-    class Snowflake {
-        constructor(x, y, isBackground = false) {
-            this.x = x;
-            this.y = y;
-            this.velX = (Math.random() - 0.5) * 2;
-            this.velY = isBackground ? Math.random() * 1 + 0.5 : Math.random() * -1 - 0.5;
-            this.size = isBackground ? Math.random() * 8 + 4 : Math.random() * 6 + 8;
-            this.opacity = isBackground ? 0.4 : 1;
-            this.element = document.createElement('div');
-            this.element.className = isBackground ? 'snowflake-bg' : 'snowflake';
-            this.element.style.left = this.x + 'px';
-            this.element.style.top = this.y + 'px';
-            this.element.style.fontSize = this.size + 'px';
-            this.element.innerHTML = '❄';
-            document.body.appendChild(this.element);
+    // Minimal "glitch" static effect
+    const body = document.body;
+    setInterval(() => {
+        if(Math.random() > 0.98) {
+            body.style.opacity = '0.8';
+            setTimeout(() => body.style.opacity = '1', 50);
         }
-
-        update() {
-            this.velY += gravity * 0.5;
-            this.x += this.velX;
-            this.y += this.velY;
-            this.opacity -= 0.005;
-            if (this.element) {
-                this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
-                this.element.style.opacity = this.opacity;
-            }
-        }
-
-        isDead() { return this.opacity <= 0 || this.y > window.innerHeight; }
-        remove() { if (this.element.parentNode) this.element.parentNode.removeChild(this.element); }
-    }
-
-    function animate() {
-        snowflakes.forEach((s, i) => {
-            s.update();
-            if (s.isDead()) { s.remove(); snowflakes.splice(i, 1); }
-        });
-        bgSnowflakes.forEach((s, i) => {
-            s.update();
-            if (s.isDead()) { s.remove(); bgSnowflakes.splice(i, 1); }
-        });
-        if (Math.random() < 0.05) bgSnowflakes.push(new Snowflake(Math.random() * window.innerWidth, -10, true));
-        requestAnimationFrame(animate);
-    }
-
-    document.addEventListener('mousemove', (e) => {
-        if (Math.random() < 0.3) snowflakes.push(new Snowflake(e.clientX, e.clientY));
-    });
-
-    animate();
-
-    // Modal Handling
-    document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById('share-modal-overlay');
-        const modalContent = document.getElementById('share-modal-content');
-        const close = document.getElementById('close-modal-btn');
-        const copyBtn = document.getElementById('copy-link-btn');
-
-        const show = () => {
-            modal.style.opacity = '1';
-            modal.style.pointerEvents = 'auto';
-            modalContent.style.transform = 'scale(1)';
-        };
-
-        const hide = () => {
-            modal.style.opacity = '0';
-            modal.style.pointerEvents = 'none';
-            modalContent.style.transform = 'scale(0.95)';
-        };
-
-        setTimeout(show, 1500);
-
-        close.addEventListener('click', hide);
-        copyBtn.addEventListener('click', () => {
-            const input = document.getElementById('share-code');
-            input.select();
-            document.execCommand('copy');
-        });
-    });
+    }, 100);
 </script>
+
 </body>
 </html>
