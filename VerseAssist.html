@@ -3,234 +3,688 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verse Assist +</title>
+    <title>Verse Assist + | AI-Powered Unreal Engine Blueprint Assistant</title>
     <meta name="description" content="AI-powered Unreal Engine 5 blueprint assistant from IronWill Interactive Entertainment. Find visual blueprint snippets and raw code by describing your needs.">
-    <meta name="keywords" content="Unreal Engine, UE5, Blender, Blueprint, Verse, AI, Assistant, PGD, IronWill Interactive Entertainment, Code Snippet, Tutorial">        
-    <style>        
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');        
-        :root {            
-            --color-bg: #1a1c22;            
-            --color-border: #44475a;            
-            --color-panel-bg: #282a36;            
-            --color-node-header: #343746;            
-            --color-text: #f8f8f2;            
-            --color-text-dim: #bd93f9;            
-            --color-accent: #8be9fd;            
-            --color-success: #50fa7b;            
-            --color-pin-string: #f1fa8c;            
-            --color-pin-number: #50fa7b;            
-            --color-pin-boolean: #ff79c6;            
-            --color-pin-exec: #ffffff;            
-            --color-pin-any: #cccccc;            
-            --shadow-color: rgba(0, 0, 0, 0.4);            
-            --node-header-event: #c0392b;            
-            --node-header-flow: #7f8c8d;            
-            --node-header-util: #2980b9;        
-        }        
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background-color: var(--color-bg); color: var(--color-text); }        
-        .app-container { display: flex; height: 100vh; flex-direction: column; }        
-        .input-panel { padding: 1.5rem; display: flex; flex-direction: column; z-index: 10; background-color: var(--color-panel-bg); position: relative; /* Added for absolute positioning of back button */ }        
-        .output-container { flex-grow: 1; display: flex; flex-direction: column; min-height: 0; }        
-        .output-panel { flex-grow: 1; position: relative; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; background-image: radial-gradient(circle at 1px 1px, var(--color-border) 1px, transparent 0); background-size: 20px 20px; overflow: auto; cursor: grab; }        
-        .output-panel.panning { cursor: grabbing; }        
-        h1 { font-size: 1.5rem; color: var(--color-accent); margin: 0 0 1rem 0; text-align: center; } /* Centered h1 */        
-        label { font-size: 1rem; color: var(--color-text-dim); margin-bottom: 0.5rem; display: block; }                
-        #ai-prompt-area { display: flex; flex-direction: column; gap: 1rem; }        
-        #ai-prompt { width: 100%; box-sizing: border-box; background-color: var(--color-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 0.75rem; color: var(--color-text); font-size: 1rem; min-height: 80px; resize: vertical; }        
-        #ai-prompt:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(139, 233, 253, 0.2); }        
-        #ai-submit-btn { padding: 0.75rem; background: var(--color-accent); color: var(--color-bg); font-weight: 600; border-radius: 8px; cursor: pointer; border: none; transition: background-color 0.2s; }        
-        #ai-submit-btn:hover { background: #a1f0ff; }        
-        #ai-submit-btn:disabled { background: var(--color-node-header); color: var(--color-border); cursor: not-allowed; }                
-        .toolbar { padding: 0.5rem 1rem; background-color: var(--color-panel-bg); border-bottom: 2px solid var(--color-border); display: flex; gap: 0.5rem; align-items: center; }        
-        .toggle-btn, .copy-btn { padding: 0.5rem 1rem; background: var(--color-node-header); border: 1px solid var(--color-border); color: var(--color-text-dim); border-radius: 6px; cursor: pointer; transition: all 0.2s ease; }        
-        .toggle-btn.active, .copy-btn:hover { background: var(--color-accent); color: var(--color-bg); font-weight: 600; border-color: var(--color-accent); }        
-        .copy-btn { margin-left: auto; }        
-        #raw-text-output { position: absolute; inset: 0; background: var(--color-bg); color: #cecece; font-family: monospace; white-space: pre-wrap; padding: 1rem; overflow: auto; font-size: 0.85rem; }                
-        #node-wrapper, #svg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }        
-        #svg-layer { pointer-events: none; }        
-        .node { position: absolute; background-color: var(--color-panel-bg); border: 1px solid var(--color-border); border-radius: 8px; min-width: 180px; box-shadow: 0 10px 25px var(--shadow-color); display: flex; flex-direction: column; }        
-        .node-header { background-color: var(--color-node-header); padding: 8px 12px; font-weight: 600; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom: 1px solid var(--color-border); }        
-        .node-header.event-node { background-color: var(--node-header-event); }        
-        .node-header.flow-node { background-color: var(--node-header-flow); }        
-        .node-header.util-node { background-color: var(--node-header-util); } /* Corrected variable name */        
-        .node-body { display: flex; justify-content: space-between; padding: 8px 0; }        
-        .node-pins { display: flex; flex-direction: column; gap: 12px; padding: 0 12px; }        
-        .node-pins.inputs { align-items: flex-start; }        
-        .node-pins.outputs { align-items: flex-end; }        
-        .pin { display: flex; align-items: center; gap: 8px; font-size: 14px; }        
-        .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid; background-color: var(--color-panel-bg); }        
-        .pin-dot[data-pin-type="string"] { border-color: var(--color-pin-string); }        
-        .pin-dot[data-pin-type="number"] { border-color: var(--color-pin-number); }        
-        .pin-dot[data-pin-type="boolean"] { border-color: var(--color-pin-boolean); }        
-        .pin-dot[data-pin-type="any"] { border-color: var(--color-pin-any); }        
-        .pin-dot[data-pin-type="exec"] { border-color: var(--color-pin-exec); width: 16px; height: 16px; clip-path: polygon(0% 25%, 75% 25%, 75% 0%, 100% 50%, 75% 100%, 75% 75%, 0% 75%); border-radius: 0; background-color: transparent; }        
-        .wire { stroke-width: 2.5; fill: none; }        
-        .wire.string { stroke: var(--color-pin-string); }        
-        .wire.number { stroke: var(--color-pin-number); }        
-        .wire.boolean { stroke: var(--color-pin-boolean); }        
-        .wire.exec { stroke: var(--color-pin-exec); stroke-width: 3.5; }        
+    <meta name="keywords" content="Unreal Engine, UE5, Blender, Blueprint, Verse, AI, Assistant, PGD, IronWill Interactive Entertainment, Code Snippet, Tutorial">
+    
+    <!-- Puter.js for Free AI API -->
+    <script src="https://js.puter.com/v2/"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --color-bg: #1a1c22;
+            --color-border: #44475a;
+            --color-panel-bg: #282a36;
+            --color-node-header: #343746;
+            --color-text: #f8f8f2;
+            --color-text-dim: #bd93f9;
+            --color-accent: #8be9fd;
+            --color-success: #50fa7b;
+            --color-error: #ff5555;
+            --color-warning: #f1fa8c;
+            --color-pin-string: #f1fa8c;
+            --color-pin-number: #50fa7b;
+            --color-pin-boolean: #ff79c6;
+            --color-pin-exec: #ffffff;
+            --color-pin-any: #cccccc;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --node-header-event: #c0392b;
+            --node-header-flow: #7f8c8d;
+            --node-header-util: #2980b9;
+            --transition-speed: 0.3s;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+        
+        .input-panel {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            background-color: var(--color-panel-bg);
+            position: relative;
+            border-bottom: 2px solid var(--color-border);
+        }
+        
+        .output-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .output-panel {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background-image: radial-gradient(circle at 1px 1px, var(--color-border) 1px, transparent 0);
+            background-size: 20px 20px;
+            overflow: auto;
+            cursor: grab;
+        }
+        
+        .output-panel.panning { cursor: grabbing; }
+        
+        h1 {
+            font-size: 1.75rem;
+            color: var(--color-accent);
+            margin: 0 0 0.5rem 0;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--color-text-dim);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            font-size: 1rem;
+            color: var(--color-text-dim);
+            margin-bottom: 0.5rem;
+            display: block;
+            font-weight: 500;
+        }
+        
+        #ai-prompt-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        #ai-prompt {
+            width: 100%;
+            background-color: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--color-text);
+            font-size: 1rem;
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        
+        #ai-prompt:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(139, 233, 253, 0.2);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition-speed);
+            font-size: 1rem;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-accent) 0%, #6dd5ed 100%);
+            color: var(--color-bg);
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 233, 253, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--color-node-header);
+            color: var(--color-text-dim);
+            border: 1px solid var(--color-border);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--color-accent);
+            color: var(--color-bg);
+            border-color: var(--color-accent);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .toolbar {
+            padding: 0.75rem 1rem;
+            background-color: var(--color-panel-bg);
+            border-bottom: 2px solid var(--color-border);
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .toggle-btn {
+            padding: 0.5rem 1rem;
+            background: var(--color-node-header);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-dim);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        
+        .toggle-btn.active {
+            background: var(--color-accent);
+            color: var(--color-bg);
+            font-weight: 600;
+            border-color: var(--color-accent);
+        }
+        
+        .toggle-btn:hover:not(.active) {
+            background: var(--color-border);
+        }
+        
+        .copy-btn {
+            margin-left: auto;
+        }
+        
+        #raw-text-output {
+            position: absolute;
+            inset: 0;
+            background: var(--color-bg);
+            color: #cecece;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            padding: 1.5rem;
+            overflow: auto;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        #node-wrapper, #svg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: 0 0;
+        }
+        
+        #svg-layer {
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .node {
+            position: absolute;
+            background-color: var(--color-panel-bg);
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px var(--shadow-color);
+        }
+        
+        .node-header {
+            background-color: var(--color-node-header);
+            padding: 10px 14px;
+            font-weight: 600;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            border-bottom: 2px solid var(--color-border);
+            font-size: 0.95rem;
+        }
+        
+        .node-header.event-node { background-color: var(--node-header-event); }
+        .node-header.flow-node { background-color: var(--node-header-flow); }
+        .node-header.util-node { background-color: var(--node-header-util); }
+        
+        .node-body {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+        
+        .node-pins {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 0 14px;
+        }
+        
+        .node-pins.inputs { align-items: flex-start; }
+        .node-pins.outputs { align-items: flex-end; }
+        
+        .pin {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+        
+        .pin-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid;
+            background-color: var(--color-panel-bg);
+            transition: transform 0.2s;
+        }
+        
+        .pin:hover .pin-dot {
+            transform: scale(1.2);
+        }
+        
+        .pin-dot[data-pin-type="string"] { border-color: var(--color-pin-string); }
+        .pin-dot[data-pin-type="number"] { border-color: var(--color-pin-number); }
+        .pin-dot[data-pin-type="boolean"] { border-color: var(--color-pin-boolean); }
+        .pin-dot[data-pin-type="any"] { border-color: var(--color-pin-any); }
+        .pin-dot[data-pin-type="exec"] {
+            border-color: var(--color-pin-exec);
+            width: 16px;
+            height: 16px;
+            clip-path: polygon(0% 25%, 75% 25%, 75% 0%, 100% 50%, 75% 100%, 75% 75%, 0% 75%);
+            border-radius: 0;
+            background-color: transparent;
+        }
+        
+        .wire {
+            stroke-width: 2.5;
+            fill: none;
+            transition: stroke-width 0.2s;
+        }
+        
+        .wire:hover {
+            stroke-width: 3.5;
+        }
+        
+        .wire.string { stroke: var(--color-pin-string); }
+        .wire.number { stroke: var(--color-pin-number); }
+        .wire.boolean { stroke: var(--color-pin-boolean); }
+        .wire.exec { stroke: var(--color-pin-exec); stroke-width: 3.5; }
         .wire.any, .wire.default { stroke: var(--color-pin-any); }
-        #search-results { width: 100%; max-width: 90%; text-align: left; padding: 1rem; }        
-        .results-section { margin-bottom: 2rem; }        
-        .results-section h2 { font-size: 1.25rem; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 1rem; }        
-        .result-item { background: var(--color-panel-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }        
-        .result-item a { color: var(--color-text); text-decoration: none; font-weight: 600; font-size: 1.1rem; }        
-        .result-item a:hover { color: var(--color-accent); text-decoration: underline; }        
-        .result-item p { font-size: 0.9rem; color: var(--color-text-dim); margin: 0.5rem 0 0 0; }        
-        .result-item ul { margin: 0.5rem 0 0 1rem; padding: 0; list-style-type: disc; }        
-        .result-item li { margin-bottom: 0.25rem; }        
-        .result-item strong, .result-item b { color: var(--color-accent); font-weight: 600; }        
-        .result-item h3 { font-size: 1.1rem; margin-top: 1rem; color: var(--color-accent); }                
-        /* Modal Styles */        
-        .modal-overlay { 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0,0,0,0.7); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+        
+        #search-results {
+            width: 100%;
+            max-width: 90%;
+            text-align: left;
+            padding: 1.5rem;
+        }
+        
+        .results-section {
+            margin-bottom: 2rem;
+        }
+        
+        .results-section h2 {
+            font-size: 1.3rem;
+            color: var(--color-accent);
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .result-item {
+            background: var(--color-panel-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 233, 253, 0.2);
+        }
+        
+        .result-item a {
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .result-item a:hover {
+            color: var(--color-accent);
+            text-decoration: underline;
+        }
+        
+        .result-item p {
+            font-size: 0.95rem;
+            color: var(--color-text-dim);
+            margin: 0.5rem 0 0 0;
+            line-height: 1.6;
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }        
+            transition: opacity var(--transition-speed), visibility var(--transition-speed);
+        }
+        
         .modal-overlay.show {
             opacity: 1;
             visibility: visible;
         }
-        .modal-content { 
-            background: var(--color-panel-bg); 
-            padding: 2rem; 
-            border-radius: 12px; 
-            border: 1px solid var(--color-border); 
-            max-width: 500px; 
-            width: 90%; 
-            text-align: center; 
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-        }        
+        
+        .modal-content {
+            background: var(--color-panel-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--color-border);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: center;
+            transform: translateY(-30px);
+            transition: transform var(--transition-speed);
+        }
+        
         .modal-overlay.show .modal-content {
             transform: translateY(0);
         }
-        .modal-content h2 { color: var(--color-accent); margin-top: 0; }        
-        .modal-content p { color: var(--color-text-dim); line-height: 1.6; }        
-        .modal-footer { margin-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }        
-        .dont-show-again { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; }                
-        .hidden { display: none; }                
-        /* Responsive Design */        
-        @media (min-width: 768px) {            
-            .app-container { flex-direction: row; }            
-            .input-panel { flex: 1; }            
-            .output-container { flex: 2; }        
+        
+        .modal-content h2 {
+            color: var(--color-accent);
+            margin-top: 0;
+            font-size: 1.5rem;
         }
-        /* Style for the back button */
+        
+        .modal-content p {
+            color: var(--color-text-dim);
+            line-height: 1.7;
+            margin: 1rem 0;
+        }
+        
+        .modal-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .modal-content input[type="password"],
+        .modal-content input[type="text"],
+        .modal-content select {
+            width: 100%;
+            background-color: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--color-text);
+            font-size: 1rem;
+            font-family: inherit;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-content input:focus,
+        .modal-content select:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(139, 233, 253, 0.2);
+        }
+        
+        .api-mode-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--color-node-header);
+            border: 2px solid var(--color-border);
+            color: var(--color-text-dim);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-family: inherit;
+        }
+        
+        .mode-btn.active {
+            background: var(--color-accent);
+            color: var(--color-bg);
+            border-color: var(--color-accent);
+            font-weight: 600;
+        }
+        
+        .error-message {
+            background: rgba(255, 85, 85, 0.2);
+            border: 1px solid var(--color-error);
+            color: var(--color-error);
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .success-message {
+            background: rgba(80, 250, 123, 0.2);
+            border: 1px solid var(--color-success);
+            color: var(--color-success);
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .info-box {
+            background: rgba(139, 233, 253, 0.1);
+            border: 1px solid var(--color-accent);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: left;
+        }
+        
+        .info-box h3 {
+            color: var(--color-accent);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .info-box ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .info-box li {
+            margin: 0.25rem 0;
+            color: var(--color-text-dim);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading-spinner {
+            border: 3px solid var(--color-border);
+            border-top: 3px solid var(--color-accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         .back-button {
-            position: absolute; /* Position relative to input-panel */
-            top: 1rem; /* Adjusted position */
-            left: 1rem; /* Adjusted position */
-            padding: 0.75rem 1.5rem;
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.6rem 1.2rem;
             background: var(--color-node-header);
             color: var(--color-text-dim);
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
             border: 1px solid var(--color-border);
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-            text-decoration: none; /* Remove underline for link */
-            display: inline-block; /* Allow padding and margin */
-            z-index: 11; /* Ensure it's above other elements */
+            transition: all var(--transition-speed);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 11;
+            font-size: 0.9rem;
         }
+        
         .back-button:hover {
             background: var(--color-accent);
             color: var(--color-bg);
             border-color: var(--color-accent);
         }
-
-        /* Style for the API Key input field */
-        #api-key-input {
-            width: 100%;
-            box-sizing: border-box;
-            background-color: var(--color-bg);
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            padding: 0.75rem;
-            color: var(--color-text);
-            font-size: 1rem;
-            margin-top: 1rem; /* Space from elements above it */
-        }
-        #api-key-input:focus {
-            outline: none;
-            border-color: var(--color-accent);
-            box-shadow: 0 0 0 3px rgba(139, 233, 253, 0.2);
-        }
-
-        /* Options Button */
-        #options-btn {
-            padding: 0.75rem 1rem;
-            background: var(--color-node-header);
+        
+        #placeholder-text {
+            padding: 2rem;
+            font-size: 1.1rem;
             color: var(--color-text-dim);
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 1px solid var(--color-border);
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-            margin-top: 1rem;
+            text-align: center;
         }
-        #options-btn:hover {
-            background: var(--color-accent);
-            color: var(--color-bg);
-            border-color: var(--color-accent);
+        
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .app-container { flex-direction: row; }
+            .input-panel {
+                flex: 1;
+                border-bottom: none;
+                border-right: 2px solid var(--color-border);
+            }
+            .output-container { flex: 2; }
         }
-
-        /* Specific modal for API Key input */
-        #api-key-modal .modal-content {
-            max-width: 400px;
-            padding: 1.5rem;
-        }
-        #api-key-modal input[type="password"] {
-            margin-bottom: 1rem;
-        }
-        #api-key-modal button {
-            width: 100%;
-        }
-
-        /* Too Many Attempts Modal */
-        #too-many-attempts-modal .modal-content {
-            background-color: #c0392b; /* Red background for error */
-            color: white;
-            border: 1px solid #e74c3c;
-        }
-        #too-many-attempts-modal .modal-content h2 {
-            color: white;
-        }
-        #too-many-attempts-modal .modal-content p {
-            color: #f8f8f2;
+        
+        @media (max-width: 767px) {
+            h1 { font-size: 1.4rem; }
+            .subtitle { font-size: 0.8rem; }
+            .back-button { font-size: 0.8rem; padding: 0.5rem 1rem; }
         }
     </style>
 </head>
 <body>
-    <!-- API Key Input Modal -->
-    <div class="modal-overlay" id="api-key-modal">
+    <!-- API Configuration Modal -->
+    <div class="modal-overlay show" id="api-config-modal">
         <div class="modal-content">
-            <h2>Enter Gemini API Key</h2>
-            <p>Please enter your Gemini API key to use Verse Assist +.</p>
-            <input type="password" id="modal-api-key-input" placeholder="Enter Gemini API Key Now">
-            <button id="submit-api-key-btn" class="toggle-btn active">Submit Key</button>
-            <p style="color: red; margin-top: 1rem;" id="api-key-error-message" class="hidden"></p>
+            <h2>🚀 Configure AI Assistant</h2>
+            <p>Choose your preferred AI service mode</p>
+            
+            <div class="api-mode-selector">
+                <button class="mode-btn active" data-mode="free">🆓 Free Mode</button>
+                <button class="mode-btn" data-mode="advanced">⚡ Advanced Mode</button>
+            </div>
+            
+            <div id="free-mode-info" class="info-box">
+                <h3>Free Mode (Recommended)</h3>
+                <ul>
+                    <li>✅ No API key required</li>
+                    <li>✅ Powered by Puter.js</li>
+                    <li>✅ Access to GPT-4o and other models</li>
+                    <li>✅ Perfect for getting started</li>
+                </ul>
+            </div>
+            
+            <div id="advanced-mode-config" class="hidden">
+                <label for="api-provider-select">Select AI Provider:</label>
+                <select id="api-provider-select">
+                    <option value="gemini">Google Gemini</option>
+                    <option value="openai">OpenAI</option>
+                    <option value="anthropic">Anthropic Claude</option>
+                    <option value="openrouter">OpenRouter</option>
+                </select>
+                
+                <label for="api-key-input">API Key:</label>
+                <input type="password" id="api-key-input" placeholder="Enter your API key">
+                
+                <div class="info-box">
+                    <h3>Advanced Mode Benefits</h3>
+                    <ul>
+                        <li>⚡ Higher rate limits</li>
+                        <li>🎯 More control over models</li>
+                        <li>🔒 Use your own API credits</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button id="save-api-config-btn" class="btn btn-primary" style="width: 100%;">Continue</button>
+                <div id="api-config-error" class="error-message hidden"></div>
+            </div>
         </div>
     </div>
 
     <!-- Welcome Modal -->
     <div class="modal-overlay hidden" id="welcome-modal">
         <div class="modal-content">
-            <h2>Welcome to Verse Assist +</h2>
-            <p>From the team at IronWill Interactive Entertainment (Formerly PGD), we're proud to introduce our newest AI tool. Describe the blueprint functionality you need, and our AI will find the best matching visual snippet and raw code from our curated database, or search the web for relevant tutorials and documentation.</p>
+            <h2>👋 Welcome to Verse Assist +</h2>
+            <p>From the team at <strong>IronWill Interactive Entertainment</strong> (Formerly PGD), we're proud to introduce our newest AI tool.</p>
+            <p>Describe the blueprint functionality you need, and our AI will find the best matching visual snippet and raw code from our curated database, or search the web for relevant tutorials and documentation.</p>
             <div class="modal-footer">
-                <button id="close-welcome-modal-btn" class="toggle-btn active" style="width: 100%;">Get Started</button>
-                <div class="dont-show-again">
+                <button id="close-welcome-modal-btn" class="btn btn-primary" style="width: 100%;">Get Started</button>
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                     <input type="checkbox" id="dont-show-again-checkbox">
-                    <label for="dont-show-again-checkbox">Don't show this again</label>
-                </div>
+                    <span>Don't show this again</span>
+                </label>
             </div>
         </div>
     </div>
@@ -238,551 +692,671 @@
     <!-- Options Modal -->
     <div class="modal-overlay hidden" id="options-modal">
         <div class="modal-content">
-            <h2>Options</h2>
+            <h2>⚙️ Options</h2>
             <div class="modal-footer">
-                <button id="clear-local-data-btn" class="toggle-btn active" style="width: 100%;">Clear All Local Data</button>
-                <button id="reset-code-output-btn" class="toggle-btn" style="width: 100%;">Reset Current Output</button>
-                <button id="close-options-modal-btn" class="toggle-btn" style="width: 100%;">Close</button>
+                <button id="change-api-mode-btn" class="btn btn-secondary" style="width: 100%;">Change AI Mode</button>
+                <button id="clear-local-data-btn" class="btn btn-secondary" style="width: 100%;">Clear All Local Data</button>
+                <button id="reset-output-btn" class="btn btn-secondary" style="width: 100%;">Reset Current Output</button>
+                <button id="close-options-modal-btn" class="btn btn-primary" style="width: 100%;">Close</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Too Many Attempts Modal -->
-    <div class="modal-overlay hidden" id="too-many-attempts-modal">
-        <div class="modal-content">
-            <h2>Too Many Attempts!</h2>
-            <p>You have made too many invalid API key attempts today. Access denied.</p>
-            <p>Redirecting to IWI.com in <span id="redirect-countdown">5</span> seconds...</p>
         </div>
     </div>
 
     <div class="app-container">
         <div class="input-panel">
-            <!-- Back to IWI.com Button -->
-            <a href="https://gamedev44.github.io/IronWill/" class="back-button">Back to IWI.com</a>
+            <a href="https://gamedev44.github.io/IronWill/" class="back-button">
+                ← Back to IWI.com
+            </a>
             <h1>Verse Assist +</h1>
-            <div id="ai-prompt-area"> 
+            <p class="subtitle">AI-Powered Blueprint Assistant for Unreal Engine</p>
+            
+            <div id="ai-prompt-area">
                 <label for="ai-prompt">What blueprint do you need?</label>
-                <textarea id="ai-prompt" placeholder="e.g., How do I make something explode when it gets hit?"></textarea>
-                <!-- API Key Input Field (hidden by default, managed by JS) -->
-                <input type="password" id="api-key-input" placeholder="Enter Gemini API Key Now" class="hidden">
-                <button id="ai-submit-btn">Get Snippet</button>
+                <textarea 
+                    id="ai-prompt" 
+                    placeholder="e.g., How do I make something explode when it gets hit?"
+                    aria-label="Blueprint description input"
+                ></textarea>
+                
+                <div class="button-group">
+                    <button id="ai-submit-btn" class="btn btn-primary" style="flex: 1;">
+                        🔍 Get Snippet
+                    </button>
+                    <button id="options-btn" class="btn btn-secondary">
+                        ⚙️ Options
+                    </button>
+                </div>
             </div>
-            <button id="options-btn">Options</button>
         </div>
+        
         <div class="output-container">
             <div class="toolbar">
-                <button id="visual-toggle" class="toggle-btn active">Visual</button>
-                <button id="raw-toggle" class="toggle-btn">Raw Text</button>
-                <button id="copy-btn" class="copy-btn hidden">Copy</button>
+                <button id="visual-toggle" class="toggle-btn active">📊 Visual</button>
+                <button id="raw-toggle" class="toggle-btn">📝 Raw Text</button>
+                <button id="copy-btn" class="toggle-btn copy-btn hidden">📋 Copy</button>
             </div>
             <div class="output-panel" id="output-panel">
                 <div id="placeholder-text">Ask the AI for a blueprint to begin</div>
             </div>
         </div>
-    </div>        
-    <script>        
-        document.addEventListener('DOMContentLoaded', () => {            
-            // --- DOM Elements ---            
-            const aiPrompt = document.getElementById('ai-prompt');            
-            const aiSubmitBtn = document.getElementById('ai-submit-btn');            
-            const outputPanel = document.getElementById('output-panel');            
-            const visualToggle = document.getElementById('visual-toggle');            
-            const rawToggle = document.getElementById('raw-toggle');            
-            const copyBtn = document.getElementById('copy-btn');            
+    </div>
+
+    <script>
+        // ============================================================================
+        // STATE MANAGEMENT
+        // ============================================================================
+        const AppState = {
+            // API Configuration
+            apiMode: 'free', // 'free' or 'advanced'
+            apiProvider: 'gemini',
+            apiKey: null,
             
-            // Modals and their elements
-            const apiKeyModal = document.getElementById('api-key-modal');
-            const modalApiKeyInput = document.getElementById('modal-api-key-input');
-            const submitApiKeyBtn = document.getElementById('submit-api-key-btn');
-            const apiKeyErrorMessage = document.getElementById('api-key-error-message');
-
-            const welcomeModal = document.getElementById('welcome-modal');            
-            const closeWelcomeModalBtn = document.getElementById('close-welcome-modal-btn');            
-            const dontShowCheckbox = document.getElementById('dont-show-again-checkbox');                        
+            // Application State
+            activeBlueprint: null,
+            viewMode: 'visual', // 'visual' or 'raw'
+            isProcessing: false,
             
-            const optionsBtn = document.getElementById('options-btn');
-            const optionsModal = document.getElementById('options-modal');
-            const clearLocalDataBtn = document.getElementById('clear-local-data-btn');
-            const resetCodeOutputBtn = document.getElementById('reset-code-output-btn');
-            const closeOptionsModalBtn = document.getElementById('close-options-modal-btn');
-
-            const tooManyAttemptsModal = document.getElementById('too-many-attempts-modal');
-            const redirectCountdownSpan = document.getElementById('redirect-countdown');
-
-            // --- Constants ---
-            const MAX_API_ATTEMPTS = 3;
-            const REDIRECT_DELAY_MS = 5000; // 5 seconds
-            const IWI_REDIRECT_URL = "https://gamedev44.github.io/IronWill/";
-
-            let activeBlueprint = null;            
-            let view = { x: 50, y: 50, scale: 0.7 };            
-            let panning = { active: false, start: { x: 0, y: 0 }, viewStart: { x: 0, y: 0 } };
-
-            // --- API Key Management ---
-            let currentApiKey = localStorage.getItem('geminiApiKey');
-            let apiKeyAttempts = parseInt(localStorage.getItem('apiKeyAttempts') || '0', 10);
-            let lastAttemptDate = localStorage.getItem('lastAttemptDate');
-
-            const today = new Date().toDateString();
-
-            // Reset attempts if it's a new day
-            if (lastAttemptDate !== today) {
-                apiKeyAttempts = 0;
-                localStorage.setItem('apiKeyAttempts', apiKeyAttempts);
-                localStorage.setItem('lastAttemptDate', today);
-            }
-
-            const showModal = (modalElement) => {
-                modalElement.classList.remove('hidden');
-                setTimeout(() => modalElement.classList.add('show'), 10); // For transition
-            };
-
-            const hideModal = (modalElement) => {
-                modalElement.classList.remove('show');
-                setTimeout(() => modalElement.classList.add('hidden'), 300); // Wait for transition
-            };
-
-            const redirectToIWI = () => {
-                let countdown = REDIRECT_DELAY_MS / 1000;
-                redirectCountdownSpan.textContent = countdown;
-
-                const countdownInterval = setInterval(() => {
-                    countdown--;
-                    redirectCountdownSpan.textContent = countdown;
-                    if (countdown <= 0) {
-                        clearInterval(countdownInterval);
-                        window.location.href = IWI_REDIRECT_URL;
-                    }
-                }, 1000);
-            };
-
-            const initializeApp = () => {
-                if (apiKeyAttempts >= MAX_API_ATTEMPTS) {
-                    showModal(tooManyAttemptsModal);
-                    redirectToIWI();
-                } else if (!currentApiKey) {
-                    showModal(apiKeyModal);
-                } else {
-                    // If API key exists, proceed to welcome modal check
-                    if (localStorage.getItem('hideWelcomeModal') !== 'true') {
-                        showModal(welcomeModal);
-                    }
-                }
-            };
-
-            // Initial app setup
-            initializeApp();
-
-            submitApiKeyBtn.addEventListener('click', async () => { // Made async
-                const enteredKey = modalApiKeyInput.value.trim();
-                if (!enteredKey) {
-                    apiKeyErrorMessage.textContent = 'Please enter a valid API Key.';
-                    apiKeyErrorMessage.classList.remove('hidden');
-                    return;
-                }
-
-                if (apiKeyAttempts >= MAX_API_ATTEMPTS) {
-                    hideModal(apiKeyModal); // Hide API key modal
-                    showModal(tooManyAttemptsModal);
-                    redirectToIWI();
-                    return;
-                }
-
-                // Attempt a lightweight API call to validate the key
+            // View State (for canvas pan/zoom)
+            view: {
+                x: 50,
+                y: 50,
+                scale: 0.7
+            },
+            
+            panning: {
+                active: false,
+                start: { x: 0, y: 0 },
+                viewStart: { x: 0, y: 0 }
+            },
+            
+            // Load state from localStorage
+            loadState() {
                 try {
-                    const testApiUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${enteredKey}`;
-                    const response = await fetch(testApiUrl);
-
-                    if (response.ok) {
-                        localStorage.setItem('geminiApiKey', enteredKey);
-                        currentApiKey = enteredKey;
-                        localStorage.setItem('apiKeyAttempts', '0'); // Reset attempts on success
-                        apiKeyAttempts = 0;
-                        hideModal(apiKeyModal);
-                        apiKeyErrorMessage.classList.add('hidden'); // Hide error message on success
-                        if (localStorage.getItem('hideWelcomeModal') !== 'true') {
-                            showModal(welcomeModal);
-                        }
-                    } else {
-                        // Invalid key attempt
-                        apiKeyAttempts++;
-                        localStorage.setItem('apiKeyAttempts', apiKeyAttempts);
-                        localStorage.setItem('lastAttemptDate', today); // Update last attempt date
-
-                        const errorData = await response.json();
-                        let errorMessage = `Invalid API Key. Attempt ${apiKeyAttempts} of ${MAX_API_ATTEMPTS}.`;
-                        if (errorData && errorData.error && errorData.error.message) {
-                            errorMessage += ` (${errorData.error.message})`;
-                        }
-                        apiKeyErrorMessage.textContent = errorMessage;
-                        apiKeyErrorMessage.classList.remove('hidden');
-                        localStorage.removeItem('geminiApiKey'); // Clear invalid key
-                        currentApiKey = null;
-
-                        if (apiKeyAttempts >= MAX_API_ATTEMPTS) {
-                            hideModal(apiKeyModal);
-                            showModal(tooManyAttemptsModal);
-                            redirectToIWI();
-                        }
+                    const saved = localStorage.getItem('verseAssistState');
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        this.apiMode = parsed.apiMode || 'free';
+                        this.apiProvider = parsed.apiProvider || 'gemini';
+                        this.apiKey = parsed.apiKey || null;
                     }
                 } catch (error) {
-                    console.error("API Key validation failed:", error);
-                    // This catch block handles network errors, not API key invalidity
-                    apiKeyErrorMessage.textContent = 'Could not validate key. Check your network connection.';
-                    apiKeyErrorMessage.classList.remove('hidden');
-                    localStorage.removeItem('geminiApiKey'); // Clear key on network error too
-                    currentApiKey = null;
-                    // Do not increment attempts for network errors, as it's not an invalid key attempt
+                    console.error('Failed to load state:', error);
                 }
-            });
+            },
+            
+            // Save state to localStorage
+            saveState() {
+                try {
+                    const toSave = {
+                        apiMode: this.apiMode,
+                        apiProvider: this.apiProvider,
+                        apiKey: this.apiKey
+                    };
+                    localStorage.setItem('verseAssistState', JSON.stringify(toSave));
+                } catch (error) {
+                    console.error('Failed to save state:', error);
+                }
+            },
+            
+            // Reset state
+            reset() {
+                this.activeBlueprint = null;
+                this.viewMode = 'visual';
+                this.isProcessing = false;
+                this.view = { x: 50, y: 50, scale: 0.7 };
+            }
+        };
 
-            // --- DATA LIBRARIES & SETUP ---            
-            const NODE_LIBRARY = {                
-                'event_begin_play': { name: 'Begin Play', category: 'event', inputs: [], outputs: [{ name: 'Output', type: 'exec' }] },                
-                'event_hit': { name: 'Event Hit', category: 'event', inputs: [], outputs: [ {name: 'Output', type: 'any'}, {name: 'Other Comp', type: 'any'}, {name: 'Hit Location', type: 'number'}, {name: 'Hit Normal', type: 'number'} ]},                
-                'flow_delay': { name: 'Delay', category: 'flow', inputs: [{name: 'Input', type: 'exec'}, {name: 'Duration', type: 'number'}], outputs: [{name: 'Completed', type: 'exec'}]},                
-                'util_print': { name: 'Print String', category: 'util', inputs: [{ name: 'Input', type: 'exec' }, { name: 'In String', type: 'string' }], outputs: [{ name: 'Output', type: 'exec' }] },                
-                'util_destroy': { name: 'Destroy Actor', category: 'util', inputs: [{name: 'Input', type: 'exec'}, {name: 'Target', type: 'any'}]},                
-                'logic_branch': { name: 'Branch', category: 'flow', inputs: [{ name: 'Input', type: 'exec' }, { name: 'Condition', type: 'boolean' }], outputs: [{ name: 'True', type: 'exec' }, { name: 'False', type: 'exec' }] },                
-                'phys_is_sim_phys': { name: 'Is Simulating Physics', category: 'util', inputs: [{name: 'Target', type: 'any'}], outputs: [{name: 'Return Value', type: 'boolean'}]},                
-                'phys_add_impulse': { name: 'Add Impulse At Location', category: 'util', inputs: [{name: 'Input', type: 'exec'}, {name: 'Impulse', type: 'number'}, {name: 'Location', type: 'number'}]},                
-                'spawn_emitter': { name: 'Spawn Emitter At Location', category: 'util', inputs: [{name: 'Input', type: 'exec'}, {name: 'Location', type: 'number'}], outputs: [{name: 'Output', type: 'exec'}, {name: 'Return Value', type: 'any'}]},                
-                'audio_play_sound': { name: 'Play Sound At Location', category: 'util', inputs: [{name: 'Input', type: 'exec'}, {name: 'Sound', type: 'any'}, {name: 'Location', type: 'number'}]},                
-                'util_get_world_loc': { name: 'Get World Location', category: 'util', inputs: [{name: 'Target', type: 'any'}], outputs: [{name: 'Return Value', type: 'number'}]},            
-            };                        
-            const BLUEPRINT_SNIPPETS = {                
-                'bomb_blueprint': {                    
-                    name: "Bomb Blueprint",                    
-                    description: "A comprehensive blueprint for a bomb or projectile. It handles exploding on impact with a physics object, plays sound and visual effects, and has a delayed explosion timer.",                    
-                    visual: {                        
-                        nodes: [ { id: 'hit', typeId: 'event_hit', x: 20, y: 50 }, { id: 'is_phys', typeId: 'phys_is_sim_phys', x: 280, y: 180 }, { id: 'branch', typeId: 'logic_branch', x: 500, y: 50 }, { id: 'impulse', typeId: 'phys_add_impulse', x: 750, y: 50 }, { id: 'spawn', typeId: 'spawn_emitter', x: 1050, y: 50 }, { id: 'play_explode', typeId: 'audio_play_sound', x: 1350, y: 180 }, { id: 'destroy', typeId: 'util_destroy', x: 1650, y: 180 }, { id: 'begin_play', typeId: 'event_begin_play', x: 20, y: 400 }, { id: 'delay', typeId: 'flow_delay', x: 280, y: 400 }, { id: 'get_loc', typeId: 'util_get_world_loc', x: 280, y: 550 }, { id: 'play_bounce', typeId: 'audio_play_sound', x: 500, y: 600 }, ],                        
-                        connections: [ { from: 'hit', fromPin: 'Output', to: 'branch', toPin: 'Input' }, { from: 'hit', fromPin: 'Other Comp', to: 'is_phys', toPin: 'Target' }, { from: 'is_phys', fromPin: 'Return Value', to: 'branch', toPin: 'Condition' }, { from: 'branch', fromPin: 'True', to: 'impulse', toPin: 'Input' }, { from: 'impulse', fromPin: '', to: 'spawn', toPin: 'Input' },  { from: 'spawn', fromPin: 'Output', to: 'play_explode', toPin: 'Input' }, { from: 'spawn', fromPin: 'Return Value', to: 'destroy', toPin: 'Target'}, { from: 'play_explode', fromPin: '', to: 'destroy', toPin: 'Input'},  { from: 'hit', fromPin: 'Hit Location', to: 'impulse', toPin: 'Location'}, { from: 'begin_play', fromPin: 'Output', to: 'delay', toPin: 'Input' }, { from: 'delay', fromPin: 'Completed', to: 'play_explode', toPin: 'Input'}, { from: 'get_loc', fromPin: 'Return Value', to: 'play_bounce', toPin: 'Location'}, { from: 'get_loc', fromPin: 'Return Value', to: 'play_explode', toPin: 'Location'}, ]                    
-                    },                    
-                    raw: `Begin Object Class=/Script/BlueprintGraph.K2Node_Event Name="K2Node_Event_0" ... (full raw text)`                
-                },                
-                'print_string': {                    
-                    name: "Simple Print String",                    
-                    description: "The most basic debugging tool. Prints a string to the screen when the game starts.",                     
-                    visual: {                        
-                        nodes: [ { id: 'begin_play', typeId: 'event_begin_play', x: 50, y: 50}, { id: 'print', typeId: 'util_print', x: 350, y: 50} ],                        
-                        connections: [ { from: 'begin_play', fromPin: 'Output', to: 'print', toPin: 'Input' } ]                    
-                    },                    
-                    raw: `Begin Object Class=/Script/BlueprintGraph.K2Node_CallFunction Name="K2Node_CallFunction_1" ... (full raw text)`                
-                }            
-            };                        
-            // --- AI & Tool Integration ---            
-            async function findBlueprintWithAI(userQuery) {                
-                if (!currentApiKey) {
-                    outputPanel.innerHTML = `<div id="placeholder-text" style="color: red;">Please enter your Gemini API Key to proceed.</div>`;
-                    showModal(apiKeyModal); // Show API key modal if not present
+        // ============================================================================
+        // DATA LIBRARY
+        // ============================================================================
+        const NODE_LIBRARY = {
+            'event_begin_play': {
+                name: 'Begin Play',
+                category: 'event',
+                inputs: [],
+                outputs: [{ name: 'Output', type: 'exec' }]
+            },
+            'event_hit': {
+                name: 'Event Hit',
+                category: 'event',
+                inputs: [],
+                outputs: [
+                    { name: 'Output', type: 'exec' },
+                    { name: 'Other Comp', type: 'any' },
+                    { name: 'Hit Location', type: 'number' },
+                    { name: 'Hit Normal', type: 'number' }
+                ]
+            },
+            'flow_delay': {
+                name: 'Delay',
+                category: 'flow',
+                inputs: [
+                    { name: 'Input', type: 'exec' },
+                    { name: 'Duration', type: 'number' }
+                ],
+                outputs: [{ name: 'Completed', type: 'exec' }]
+            },
+            'util_print': {
+                name: 'Print String',
+                category: 'util',
+                inputs: [
+                    { name: 'Input', type: 'exec' },
+                    { name: 'In String', type: 'string' }
+                ],
+                outputs: [{ name: 'Output', type: 'exec' }]
+            },
+            'util_destroy': {
+                name: 'Destroy Actor',
+                category: 'util',
+                inputs: [
+                    { name: 'Input', type: 'exec' },
+                    { name: 'Target', type: 'any' }
+                ],
+                outputs: []
+            },
+            'logic_branch': {
+                name: 'Branch',
+                category: 'flow',
+                inputs: [
+                    { name: 'Input', type: 'exec' },
+                    { name: 'Condition', type: 'boolean' }
+                ],
+                outputs: [
+                    { name: 'True', type: 'exec' },
+                    { name: 'False', type: 'exec' }
+                ]
+            },
+            'phys_is_sim_phys': {
+                name: 'Is Simulating Physics',
+                category: 'util',
+                inputs: [{ name: 'Target', type: 'any' }],
+                outputs: [{ name: 'Return Value', type: 'boolean' }]
+            },
+            'phys_add_impulse': {
+                name: 'Add Impulse At Location',
+                category: 'util',
+                inputs: [
+                    { name: 'Input', type: 'exec' },
+                    { name: 'Impulse', type: 'number' },
+                    { name: 'Location', type: 'number' }
+                ],
+                outputs: []
+            },
+            'spawn_emitter': {
+                name: 'Spawn Emitter At Location',
+                category: 'util',
+                inputs: [
+                    { name: 'Input', type: 'exec' },
+                    { name: 'Location', type: 'number' }
+                ],
+                outputs: [
+                    { name: 'Output', type: 'exec' },
+                    { name: 'Return Value', type: 'any' }
+                ]
+            },
+            'audio_play_sound': {
+                name: 'Play Sound At Location',
+                category: 'util',
+                inputs: [
+                    { name: 'Input', type: 'exec' },
+                    { name: 'Sound', type: 'any' },
+                    { name: 'Location', type: 'number' }
+                ],
+                outputs: []
+            },
+            'util_get_world_loc': {
+                name: 'Get World Location',
+                category: 'util',
+                inputs: [{ name: 'Target', type: 'any' }],
+                outputs: [{ name: 'Return Value', type: 'number' }]
+            }
+        };
+
+        const BLUEPRINT_SNIPPETS = {
+            'bomb_blueprint': {
+                name: "Bomb Blueprint",
+                description: "A comprehensive blueprint for a bomb or projectile that explodes on impact with physics objects, with sound and visual effects.",
+                visual: {
+                    nodes: [
+                        { id: 'hit', typeId: 'event_hit', x: 20, y: 50 },
+                        { id: 'is_phys', typeId: 'phys_is_sim_phys', x: 280, y: 180 },
+                        { id: 'branch', typeId: 'logic_branch', x: 500, y: 50 },
+                        { id: 'impulse', typeId: 'phys_add_impulse', x: 750, y: 50 },
+                        { id: 'spawn', typeId: 'spawn_emitter', x: 1050, y: 50 },
+                        { id: 'play_explode', typeId: 'audio_play_sound', x: 1350, y: 180 },
+                        { id: 'destroy', typeId: 'util_destroy', x: 1650, y: 180 },
+                        { id: 'begin_play', typeId: 'event_begin_play', x: 20, y: 400 },
+                        { id: 'delay', typeId: 'flow_delay', x: 280, y: 400 },
+                        { id: 'get_loc', typeId: 'util_get_world_loc', x: 280, y: 550 }
+                    ],
+                    connections: [
+                        { from: 'hit', fromPin: 'Output', to: 'branch', toPin: 'Input' },
+                        { from: 'hit', fromPin: 'Other Comp', to: 'is_phys', toPin: 'Target' },
+                        { from: 'is_phys', fromPin: 'Return Value', to: 'branch', toPin: 'Condition' },
+                        { from: 'branch', fromPin: 'True', to: 'impulse', toPin: 'Input' },
+                        { from: 'impulse', fromPin: '', to: 'spawn', toPin: 'Input' },
+                        { from: 'spawn', fromPin: 'Output', to: 'play_explode', toPin: 'Input' },
+                        { from: 'spawn', fromPin: 'Return Value', to: 'destroy', toPin: 'Target' },
+                        { from: 'play_explode', fromPin: '', to: 'destroy', toPin: 'Input' },
+                        { from: 'hit', fromPin: 'Hit Location', to: 'impulse', toPin: 'Location' },
+                        { from: 'begin_play', fromPin: 'Output', to: 'delay', toPin: 'Input' },
+                        { from: 'get_loc', fromPin: 'Return Value', to: 'play_explode', toPin: 'Location' }
+                    ]
+                },
+                raw: `Begin Object Class=/Script/BlueprintGraph.K2Node_Event Name="K2Node_Event_Hit"
+    EventReference=(MemberParent=Class'/Script/Engine.Actor',MemberName="ReceiveHit")
+    NodePosX=20
+    NodePosY=50
+End Object
+
+Begin Object Class=/Script/BlueprintGraph.K2Node_CallFunction Name="K2Node_CallFunction_IsSimulatingPhysics"
+    FunctionReference=(MemberParent=Class'/Script/Engine.PrimitiveComponent',MemberName="IsSimulatingPhysics")
+    NodePosX=280
+    NodePosY=180
+End Object
+
+Begin Object Class=/Script/BlueprintGraph.K2Node_IfThenElse Name="K2Node_Branch"
+    NodePosX=500
+    NodePosY=50
+End Object
+
+// ... Additional node definitions would be included here for a complete raw output`
+            },
+            'print_string': {
+                name: "Simple Print String",
+                description: "The most basic debugging tool - prints a string to the screen when the game starts.",
+                visual: {
+                    nodes: [
+                        { id: 'begin_play', typeId: 'event_begin_play', x: 50, y: 50 },
+                        { id: 'print', typeId: 'util_print', x: 350, y: 50 }
+                    ],
+                    connections: [
+                        { from: 'begin_play', fromPin: 'Output', to: 'print', toPin: 'Input' }
+                    ]
+                },
+                raw: `Begin Object Class=/Script/BlueprintGraph.K2Node_Event Name="K2Node_Event_BeginPlay"
+    EventReference=(MemberParent=Class'/Script/Engine.Actor',MemberName="ReceiveBeginPlay")
+    NodePosX=50
+    NodePosY=50
+End Object
+
+Begin Object Class=/Script/BlueprintGraph.K2Node_CallFunction Name="K2Node_CallFunction_PrintString"
+    FunctionReference=(MemberParent=Class'/Script/Engine.KismetSystemLibrary',MemberName="PrintString")
+    NodePosX=350
+    NodePosY=50
+End Object`
+            }
+        };
+
+        // ============================================================================
+        // AI SERVICE LAYER
+        // ============================================================================
+        class AIService {
+            static async queryFree(prompt) {
+                try {
+                    const response = await puter.ai.chat(prompt, {
+                        model: 'gpt-4o'
+                    });
+                    return response;
+                } catch (error) {
+                    throw new Error(`Free AI service error: ${error.message}`);
+                }
+            }
+            
+            static async queryGemini(prompt, apiKey) {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: prompt }] }]
+                };
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error?.message || 'Gemini API request failed');
+                }
+                
+                const result = await response.json();
+                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    return result.candidates[0].content.parts[0].text;
+                }
+                throw new Error('Invalid response structure from Gemini');
+            }
+            
+            static async queryOpenAI(prompt, apiKey) {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4',
+                        messages: [{ role: 'user', content: prompt }]
+                    })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error?.message || 'OpenAI API request failed');
+                }
+                
+                const result = await response.json();
+                return result.choices[0].message.content;
+            }
+            
+            static async query(prompt) {
+                if (AppState.apiMode === 'free') {
+                    return await this.queryFree(prompt);
+                }
+                
+                // Advanced mode
+                switch (AppState.apiProvider) {
+                    case 'gemini':
+                        return await this.queryGemini(prompt, AppState.apiKey);
+                    case 'openai':
+                        return await this.queryOpenAI(prompt, AppState.apiKey);
+                    default:
+                        throw new Error('Unsupported API provider');
+                }
+            }
+        }
+
+        // ============================================================================
+        // UI CONTROLLER
+        // ============================================================================
+        class UIController {
+            static showModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.add('show'), 10);
+            }
+            
+            static hideModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.remove('show');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+            
+            static showError(message, containerId = null) {
+                if (containerId) {
+                    const container = document.getElementById(containerId);
+                    container.textContent = message;
+                    container.classList.remove('hidden');
+                } else {
+                    alert(message);
+                }
+            }
+            
+            static hideError(containerId) {
+                const container = document.getElementById(containerId);
+                container.classList.add('hidden');
+            }
+            
+            static setProcessing(isProcessing) {
+                const submitBtn = document.getElementById('ai-submit-btn');
+                submitBtn.disabled = isProcessing;
+                submitBtn.innerHTML = isProcessing 
+                    ? '<div class="loading-spinner" style="width: 20px; height: 20px; margin: 0;"></div> Thinking...'
+                    : '🔍 Get Snippet';
+            }
+            
+            static showPlaceholder(message) {
+                const outputPanel = document.getElementById('output-panel');
+                outputPanel.innerHTML = `<div id="placeholder-text">${message}</div>`;
+            }
+        }
+
+        // ============================================================================
+        // BLUEPRINT FINDER
+        // ============================================================================
+        class BlueprintFinder {
+            static async findBlueprint(userQuery) {
+                if (!userQuery.trim()) {
+                    UIController.showError('Please enter a query');
                     return;
                 }
+                
+                AppState.isProcessing = true;
+                UIController.setProcessing(true);
+                UIController.showPlaceholder('🔍 Searching my library...');
+                
+                try {
+                    const snippetKeys = Object.keys(BLUEPRINT_SNIPPETS);
+                    const snippetDescriptions = snippetKeys
+                        .map(key => `'${key}': ${BLUEPRINT_SNIPPETS[key].description}`)
+                        .join('\n');
+                    
+                    const prompt = `You are an expert Unreal Engine assistant. A user wants a blueprint snippet.
 
-                aiSubmitBtn.disabled = true;                
-                aiSubmitBtn.textContent = 'Thinking...';                
-                outputPanel.innerHTML = `<div id="placeholder-text">Checking my library...</div>`;                                
-                
-                const availableSnippets = Object.keys(BLUEPRINT_SNIPPETS).map(key => `'${key}': ${BLUEPRINT_SNIPPETS[key].description}`).join('\n');                
-                const initialPrompt = `You are an expert Unreal Engine assistant. A user wants a blueprint snippet. Your only task is to identify the best snippet from the provided list based on the user's request.\n\nHere are the available snippets:\n${availableSnippets}\n\nUser's request: "${userQuery}"\n\nBased on the request, which snippet key is the best match? If there is a good match, respond with ONLY the single snippet key (e.g., 'bomb_blueprint'). If there are no good matches, respond with ONLY the text 'NO_MATCH'.`;
-                
-                try {                    
-                    let chatHistory = [{ role: "user", parts: [{ text: initialPrompt }] }];                    
-                    let payload = { contents: chatHistory };                    
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${currentApiKey}`; // Use current API Key                   
-                    let response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });                    
+Available snippets:
+${snippetDescriptions}
+
+User's request: "${userQuery}"
+
+Based on the request, which snippet key is the best match? 
+Respond with ONLY the snippet key (e.g., 'bomb_blueprint') or 'NO_MATCH' if no good match exists.`;
                     
-                    if (!response.ok) {
-                        if (response.status === 400 || response.status === 401) {
-                            outputPanel.innerHTML = `<div id="placeholder-text" style="color: red;">Error: Invalid API Key. Please re-enter your key.</div>`;
-                            localStorage.removeItem('geminiApiKey'); // Clear invalid key
-                            currentApiKey = null;
-                            showModal(apiKeyModal); // Re-show API key modal
-                            return; // Stop further execution
-                        }
-                        throw new Error(`API request failed with status ${response.status}`);
+                    const response = await AIService.query(prompt);
+                    const snippetKey = response.trim().replace(/'/g, "").toLowerCase();
+                    
+                    if (BLUEPRINT_SNIPPETS[snippetKey]) {
+                        AppState.activeBlueprint = BLUEPRINT_SNIPPETS[snippetKey];
+                        BlueprintRenderer.renderVisual();
+                    } else {
+                        await this.searchWeb(userQuery);
                     }
-                    
-                    let result = await response.json();                                        
-                    
-                    if (result.candidates && result.candidates.length > 0) {                        
-                        const responseText = result.candidates[0].content.parts[0].text.trim().replace(/'/g, "");                        
-                        if (BLUEPRINT_SNIPPETS[responseText]) {                            
-                            activeBlueprint = BLUEPRINT_SNIPPETS[responseText];                            
-                            renderVisual();                        
-                        } else {                            
-                            await researchAndAdviseWithTools(userQuery);                        
-                        }                    
-                    } else { throw new Error("Invalid response structure from AI."); }                
-                } catch (error) {                    
-                    console.error("AI Error:", error);                    
-                    outputPanel.innerHTML = `<div id="placeholder-text" style="color: red;">Error: ${error.message || 'Could not connect to AI. Check your API key or network.'}</div>`;                
-                } finally {                    
-                    aiSubmitBtn.disabled = false;                    
-                    aiSubmitBtn.textContent = 'Get Snippet';                
-                }            
-            }                        
-            async function researchAndAdviseWithTools(userQuery) {                
-                if (!currentApiKey) { // Redundant check, but good for safety
-                    outputPanel.innerHTML = `<div id="placeholder-text" style="color: red;">Please enter your Gemini API Key to proceed.</div>`;
-                    showModal(apiKeyModal);
-                    return;
+                } catch (error) {
+                    console.error('Blueprint finder error:', error);
+                    UIController.showPlaceholder(`❌ Error: ${error.message}`);
+                } finally {
+                    AppState.isProcessing = false;
+                    UIController.setProcessing(false);
                 }
+            }
+            
+            static async searchWeb(userQuery) {
+                UIController.showPlaceholder('🌐 No snippet found. Searching for advice...');
+                
+                try {
+                    const prompt = `You are Atom (AI Technical Advisor), an expert on Unreal Engine and Blender for IronWill Interactive Entertainment.
 
-                outputPanel.innerHTML = `<div id="placeholder-text">No snippet found in my library. Searching the web for you...</div>`;                 
-                try {                     
-                    const searchResultsText = `Simulated search results for "${userQuery}"... In a real environment, this would be populated with live data from Google Search. The AI would then synthesize this data.`;                                         
-                    const advisoryPrompt = `You are Atom (AI Technical Advisor), an expert on Unreal Engine and Blender, providing advice for the team at IronWill Interactive Entertainment (formerly PGD). A user asked: "${userQuery}".You have searched the web and found the following information:---${searchResultsText}---Based on this information and your expert knowledge of the team's preferences, provide a helpful, synthesized answer.
-**Team-Specific Recommendations (Apply these rules when relevant):*** **Blender Texturing:** If the user asks about simple texturing, recommend the **Image Texture node** workflow and remind them about proper UV unwrapping. For complex materials, the **Principled BSDF** is preferred. For procedural textures in UE 5.4+, mention the new **Texture Graph** feature. For older versions, mention using plugins like **Texture Lab**.* **Shooter Template:** If the query is about starting a First or Third Person shooter, **strongly recommend** using the team's **True_FP-TP_Template** (https://github.com/gamedev44/True_FP-TP-Template) over Epic's base templates, explaining that it's fully network replicated.* **Networking:** For general networking or dedicated server setup, suggest the **UE5-TunnelServerSolution** (https://github.com/gamedev44/UE5-TunnelServerSolution) as a great starting point.* **Large-Scale Networking:** For fully scalable, but more costly dedicated server solutions, suggest checking out **Horizon** (https://horizon.farbeyond.dev). For MMO-scale solutions, mention **Edgegap**.* **Other Tools:** Refer to team tools like **AsterTools** (https://github.com/gamedev44/ARFB, https://github.com/gamedev44/RFBE) or **MetaMaker** (https://github.com/gamedev44/MetaMaker) if they apply to the user's problem.
-Structure your answer clearly using Markdown with headings (e.g., ### My Heading), bullet points (* My Item), and bold text (**My Bold Text**). Your goal is to give direct, actionable advice, not just links.`;                                        
-                    const chatHistory = [{ role: "user", parts: [{ text: advisoryPrompt }] }];                    
-                    const payload = { contents: chatHistory };                    
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${currentApiKey}`; // Use current API Key                    
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });                    
-                    
-                    if (!response.ok) {
-                        if (response.status === 400 || response.status === 401) {
-                            outputPanel.innerHTML = `<div id="placeholder-text" style="color: red;">Error: Invalid API Key. Please re-enter your key.</div>`;
-                            localStorage.removeItem('geminiApiKey'); // Clear invalid key
-                            currentApiKey = null;
-                            showModal(apiKeyModal); // Re-show API key modal
-                            return; // Stop further execution
-                        }
-                        throw new Error(`Advisory API request failed: ${response.status}`);
-                    }
+User asked: "${userQuery}"
 
-                    const result = await response.json();                                        
+Provide helpful, synthesized advice with:
+- Direct, actionable guidance
+- Team-specific recommendations when relevant:
+  * Blender: Image Texture node, Principled BSDF, Texture Graph (UE 5.4+)
+  * Shooter Template: True_FP-TP_Template (https://github.com/gamedev44/True_FP-TP-Template)
+  * Networking: UE5-TunnelServerSolution (https://github.com/gamedev44/UE5-TunnelServerSolution)
+  * Large-scale: Horizon (https://horizon.farbeyond.dev) or Edgegap for MMO
+
+Format with Markdown: ### headings, * bullets, **bold**, [links](url)`;
                     
-                    if (result.candidates && result.candidates.length > 0) {                         
-                        const advice = result.candidates[0].content.parts[0].text;                         
-                        displaySynthesizedAnswer(advice, userQuery);                    
-                    } else { throw new Error("Could not get advice from AI.") }
-                } catch(e) {                     
-                    console.error("Search Tool Error:", e);                     
-                    outputPanel.innerHTML = `<div id="placeholder-text" style="color: red;">Error: ${e.message || 'Web search failed. Check your API key or network.'}</div>`;                 
-                }            
-            }                        
-            function displaySynthesizedAnswer(advice, userQuery) {                
-                const coreQuery = userQuery.replace(/how to make a|how do i|etc|and so on|in unreal engine|in blender/gi, '').trim();                
-                const searchQueries = [                    
-                    `https://www.google.com/search?q=Unreal+Engine+5+documentation+${encodeURIComponent(coreQuery)}`,                    
-                    `https://www.google.com/search?q=Blender+documentation+${encodeURIComponent(coreQuery)}`,                    
-                    `https://www.youtube.com/results?search_query=${encodeURIComponent(coreQuery + ' ue5 tutorial')}`,                    
-                    `https://www.google.com/search?q=site%3Areddit.com/r/unrealengine+${encodeURIComponent(coreQuery)}`                
+                    const advice = await AIService.query(prompt);
+                    this.displayAdvice(advice, userQuery);
+                } catch (error) {
+                    console.error('Web search error:', error);
+                    UIController.showPlaceholder(`❌ Search failed: ${error.message}`);
+                }
+            }
+            
+            static displayAdvice(advice, userQuery) {
+                const coreQuery = userQuery
+                    .replace(/how to|how do i|in unreal engine|in blender/gi, '')
+                    .trim();
+                
+                const searchLinks = [
+                    { name: 'UE5 Docs', url: `https://www.google.com/search?q=Unreal+Engine+5+${encodeURIComponent(coreQuery)}` },
+                    { name: 'Blender Docs', url: `https://www.google.com/search?q=Blender+${encodeURIComponent(coreQuery)}` },
+                    { name: 'YouTube', url: `https://www.youtube.com/results?search_query=${encodeURIComponent(coreQuery + ' ue5')}` },
+                    { name: 'Reddit', url: `https://www.google.com/search?q=site:reddit.com/r/unrealengine+${encodeURIComponent(coreQuery)}` }
                 ];
                 
-                const renderedAdvice = renderMarkdown(advice);
+                const renderedAdvice = this.renderMarkdown(advice);
                 
-                const resultsHTML = `                    
-                    <div class="result-item">${renderedAdvice}</div>                    
-                    <div class="results-section">                        
-                        <h2>For more details, you can search here:</h2>                        
-                        <div class="result-item"><a href="${searchQueries[0]}" target="_blank">Search UE5 Docs</a></div>                        
-                        <div class="result-item"><a href="${searchQueries[1]}" target="_blank">Search Blender Docs</a></div>                        
-                        <div class="result-item"><a href="${searchQueries[2]}" target="_blank">Search YouTube</a></div>                        
-                        <div class="result-item"><a href="${searchQueries[3]}" target="_blank">Search Reddit</a></div>                    
-                    </div>`;
-                 outputPanel.innerHTML = `<div id="search-results">                    
-                    <div class="results-section"><h2>Atom (AI Technical Advisor)</h2>${resultsHTML}</div>                 
-                 </div>`;
-                activeBlueprint = null;                
-                visualToggle.classList.remove('active');                
-                rawToggle.classList.remove('active');                
-                copyBtn.classList.add('hidden');            
-            }
-            // --- Event Handlers & Core Logic ---            
-            aiSubmitBtn.addEventListener('click', () => {                
-                const query = aiPrompt.value.trim();                
-                if (query) findBlueprintWithAI(query);            
-            });
-            
-            visualToggle.addEventListener('click', renderVisual);            
-            rawToggle.addEventListener('click', renderRawText);            
-            copyBtn.addEventListener('click', copyRawText);                        
-            
-            // Pan and Zoom Listeners            
-            outputPanel.addEventListener('mousedown', (e) => {                
-                if (!e.target.closest('.node') && e.target.closest('.output-panel')) {                    
-                    panning.active = true;                    
-                    panning.start = { x: e.clientX, y: e.clientY };                    
-                    panning.viewStart = { ...view };                    
-                    outputPanel.classList.add('panning');                
-                }            
-            });            
-            window.addEventListener('mousemove', (e) => {                
-                if (!panning.active) return;                
-                const dx = e.clientX - panning.start.x;                
-                const dy = e.clientY - panning.start.y;                
-                view.x = panning.viewStart.x + dx;                
-                view.y = panning.viewStart.y + dy;                
-                updateViewTransform();            
-            });            
-            window.addEventListener('mouseup', () => {                
-                panning.active = false;                
-                outputPanel.classList.remove('panning');            
-            });            
-            outputPanel.addEventListener('wheel', (e) => {                
-                e.preventDefault();                
-                const rect = outputPanel.getBoundingClientRect();                
-                const mouseX = e.clientX - rect.left;                
-                const mouseY = e.clientY - rect.top;                
-                const scaleAmount = 1 - e.deltaY * 0.001;                
-                const newScale = Math.max(0.2, Math.min(1.5, view.scale * scaleAmount));                
-                view.x = mouseX - (mouseX - view.x) * (newScale / view.scale);                
-                view.y = mouseY - (mouseY - view.y) * (newScale / view.scale);                
-                view.scale = newScale;                
-                updateViewTransform();            
-            });
-            
-            // Welcome Modal Logic            
-            closeWelcomeModalBtn.addEventListener('click', () => {                
-                if (dontShowCheckbox.checked) {                    
-                    try {                        
-                        localStorage.setItem('hideWelcomeModal', 'true');                    
-                    } catch(e) { /* ignore */ }                
-                }                
-                hideModal(welcomeModal);            
-            });
-
-            // Options Modal Logic
-            optionsBtn.addEventListener('click', () => {
-                hideModal(welcomeModal); // Hide welcome modal if open
-                hideModal(apiKeyModal);   // Hide API key modal if open
-                showModal(optionsModal);
-            });
-
-            closeOptionsModalBtn.addEventListener('click', () => {
-                hideModal(optionsModal);
-            });
-
-            clearLocalDataBtn.addEventListener('click', () => {
-                localStorage.clear();
-                window.location.reload(); // Reload to apply changes
-            });
-
-            resetCodeOutputBtn.addEventListener('click', () => {
-                outputPanel.innerHTML = `<div id="placeholder-text">Ask the AI for a blueprint to begin</div>`;
-                aiPrompt.value = ''; // Clear prompt
-                activeBlueprint = null;
-                visualToggle.classList.add('active');
-                rawToggle.classList.remove('active');
-                copyBtn.classList.add('hidden');
-                hideModal(optionsModal);
-            });
-            
-            // --- Render Functions ---            
-            function renderVisual() {                
-                if (!activeBlueprint) {                    
-                    outputPanel.innerHTML = `<div id="placeholder-text">Ask the AI for a blueprint to begin</div>`;                    
-                    return;                
-                };                
-                visualToggle.classList.add('active');                
-                rawToggle.classList.remove('active');                
-                copyBtn.classList.add('hidden');                
-                try {                    
-                    const graph = activeBlueprint.visual;                    
-                    setupScene();                    
-                    const wrapper = document.getElementById('node-wrapper');                    
-                    const svg = document.getElementById('svg-layer');                    
-                    const nodeElements = new Map();                    
-                    graph.nodes.forEach(nodeData => {                        
-                        const template = NODE_LIBRARY[nodeData.typeId];                        
-                        if (!template) return;                        
-                        const element = createNodeElement(template);                        
-                        element.style.left = `${nodeData.x}px`;                        
-                        element.style.top = `${nodeData.y}px`;                        
-                        wrapper.appendChild(element);                        
-                        nodeElements.set(nodeData.id, element);                    
-                    });                    
-                    updateViewTransform();                    
-                    setTimeout(() => {                        
-                        graph.connections.forEach(conn => {                            
-                            const fromEl = nodeElements.get(conn.from);                            
-                            const toEl = nodeElements.get(conn.to);                            
-                            if (!fromEl || !toEl) return;                            
-                            const p1 = getPinPositionByName(fromEl, conn.fromPin, 'output');                            
-                            const p2 = getPinPositionByName(toEl, conn.toPin, 'input');                            
-                            if (!p1 || !p2) return;                            
-                            const wire = createWireElement(p1.pos, p2.pos, p1.type);                            
-                            svg.appendChild(wire);                        
-                        });                    
-                    }, 0);                
-                } catch (error) {                    
-                    console.error("Visual Parsing Error:", error);                    
-                    outputPanel.innerHTML = `<div id="placeholder-text">Error rendering visual.</div>`;                
-                }            
+                const linksHTML = searchLinks
+                    .map(link => `<div class="result-item"><a href="${link.url}" target="_blank">🔗 ${link.name}</a></div>`)
+                    .join('');
+                
+                const outputPanel = document.getElementById('output-panel');
+                outputPanel.innerHTML = `
+                    <div id="search-results">
+                        <div class="results-section">
+                            <h2>💡 Atom's Advice</h2>
+                            <div class="result-item">${renderedAdvice}</div>
+                        </div>
+                        <div class="results-section">
+                            <h2>🔍 Additional Resources</h2>
+                            ${linksHTML}
+                        </div>
+                    </div>
+                `;
+                
+                AppState.activeBlueprint = null;
+                document.getElementById('visual-toggle').classList.remove('active');
+                document.getElementById('raw-toggle').classList.remove('active');
+                document.getElementById('copy-btn').classList.add('hidden');
             }
             
-            function renderRawText() {                
-                if (!activeBlueprint) return;                
-                rawToggle.classList.add('active');                
-                visualToggle.classList.remove('active');                
-                copyBtn.classList.remove('hidden');                
-                outputPanel.innerHTML = `<textarea id="raw-text-output" readonly>${activeBlueprint.raw}</textarea>`;            
-            }                        
-            // --- Helpers ---            
-            function renderMarkdown(text) {                
-                let html = text                    
-                    .replace(/^### (.*$)/gim, '<h3>$1</h3>')                    
-                    .replace(/^\* (.*$)/gim, '<ul><li>$1</li></ul>')                    
-                    .replace(/<\/ul>\s?<ul>/gim, '')                    
-                    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')                    
-                    .replace(/\*(.*?)\*/gim, '<em>$1</em>')                    
-                    .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank">$1</a>')                    
-                    .replace(/\n/g, '<br>');                
-                return html;            
+            static renderMarkdown(text) {
+                return text
+                    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                    .replace(/^\* (.*$)/gim, '<ul><li>$1</li></ul>')
+                    .replace(/<\/ul>\s*<ul>/gim, '')
+                    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+                    .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+                    .replace(/\n/g, '<br>');
+            }
+        }
+
+        // ============================================================================
+        // BLUEPRINT RENDERER
+        // ============================================================================
+        class BlueprintRenderer {
+            static renderVisual() {
+                if (!AppState.activeBlueprint) {
+                    UIController.showPlaceholder('Ask the AI for a blueprint to begin');
+                    return;
+                }
+                
+                document.getElementById('visual-toggle').classList.add('active');
+                document.getElementById('raw-toggle').classList.remove('active');
+                document.getElementById('copy-btn').classList.add('hidden');
+                
+                const outputPanel = document.getElementById('output-panel');
+                outputPanel.innerHTML = `
+                    <div id="node-wrapper"></div>
+                    <svg id="svg-layer"></svg>
+                `;
+                
+                const graph = AppState.activeBlueprint.visual;
+                const wrapper = document.getElementById('node-wrapper');
+                const svg = document.getElementById('svg-layer');
+                const nodeElements = new Map();
+                
+                // Create nodes
+                graph.nodes.forEach(nodeData => {
+                    const template = NODE_LIBRARY[nodeData.typeId];
+                    if (!template) return;
+                    
+                    const element = this.createNodeElement(template);
+                    element.style.left = `${nodeData.x}px`;
+                    element.style.top = `${nodeData.y}px`;
+                    wrapper.appendChild(element);
+                    nodeElements.set(nodeData.id, element);
+                });
+                
+                this.updateViewTransform();
+                
+                // Create wires after DOM update
+                setTimeout(() => {
+                    graph.connections.forEach(conn => {
+                        const fromEl = nodeElements.get(conn.from);
+                        const toEl = nodeElements.get(conn.to);
+                        if (!fromEl || !toEl) return;
+                        
+                        const p1 = this.getPinPosition(fromEl, conn.fromPin, 'output');
+                        const p2 = this.getPinPosition(toEl, conn.toPin, 'input');
+                        if (!p1 || !p2) return;
+                        
+                        const wire = this.createWire(p1.pos, p2.pos, p1.type);
+                        svg.appendChild(wire);
+                    });
+                }, 0);
             }
             
-            function updateViewTransform() {                
-                const wrapper = document.getElementById('node-wrapper');                
-                const svg = document.getElementById('svg-layer');                
-                if(wrapper && svg) {                    
-                    const transform = `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;                    
-                    wrapper.style.transform = transform;                    
-                    svg.style.transform = transform;                
-                }            
-            }                        
-            function getPinPositionByName(nodeEl, pinName, pinIoType) {                
-                const pins = Array.from(nodeEl.querySelectorAll(`.${pinIoType}s .pin`));                
-                let foundPinEl = null;                
-                if (!pinName) {                    
-                    foundPinEl = pins.find(p => p.querySelector('.pin-dot[data-pin-type="exec"]')) || pins[0];                
-                } else {                    
-                    foundPinEl = pins.find(p => p.querySelector('span').textContent === pinName);                
-                }                
-                if (!foundPinEl) return null;                
-                const pinDot = foundPinEl.querySelector('.pin-dot');                
-                const type = pinDot.dataset.pinType;                
-                const panelRect = outputPanel.getBoundingClientRect();
-                const pinRect = pinDot.getBoundingClientRect();
-                return {
-                    pos: {
-                        x: (pinRect.left + pinRect.width / 2 - panelRect.left) / view.scale,
-                        y: (pinRect.top + pinRect.height / 2 - panelRect.top) / view.scale
-                    },
-                    type: type
-                };
+            static renderRaw() {
+                if (!AppState.activeBlueprint) return;
+                
+                document.getElementById('raw-toggle').classList.add('active');
+                document.getElementById('visual-toggle').classList.remove('active');
+                document.getElementById('copy-btn').classList.remove('hidden');
+                
+                const outputPanel = document.getElementById('output-panel');
+                outputPanel.innerHTML = `<textarea id="raw-text-output" readonly>${AppState.activeBlueprint.raw}</textarea>`;
             }
-
-            function createNodeElement(template) {
+            
+            static createNodeElement(template) {
                 const node = document.createElement('div');
                 node.className = `node ${template.category}-node`;
                 node.innerHTML = `
                     <div class="node-header ${template.category}-node">${template.name}</div>
                     <div class="node-body">
                         <div class="node-pins inputs">
-                            ${template.inputs.map(pin => `<div class="pin"><div class="pin-dot" data-pin-type="${pin.type}"></div><span>${pin.name}</span></div>`).join('')}
+                            ${template.inputs.map(pin => `
+                                <div class="pin">
+                                    <div class="pin-dot" data-pin-type="${pin.type}"></div>
+                                    <span>${pin.name}</span>
+                                </div>
+                            `).join('')}
                         </div>
                         <div class="node-pins outputs">
-                            ${template.outputs.map(pin => `<div class="pin"><span>${pin.name}</span><div class="pin-dot" data-pin-type="${pin.type}"></div></div>`).join('')}
+                            ${template.outputs.map(pin => `
+                                <div class="pin">
+                                    <span>${pin.name}</span>
+                                    <div class="pin-dot" data-pin-type="${pin.type}"></div>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                 `;
                 return node;
             }
-
-            function createWireElement(p1, p2, type) {
-                const svg = document.getElementById('svg-layer');
+            
+            static getPinPosition(nodeEl, pinName, pinIoType) {
+                const pins = Array.from(nodeEl.querySelectorAll(`.${pinIoType}s .pin`));
+                let foundPinEl = null;
+                
+                if (!pinName) {
+                    foundPinEl = pins.find(p => p.querySelector('.pin-dot[data-pin-type="exec"]')) || pins[0];
+                } else {
+                    foundPinEl = pins.find(p => p.querySelector('span').textContent === pinName);
+                }
+                
+                if (!foundPinEl) return null;
+                
+                const pinDot = foundPinEl.querySelector('.pin-dot');
+                const type = pinDot.dataset.pinType;
+                const panelRect = document.getElementById('output-panel').getBoundingClientRect();
+                const pinRect = pinDot.getBoundingClientRect();
+                
+                return {
+                    pos: {
+                        x: (pinRect.left + pinRect.width / 2 - panelRect.left) / AppState.view.scale,
+                        y: (pinRect.top + pinRect.height / 2 - panelRect.top) / AppState.view.scale
+                    },
+                    type: type
+                };
+            }
+            
+            static createWire(p1, p2, type) {
                 const wire = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 const cp1x = p1.x + 100;
                 const cp2x = p2.x - 100;
@@ -791,26 +1365,224 @@ Structure your answer clearly using Markdown with headings (e.g., ### My Heading
                 wire.setAttribute('class', `wire ${type}`);
                 return wire;
             }
-
-            function setupScene() {
-                outputPanel.innerHTML = `
-                    <div id="node-wrapper"></div>
-                    <svg id="svg-layer"></svg>
-                `;
-            }
-
-            function copyRawText() {
-                const rawTextOutput = document.getElementById('raw-text-output');
-                if (rawTextOutput) {
-                    rawTextOutput.select();
-                    document.execCommand('copy');
-                    // Provide visual feedback (optional)
-                    copyBtn.textContent = 'Copied!';
-                    setTimeout(() => {
-                        copyBtn.textContent = 'Copy';
-                    }, 2000);
+            
+            static updateViewTransform() {
+                const wrapper = document.getElementById('node-wrapper');
+                const svg = document.getElementById('svg-layer');
+                if (wrapper && svg) {
+                    const transform = `translate(${AppState.view.x}px, ${AppState.view.y}px) scale(${AppState.view.scale})`;
+                    wrapper.style.transform = transform;
+                    svg.style.transform = transform;
                 }
             }
+        }
+
+        // ============================================================================
+        // EVENT HANDLERS
+        // ============================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load saved state
+            AppState.loadState();
+            
+            // Initialize UI based on saved state
+            if (AppState.apiMode && AppState.apiKey) {
+                UIController.hideModal('api-config-modal');
+                if (localStorage.getItem('hideWelcomeModal') !== 'true') {
+                    UIController.showModal('welcome-modal');
+                }
+            }
+            
+            // API Configuration Modal
+            const modeButtons = document.querySelectorAll('.mode-btn');
+            modeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    modeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const mode = btn.dataset.mode;
+                    const freeInfo = document.getElementById('free-mode-info');
+                    const advancedConfig = document.getElementById('advanced-mode-config');
+                    
+                    if (mode === 'free') {
+                        freeInfo.classList.remove('hidden');
+                        advancedConfig.classList.add('hidden');
+                    } else {
+                        freeInfo.classList.add('hidden');
+                        advancedConfig.classList.remove('hidden');
+                    }
+                });
+            });
+            
+            document.getElementById('save-api-config-btn').addEventListener('click', async () => {
+                const activeMode = document.querySelector('.mode-btn.active').dataset.mode;
+                UIController.hideError('api-config-error');
+                
+                if (activeMode === 'free') {
+                    AppState.apiMode = 'free';
+                    AppState.apiKey = null;
+                    AppState.saveState();
+                    UIController.hideModal('api-config-modal');
+                    
+                    if (localStorage.getItem('hideWelcomeModal') !== 'true') {
+                        UIController.showModal('welcome-modal');
+                    }
+                } else {
+                    const apiKey = document.getElementById('api-key-input').value.trim();
+                    const provider = document.getElementById('api-provider-select').value;
+                    
+                    if (!apiKey) {
+                        UIController.showError('Please enter an API key', 'api-config-error');
+                        return;
+                    }
+                    
+                    // Validate API key
+                    try {
+                        UIController.setProcessing(true);
+                        AppState.apiMode = 'advanced';
+                        AppState.apiProvider = provider;
+                        AppState.apiKey = apiKey;
+                        
+                        // Test the key
+                        await AIService.query('Hello');
+                        
+                        AppState.saveState();
+                        UIController.hideModal('api-config-modal');
+                        
+                        if (localStorage.getItem('hideWelcomeModal') !== 'true') {
+                            UIController.showModal('welcome-modal');
+                        }
+                    } catch (error) {
+                        UIController.showError(`Invalid API key: ${error.message}`, 'api-config-error');
+                        AppState.apiKey = null;
+                    } finally {
+                        UIController.setProcessing(false);
+                    }
+                }
+            });
+            
+            // Welcome Modal
+            document.getElementById('close-welcome-modal-btn').addEventListener('click', () => {
+                if (document.getElementById('dont-show-again-checkbox').checked) {
+                    localStorage.setItem('hideWelcomeModal', 'true');
+                }
+                UIController.hideModal('welcome-modal');
+            });
+            
+            // Options Modal
+            document.getElementById('options-btn').addEventListener('click', () => {
+                UIController.showModal('options-modal');
+            });
+            
+            document.getElementById('close-options-modal-btn').addEventListener('click', () => {
+                UIController.hideModal('options-modal');
+            });
+            
+            document.getElementById('change-api-mode-btn').addEventListener('click', () => {
+                UIController.hideModal('options-modal');
+                UIController.showModal('api-config-modal');
+            });
+            
+            document.getElementById('clear-local-data-btn').addEventListener('click', () => {
+                if (confirm('Are you sure you want to clear all local data? This will reset the app.')) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            });
+            
+            document.getElementById('reset-output-btn').addEventListener('click', () => {
+                AppState.reset();
+                UIController.showPlaceholder('Ask the AI for a blueprint to begin');
+                document.getElementById('ai-prompt').value = '';
+                document.getElementById('visual-toggle').classList.add('active');
+                document.getElementById('raw-toggle').classList.remove('active');
+                document.getElementById('copy-btn').classList.add('hidden');
+                UIController.hideModal('options-modal');
+            });
+            
+            // Main functionality
+            document.getElementById('ai-submit-btn').addEventListener('click', () => {
+                const query = document.getElementById('ai-prompt').value.trim();
+                if (query) {
+                    BlueprintFinder.findBlueprint(query);
+                }
+            });
+            
+            // Enter key support
+            document.getElementById('ai-prompt').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    document.getElementById('ai-submit-btn').click();
+                }
+            });
+            
+            // View toggles
+            document.getElementById('visual-toggle').addEventListener('click', () => {
+                AppState.viewMode = 'visual';
+                BlueprintRenderer.renderVisual();
+            });
+            
+            document.getElementById('raw-toggle').addEventListener('click', () => {
+                AppState.viewMode = 'raw';
+                BlueprintRenderer.renderRaw();
+            });
+            
+            // Copy button
+            document.getElementById('copy-btn').addEventListener('click', () => {
+                const textarea = document.getElementById('raw-text-output');
+                if (textarea) {
+                    textarea.select();
+                    document.execCommand('copy');
+                    
+                    const btn = document.getElementById('copy-btn');
+                    const originalText = btn.textContent;
+                    btn.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 2000);
+                }
+            });
+            
+            // Pan and Zoom
+            const outputPanel = document.getElementById('output-panel');
+            
+            outputPanel.addEventListener('mousedown', (e) => {
+                if (!e.target.closest('.node') && e.target.closest('.output-panel')) {
+                    AppState.panning.active = true;
+                    AppState.panning.start = { x: e.clientX, y: e.clientY };
+                    AppState.panning.viewStart = { ...AppState.view };
+                    outputPanel.classList.add('panning');
+                }
+            });
+            
+            window.addEventListener('mousemove', (e) => {
+                if (!AppState.panning.active) return;
+                
+                const dx = e.clientX - AppState.panning.start.x;
+                const dy = e.clientY - AppState.panning.start.y;
+                AppState.view.x = AppState.panning.viewStart.x + dx;
+                AppState.view.y = AppState.panning.viewStart.y + dy;
+                BlueprintRenderer.updateViewTransform();
+            });
+            
+            window.addEventListener('mouseup', () => {
+                AppState.panning.active = false;
+                outputPanel.classList.remove('panning');
+            });
+            
+            outputPanel.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                
+                const rect = outputPanel.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                const scaleAmount = 1 - e.deltaY * 0.001;
+                const newScale = Math.max(0.2, Math.min(1.5, AppState.view.scale * scaleAmount));
+                
+                AppState.view.x = mouseX - (mouseX - AppState.view.x) * (newScale / AppState.view.scale);
+                AppState.view.y = mouseY - (mouseY - AppState.view.y) * (newScale / AppState.view.scale);
+                AppState.view.scale = newScale;
+                
+                BlueprintRenderer.updateViewTransform();
+            });
         });
     </script>
 </body>
