@@ -46,7 +46,6 @@
             --modal-text: #f4f4f4;
             --modal-border: #444;
         }
-
         /* Light Mode Variables */
         body.light-mode {
             --bg-start: #f4f4f4;
@@ -165,7 +164,6 @@
         .nav-link.new-apps-glow {
             animation: glow-pulse 2s infinite ease-in-out;
             border-image: linear-gradient(45deg, var(--accent), #ff9d5c, var(--accent)) 1;
-            border-radius: var(--radius); /* Note: border-image can sometimes override radius, using solid color fallback for simpler compliance */
             border: 2px solid var(--accent);
         }
 
@@ -264,14 +262,14 @@
             border-color: var(--accent);
         }
 
-        /* Welcome Modal Styling */
+        /* Modal Styling */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -291,13 +289,15 @@
             color: var(--modal-text);
             padding: 2rem;
             border-radius: var(--radius);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            max-width: 650px;
             width: 90%;
-            text-align: center;
+            max-height: 85vh;
+            overflow-y: auto;
+            text-align: left;
             transform: translateY(-20px);
             transition: transform 0.3s ease;
-            border: 1px solid var(--modal-border);
+            border: 2px solid var(--accent);
         }
 
         .modal-overlay.show .modal-content {
@@ -308,18 +308,28 @@
             font-size: 1.8rem;
             margin-bottom: 1rem;
             color: var(--accent);
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-top: 1.5rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.3rem;
         }
 
         .modal-content p {
             font-size: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
         }
 
         .modal-checkbox-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
         }
 
         .modal-checkbox-container input[type="checkbox"] {
@@ -334,21 +344,27 @@
             cursor: pointer;
         }
 
+        .modal-button-container {
+            text-align: center;
+        }
+
         .modal-button {
             background-color: var(--accent);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 2rem;
             border-radius: var(--radius);
             cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            transition: filter 0.3s ease;
         }
 
         .modal-button:hover {
-            filter: brightness(1.1);
+            filter: brightness(1.2);
         }
 
+        /* Content Sections */
         .notice {
             width: 100%;
             max-width: 960px;
@@ -356,42 +372,53 @@
             background: var(--bg-alt);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 1.5rem;
+            padding: 2rem;
             text-align: left;
             box-shadow: 0 6px 20px rgba(0,0,0,0.25);
         }
 
         .notice h2 {
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             color: var(--accent);
             font-size: 1.75rem;
+            text-transform: uppercase;
         }
 
         .status-chip {
             display: inline-block;
-            padding: 0.25rem 0.6rem;
-            border: 1px solid var(--border-color);
+            padding: 0.25rem 0.8rem;
+            border: 1px solid var(--accent);
             border-radius: 999px;
             font-size: 0.85rem;
-            margin-bottom: 1rem;
-            background: var(--hover);
+            margin-bottom: 1.5rem;
+            background: rgba(243, 112, 33, 0.1);
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .notice p {
             font-size: 1.1rem;
             max-width: 100%;
             text-align: left;
+            line-height: 1.7;
         }
 
         .notice p + p {
-            margin-top: 1rem;
+            margin-top: 1.2rem;
         }
 
-        .notice h3 { margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .notice h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--accent); }
+
+        .signature {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-style: italic;
+        }
 
         @media (max-width: 768px) {
             header { padding: 1rem; }
-            .header-logo-text .main-title { font-size: 2.5rem; }
+            .header-logo-text .main-title { font-size: 2.2rem; }
             .header-logo-text .tagline { font-size: 1rem; }
             nav { flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
             .nav-link { padding: 0.5rem 0.75rem; }
@@ -447,37 +474,83 @@
         </nav>
         <button id="theme-toggle" class="theme-toggle">Switch to Light Mode</button>
     </header>
+
     <main>
         <img class="main-logo" src="https://i.ibb.co/tMVDxK5p/image-2025-06-10-150850097.png" alt="IWI Full Logo">
-        <section class="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg text-white max-w-2xl mx-auto transition-colors duration-500 light-mode:bg-gray-200 light-mode:text-gray-800">
-            <h2 class="text-2xl font-bold mb-4 text-accent">Our Mission</h2>
+        
+        <section class="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg text-white max-w-2xl mx-auto transition-colors duration-500" style="background: var(--bg-alt); border: 1px solid var(--border-color); color: var(--text);">
+            <h2 class="text-2xl font-bold mb-4" style="color: var(--accent);">Our Mission</h2>
             <p class="text-lg">At Iron Will Interactive, we are dedicated to pushing the boundaries of technology to create impactful and innovative software solutions. We believe in the power of strong will and meticulous craftsmanship to deliver products that not only meet but exceed expectations.</p>
             <p class="mt-4 text-lg">Whether it's cutting-edge AI, robust enterprise systems, or immersive interactive experiences, our team is committed to excellence and inspiring confidence in every line of our work.</p>
         </section>
-        <section id="new-direction-notice" class="notice" aria-labelledby="notice-title">
-            <h2 id="notice-title">🚀 An Exciting New Chapter for Iron Will Interactive!</h2>
-            <div class="status-chip">Status: New Direction & Products Available!</div>
-            <p>In an unexpected but hopeful turn, we're pivoting to ensure the future of the company. To better fund our operations and explore new creative avenues, we are thrilled to announce that we're now offering software and apps for sale!</p>
-            <p>We are shifting our primary focus from game design to the broader world of software development and innovation as a whole. This new direction allows us to test the waters of this dynamic industry and bring new, powerful tools directly to you.</p>
-            <h3>Explore Our New Offerings</h3>
-            <p>Feel free to check out our products, which will be listed in the "Our Apps" dropdown menu at the top of the page. We're incredibly excited for you to see what we've been building and can't wait to continue this journey with your support!</p>
+
+        <!-- Official Human Integrity Statement Section -->
+        <section id="integrity-statement" class="notice" aria-labelledby="integrity-title">
+            <h2 id="integrity-title">Official Statement on Human Integrity & AI Paranoia</h2>
+            <div class="status-chip">Source: From the Desk of Iron Will Interactive</div>
+            
+            <p>In the current landscape of 2026, we have reached a bizarre cultural inflection point. As a development studio pushing the boundaries of Unreal Engine, N64 hardware exploitation, and high-efficiency gamedev workflows, we find ourselves increasingly confronted by a specific, modern hysteria: <strong>AI Paranoia.</strong></p>
+            
+            <p>It has come to our attention that because our productivity is high, our technical knowledge is specialized, and our digital presence is "clean," some observers—often those with limited technical literacy—have resorted to the baseless claim that Iron Will Interactive or its personnel are "artificial programs" or "AI personas."</p>
+            
+            <p><strong>Let us be absolutely clear: Iron Will Interactive is a human-driven enterprise.</strong></p>
+
+            <h3>Addressing the "Epidemic of Disbelief"</h3>
+            <p>The "Bot-Calling" culture and the fear of deepfakes have created a "truth decay" where people would rather believe in science fiction than acknowledge human discipline. This paranoia is fueled by three specific misunderstandings:</p>
+            
+            <p><strong>The Technical Gap:</strong> There is a massive rift between those who struggle with basic consumer electronics and those who manage complex C++ repositories and devkits. When a layperson sees a developer working at a speed they cannot comprehend, their "brain short-circuits," and they label it "AI" simply because they lack the vocabulary to describe high-level expertise.</p>
+            
+            <p><strong>The "Vibe Coding" Misconception:</strong> While we utilize modern tools to streamline our workflow, using a tool does not make the craftsman a machine. A carpenter isn't a "robot" because they use a power drill; a developer isn't an "AI" because they use advanced IDEs or automated pipelines.</p>
+            
+            <p><strong>Media Conditioning:</strong> We recognize that mainstream news has conditioned a generation of "old heads" to fear every digital interaction as a potential scam. However, willful ignorance is not a valid defense for making defamatory or delusional claims against creators.</p>
+
+            <h3>Our Policy on "Proof"</h3>
+            <p>We have better things to do than engage in a "Proof of Humanity" circus. Iron Will Interactive is here to ship code, solve hardware limitations, and build games. We are not interested in entertaining the paranoid fantasies of overprotective or tech-illiterate individuals who cannot distinguish between a talented human and a LLM.</p>
+            
+            <p>If you have watched our content on YouTube, seen our repositories, or engaged with us in a technical capacity, the proof is in the production. AI cannot replicate the nuance of our creative direction or the specific, grit-filled problem-solving required for N64 development.</p>
+
+            <h3>Moving Forward</h3>
+            <p>We will continue to operate with the same high-carbon, 100% human intensity that has defined us. We suggest that those who find our efficiency "unnatural" take the time to educate themselves on the current state of software engineering rather than projecting their confusion onto our team.</p>
+            
+            <p><strong>Iron Will Interactive is Comprised fully of Human Engineers, Artists and Developers alike. Our code is real. Our time is valuable.</strong></p>
+
+            <div class="signature">
+                <p>Signed,</p>
+                <p><strong>Iron Will Interactive Team</strong></p>
+            </div>
+        </section>
+
+        <!-- Original Pivot Notice -->
+        <section id="new-direction-notice" class="notice" style="margin-top: 4rem;">
+            <h2>🚀 An Exciting New Chapter!</h2>
+            <div class="status-chip">Update: Pivot & Commercial Expansion</div>
+            <p>We're pivoting to ensure the future of the company. To better fund our operations and explore new creative avenues, we are thrilled to announce that we're now offering software and apps for sale!</p>
+            <p>Check out our products listed in the "Our Apps" dropdown menu.</p>
         </section>
     </main>
+
     <footer>
         <p> | <a href="/IronWill/PrivacyPolicy.html">Privacy Policy</a> | <a href="/IronWill/EULA.html">End User License Agreement</a> </p>
-        <p style="margin-top: 1rem; color: var(--footer-text-color)">&copy; 2025 Iron Will Interactive. All rights reserved.</p>
+        <p style="margin-top: 1rem; color: var(--footer-text-color)">&copy; 2026 Iron Will Interactive. All rights reserved.</p>
     </footer>
-    <div id="welcome-modal-overlay" class="modal-overlay">
+
+    <!-- Integrity Awareness Modal -->
+    <div id="integrity-modal-overlay" class="modal-overlay">
         <div class="modal-content">
-            <h2>Welcome to Iron Will Interactive!</h2>
-            <p>We're thrilled to have you here. Explore our services, learn about our mission, and discover how we craft software that inspires.</p>
+            <h2>Official Human Integrity Notice</h2>
+            <p>Iron Will Interactive is reaching a critical point of technical output. Due to the high efficiency of our workflows, some have mistakenly labeled our team as "AI."</p>
+            <p>We wish to confirm that <strong>all IWI personnel are human engineers and creators.</strong> Our productivity is a result of discipline, not algorithms.</p>
+            
             <div class="modal-checkbox-container">
-                <input type="checkbox" id="do-not-show-again">
-                <label for="do-not-show-again">Don't show this again</label>
+                <input type="checkbox" id="integrity-do-not-show">
+                <label for="integrity-do-not-show">I understand (Don't show this again)</label>
             </div>
-            <button id="modal-got-it" class="modal-button">Got It!</button>
+            <div class="modal-button-container">
+                <button id="integrity-modal-close" class="modal-button">Acknowledge</button>
+            </div>
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const themeToggle = document.getElementById('theme-toggle');
@@ -503,48 +576,43 @@
                 }
             });
 
-            // Welcome Modal Logic
-            const welcomeModalOverlay = document.getElementById('welcome-modal-overlay');
-            const modalGotItButton = document.getElementById('modal-got-it');
-            const doNotShowAgainCheckbox = document.getElementById('do-not-show-again');
+            // Integrity Modal Logic
+            const integrityModalOverlay = document.getElementById('integrity-modal-overlay');
+            const integrityModalClose = document.getElementById('integrity-modal-close');
+            const integrityDoNotShowAgain = document.getElementById('integrity-do-not-show');
 
-            const showWelcomeModal = () => {
-                if (localStorage.getItem('hideWelcomeModal') !== 'true') {
-                    welcomeModalOverlay.classList.add('show');
+            const showIntegrityModal = () => {
+                if (localStorage.getItem('hideIntegrityModal') !== 'true') {
+                    // Small delay for impact
+                    setTimeout(() => {
+                        integrityModalOverlay.classList.add('show');
+                    }, 800);
                 }
             };
 
-            const hideWelcomeModal = () => {
-                welcomeModalOverlay.classList.remove('show');
-            };
-
-            showWelcomeModal();
-
-            modalGotItButton.addEventListener('click', () => {
-                hideWelcomeModal();
+            integrityModalClose.addEventListener('click', () => {
+                integrityModalOverlay.classList.remove('show');
             });
 
-            doNotShowAgainCheckbox.addEventListener('change', (event) => {
+            integrityDoNotShowAgain.addEventListener('change', (event) => {
                 if (event.target.checked) {
-                    localStorage.setItem('hideWelcomeModal', 'true');
+                    localStorage.setItem('hideIntegrityModal', 'true');
                 } else {
-                    localStorage.removeItem('hideWelcomeModal');
+                    localStorage.removeItem('hideIntegrityModal');
                 }
             });
+
+            showIntegrityModal();
 
             // --- Apps Glow Logic ---
             const appsNavItem = document.getElementById('apps-nav-item');
             const appsNavLink = document.getElementById('apps-nav-link');
-            
-            // Check if user has already seen the new apps
             const hasCheckedApps = localStorage.getItem('iwi_apps_checked');
             
             if (!hasCheckedApps) {
-                // Add the glowing class if they haven't checked yet
                 appsNavLink.classList.add('new-apps-glow');
             }
 
-            // When hovering over the nav item (dropdown trigger)
             appsNavItem.addEventListener('mouseenter', () => {
                 if (appsNavLink.classList.contains('new-apps-glow')) {
                     appsNavLink.classList.remove('new-apps-glow');
